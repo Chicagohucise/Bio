@@ -82,7 +82,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 18px;
+            font-size: 200%;
             border-radius: 10px;
             filter: blur(0px);
         }
@@ -110,7 +110,19 @@
             height: 187px;
             border-radius: 10px;
         }
-        
+
+        .text-color-gradient {
+            perspective: 1000px;
+            text-align: center;
+            margin: 7.5px auto;
+            display: flex;
+            font-size: 100%;
+            background: linear-gradient(0.25turn, #ffffff, #ffffff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
     </style>
 </head>
 <body>
@@ -138,8 +150,11 @@
 </header>
 
 <main>
-    <div class="mian"><p>Y si lo miras por el lado bueno,es una suerte.</p></div>
-    <div class="mian"><p>La gente no sabe cuando le va a llegar ka hora.</p></div>
+    <div class="mian">
+        <p class="text-color-gradient">Y si lo miras por el lado bueno,es una suerte.<br/><br/>
+            La gente no sabe cuando le va a llegar ka hora.</p>
+    </div>
+    <div class="mian"></div>
 </main>
 
 <footer>
