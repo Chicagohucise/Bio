@@ -1,184 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100&display=swap"
+          rel="stylesheet">
+
+    <!-- JavaScript Libraries -->
+    <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
+
+    <!-- CSS & JS -->
+    <link rel="stylesheet" href="./style.css"/>
+    <script src="./index.js" defer></script>
+
+    <!-- Meta Tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChicagoHucise</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom, #ffaa36, #ffaa36, #f76c1e);
-            background-attachment: fixed;
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
+    <meta name="description" content="100% FREE Professional Portfolio Templates - Plain Template"/>
+    <meta name="keywords" content="OSSPH, Free portfolio"/>
+    <title> Hax | a Freefolio template by OSSPH</title>
 
-        html {
-            font-size: 75%;
-        }
-
-        header {
-            text-align: center;
-            padding: 20px;
-            color: white;
-            position: relative;
-        }
-
-        p {
-            color: white;
-        }
-
-        .avatar-container {
-            width: 150px;
-            height: 150px;
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-            margin-bottom: 15px;
-            perspective: 1000px;
-        }
-
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .avatar-container:hover .avatar {
-            transform: scale(0.9)
-        }
-
-        .separator {
-            position: absolute;
-            right: 50%;
-            transform: translateX(50%);
-            width: 10px;
-            height: 5px;
-            background-color: #6493B1FF;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            transition: width 0.5s, border-radius 0.5s,
-            background-color 0.5s;
-        }
-
-        .separator-expand {
-            width: 69%;
-            border-radius: 10px;
-            background-color: #6493B1FF;
-        }
-
-        .mian {
-            width: 75%;
-            height: 225px;
-            background-color: rgba(255, 255, 255, 0.08);
-            perspective: 1000px;
-            text-align: center;
-            margin: 7.5px auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 200%;
-            font-weight:700;
-            border-radius: 10px;
-            filter: blur(0px);
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .letter {
-            display: inline-block;
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.5s, transform 0.5s;
-            margin-right: -0.2em;
-        }
-
-        .joke {
-            width: 140px;
-            height: 187px;
-            border-radius: 10px;
-        }
-
-    </style>
+    <!-- Icons -->
+    <link rel="icon" href="./favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/apple-touch-icon-180x180.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="./assets/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="./assets/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="./assets/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="./assets/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="./assets/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="./assets/icons/apple-touch-icon-57x57.png">
 </head>
 <body>
-<header>
-    <h1 id="name">
-        <span class="letter"> </span>
-        <span class="letter">C</span>
-        <span class="letter">h</span>
-        <span class="letter">i</span>
-        <span class="letter">c</span>
-        <span class="letter">a</span>
-        <span class="letter">g</span>
-        <span class="letter">o</span>
-        <span class="letter">H</span>
-        <span class="letter">u</span>
-        <span class="letter">c</span>
-        <span class="letter">i</span>
-        <span class="letter">s</span>
-        <span class="letter">e</span>
-    </h1>
-    <div class="avatar-container">
-        <img class="avatar" src="avatar.jpg" alt="Avatar" draggable="false">
-    </div>
-    <div class="separator"></div>
-</header>
-
 <main>
-    <div class="mian">
-        <p>ʟᴀ ɢᴇɴᴛᴇ ɴᴏ sᴀʙᴇ ᴄᴜᴀɴᴅᴏ ʟᴇ ᴠᴀ ᴀ ʟʟᴇɢᴀʀ ᴋᴀ ʜᴏʀᴀ.<br/><br/>
-            ʏ sɪ ʟᴏ ᴍɪʀᴀs ᴘᴏʀ ᴇʟ ʟᴀᴅᴏ ʙᴜᴇɴᴏ,ᴇs ᴜɴᴀ sᴜᴇʀᴛᴇ.
-        </p>
-    </div>
-    <div class="mian"></div>
+    <!-- Hero Header -->
+    <header id="heroHeader" class="hero-header">
+        <nav id="navBar" class="nav">
+            <div class="container">
+                <button type="button" id="hamburgerBtn" class="nav__hamburger-btn">
+                    <span class="nav__hamburger-top"></span>
+                    <span class="nav__hamburger-center"></span>
+                    <span class="nav__hamburger-bottom"></span>
+                </button>
+                <ul id="navList" class="nav__list">
+                    <li class="nav__list-item">
+                        <a class="nav__list-link active" href="#heroHeader">&lt;Home &sol;&gt;</a>
+                    </li>
+                    <li class="nav__list-item">
+                        <a class="nav__list-link" href="#services">&lt;NONE &sol;&gt;</a>
+                    </li>
+                    <li class="nav__list-item">
+                        <a class="nav__list-link" href="#works">&lt;NONE &sol;&gt;</a>
+                    </li>
+                    <li class="nav__list-item">
+                        <a class="nav__list-link" href="#contact">&lt;NONE &sol;&gt;</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <section class="header__container container">
+            <div class="header__left">
+                <div class="avatar-container"><img class="avatar" src="img_avatar.png" alt="Avatar" draggable="false"></div>
+                <div class="separator"></div>
+                <span class="header__sup-text">Hello There! I am </span>
+                <h1 class="header__title">
+                    <span class="header__title-1" data-role="Chicago">Hucise</span>
+<!--                    <span class="header__title-2" data-role="DEVELOPER">Hucise</span>-->
+                </h1>
+                <p class="header__msg">La gente no sabe cuando le va a llegar ka hora.<br><br>
+                    y si lo miras por el lado bueno, es una suerte.</p>
+                <a href="#" class="header__resume">Resume</a>
+            </div>
+            <div class="header__right">
+<!--                <img src="./assets/illustrations/header.svg" alt="Header section illustration"/>-->
+            </div>
+        </section>
+        <span class="header__bg"></span>
+    </header>
+
+    <!-- Services -->
+<!--    <section id="services" class="section container">-->
+<!--        <h2 class="section__title">Services</h2>-->
+
+<!--        <div class="service-cards">-->
+<!--            <article class="service-card__box">-->
+<!--                <span class="service-card__illustration">-->
+<!--                    <img src="./assets/services/support.svg" alt="Support Illustration"/>-->
+<!--                </span>-->
+<!--                <h3 class="service-card__title">Deployment</h3>-->
+<!--                <p class="service-card__msg"> I am always available to address any issues or concerns you may have.</p>-->
+<!--                <span class="service-card__bg"></span>-->
+<!--            </article>-->
+<!--            <article class="service-card__box">-->
+<!--                <span class="service-card__illustration">-->
+<!--                    <img src="./assets/services/design.svg" alt="Design Illustration"/>-->
+<!--                </span>-->
+<!--                <h3 class="service-card__title">Design</h3>-->
+<!--                <p class="service-card__msg">Specialized in creating stunning websites that are both visually appealing and user-friendly.</p>-->
+<!--                <span class="service-card__bg"></span>-->
+<!--            </article>-->
+<!--            <article class="service-card__box">-->
+<!--                <span class="service-card__illustration">-->
+<!--                    <img src="./assets/services/developing.svg" alt="Deploy Illustration"/>-->
+<!--                </span>-->
+<!--                <h3 class="service-card__title">Developing</h3>-->
+<!--                <p class="service-card__msg"> I offer custom web development services tailored to your specific needs as a solo professional.</p>-->
+<!--                <span class="service-card__bg"></span>-->
+<!--            </article>-->
+<!--        </div>-->
+<!--    </section>-->
+
+    <!-- Sample Works -->
+<!--    <section id="works" class="section container">-->
+<!--        <h2 class="section__title">My Works</h2>-->
+<!--        <div class="works">-->
+<!--            <article class="work">-->
+<!--                <div class="work__box">-->
+<!--                    <span class="work__img-box">-->
+<!--                    <img src="./assets/works/sample.png" alt="My Work 1"/>-->
+<!--                </span>-->
+<!--                    <h3 class="work__title">My Landing Page</h3>-->
+<!--                    <span class="work__badges">-->
+<!--                    <span class="work__badge">HTML</span>-->
+<!--                    <span class="work__badge">CSS</span>-->
+<!--                    <span class="work__badge">JavaScript</span>-->
+<!--                </span>-->
+<!--                </div>-->
+<!--            </article>-->
+<!--            <article class="work">-->
+<!--                <div class="work__box">-->
+<!--                    <span class="work__img-box">-->
+<!--                    <img src="./assets/works/sample.png" alt="My Work 1"/>-->
+<!--                </span>-->
+<!--                    <h3 class="work__title">My Landing Page</h3>-->
+<!--                    <span class="work__badges">-->
+<!--                    <span class="work__badge">HTML</span>-->
+<!--                    <span class="work__badge">CSS</span>-->
+<!--                    <span class="work__badge">JavaScript</span>-->
+<!--                </span>-->
+<!--                </div>-->
+<!--            </article>-->
+<!--            <article class="work">-->
+<!--                <div class="work__box">-->
+<!--                    <span class="work__img-box">-->
+<!--                    <img src="./assets/works/sample.png" alt="My Work 1"/>-->
+<!--                </span>-->
+<!--                    <h3 class="work__title">My Landing Page</h3>-->
+<!--                    <span class="work__badges">-->
+<!--                    <span class="work__badge">HTML</span>-->
+<!--                    <span class="work__badge">CSS</span>-->
+<!--                    <span class="work__badge">JavaScript</span>-->
+<!--                </span>-->
+<!--                </div>-->
+<!--            </article>-->
+<!--            <article class="work">-->
+<!--                <div class="work__box">-->
+<!--                    <span class="work__img-box">-->
+<!--                    <img src="./assets/works/sample.png" alt="My Work 1"/>-->
+<!--                </span>-->
+<!--                    <h3 class="work__title">My Landing Page</h3>-->
+<!--                    <span class="work__badges">-->
+<!--                    <span class="work__badge">HTML</span>-->
+<!--                    <span class="work__badge">CSS</span>-->
+<!--                    <span class="work__badge">JavaScript</span>-->
+<!--                </span>-->
+<!--                </div>-->
+<!--            </article>-->
+<!--            <article class="work">-->
+<!--                <div class="work__box">-->
+<!--                    <span class="work__img-box">-->
+<!--                    <img src="./assets/works/sample.png" alt="My Work 1"/>-->
+<!--                </span>-->
+<!--                    <h3 class="work__title">My Landing Page</h3>-->
+<!--                    <span class="work__badges">-->
+<!--                    <span class="work__badge">HTML</span>-->
+<!--                    <span class="work__badge">CSS</span>-->
+<!--                    <span class="work__badge">JavaScript</span>-->
+<!--                </span>-->
+<!--                </div>-->
+<!--            </article>-->
+<!--            <article class="work">-->
+<!--                <div class="work__box">-->
+<!--                    <span class="work__img-box">-->
+<!--                    <img src="./assets/works/sample.png" alt="My Work 1"/>-->
+<!--                </span>-->
+<!--                    <h3 class="work__title">My Landing Page</h3>-->
+<!--                    <span class="work__badges">-->
+<!--                    <span class="work__badge">HTML</span>-->
+<!--                    <span class="work__badge">CSS</span>-->
+<!--                    <span class="work__badge">JavaScript</span>-->
+<!--                </span>-->
+<!--                </div>-->
+<!--            </article>-->
+<!--        </div>-->
+<!--    </section>-->
+
+    <!-- Contact -->
+<!--    <section id="contact" class="section container">-->
+<!--        <h2 class="section__title">Let's Connect!</h2>-->
+<!--        <div class="contact">-->
+<!--            <form class="contact__form">-->
+<!--                <div class="contact__field-wrapper">-->
+<!--                    <label for="contactNameTxt">Name:</label>-->
+<!--                    <input id="contactNameTxt" type="text" placeholder="What's your name?"/>-->
+<!--                </div>-->
+<!--                <div class="contact__field-wrapper">-->
+<!--                    <label for="contactDescriptionTxt">Message:</label>-->
+<!--                    <textarea id="contactDescriptionTxt" placeholder="Lets connect!"></textarea>-->
+<!--                </div>-->
+
+<!--                <button type="submit" class="contact__submit-btn">Submit</button>-->
+<!--            </form>-->
+<!--            <span class="contact__illustration">-->
+<!--                <img src="./assets/illustrations/connect.svg" alt="Group of people connecting with each other"/>-->
+<!--            </span>-->
+<!--        </div>-->
+<!--    </section>-->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 chicagohucise. All Rights Reserved.</p>
+    </footer>
 </main>
-
-<footer>
-    <p>&copy; 2024 chicagohucise. All Rights Reserved.</p>
-</footer>
-
-<script>
-    const avatarContainer = document.querySelector('.avatar-container');
-    const separator = document.querySelector('.separator');
-
-    avatarContainer.addEventListener('mouseenter', () => {
-        separator.classList.add('separator-expand');
-        separator.style.backgroundColor = 'white';
-    });
-
-    avatarContainer.addEventListener('mouseleave', () => {
-        separator.classList.remove('separator-expand');
-        separator.style.backgroundColor = '#6493B1FF';
-    });
-
-    const name = document.getElementById('name');
-    const letters = name.getElementsByClassName('letter');
-    let index = 0;
-
-    function showLetters() {
-        if (index < letters.length) {
-            letters[index].style.opacity = '1';
-            letters[index].style.transform = 'translateY(0)';
-            index++;
-            setTimeout(showLetters, 5);
-        }
-    }
-
-    showLetters();
-</script>
 </body>
 </html>
