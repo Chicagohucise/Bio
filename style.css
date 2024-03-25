@@ -238,11 +238,6 @@ body {
  * Hero Header
  * ==================
  */
-.header__right .Avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-}
 
 .hero-header {
     position: relative;
@@ -364,6 +359,23 @@ body {
     transform: translate(-50%, -50%);
 }
 
+
+/*
+ * ==================
+ * Avatar
+ * ==================
+ */
+.Avatar {
+    width: 150px;
+    height: 150px;
+    transition: transform 0.3s ease;
+    border-radius: 50%;
+}
+
+.Avatar:hover {
+    transform: scale(0.1);
+}
+
 /*
  * ==================
  * Services
@@ -451,9 +463,10 @@ body {
 
     /* Header */
     .header__right {
+        top: 220px;
         left: 500px;
         display: block;
-        opacity: 0.3;
+        opacity: 0;
     }
 
     .header__title {
@@ -518,6 +531,7 @@ body {
         max-width: 150px;
         height: 150px;
     }
+
 }
 
 /*
@@ -545,7 +559,6 @@ body {
         left: 0;
         width: 500px;
         opacity: 1;
-        top: 60px;
     }
 }
 
@@ -566,6 +579,7 @@ body {
     .section {
         margin-bottom: 13rem;
     }
+
 }
 
 /*
@@ -576,6 +590,13 @@ body {
 @media only screen and (min-width: 87.5em) {
     .container {
         max-width: 1320px;
+    }
+
+    .header__right {
+        left: 0;
+        top: 0;
+        width: 500px;
+        opacity: 1;
     }
 }
 
