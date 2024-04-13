@@ -130,3 +130,25 @@ new SweetScroll({
     offset: NAV_BAR.getBoundingClientRect().height - 80
 });
 
+
+const {ref, createApp} = Vue
+
+const app = createApp({
+    setup() {
+
+        const disabled = ref(false)
+
+        function warnDisabled() {
+            disabled.value = true
+            setTimeout(() => {
+                disabled.value = false
+            }, 1500)
+        }
+
+        return {
+            disabled, warnDisabled
+        }
+    }
+})
+
+app.mount('#app')
