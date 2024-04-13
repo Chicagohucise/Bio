@@ -131,6 +131,8 @@ new SweetScroll({
 });
 
 
+
+//vue.js stuff
 const {ref, createApp} = Vue
 
 const app = createApp({
