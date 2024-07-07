@@ -10,6 +10,7 @@
     <!-- JavaScript Libraries -->
     <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="module" src="/main.js"></script>
 
     <!-- CSS & JS -->
     <link rel="stylesheet" href="./style.css"/>
@@ -54,7 +55,7 @@
 
                 <div id="app">
                     <div :class="{ shake: disabled }">
-                        <a href="#" @click="warnDisabled" class="header__resume" >Resume</a>
+                        <a href="#" @click="warnDisabled" class="header__resume">Resume</a>
                         <span v-if="disabled" class="header__sup-text">&nbsp&nbspThis feature is disabled!</span>
                     </div>
                 </div>
@@ -66,6 +67,11 @@
         <span class="header__bg"></span>
     </header>
 
+    <!-- TRY -->
+    <section id="try" class="try">
+        <h2 class="">Null</h2>
+       <canvas id="bg"></canvas>
+    </section>
 
     <!-- Services -->
     <!--    <section id="services" class="section container">-->
