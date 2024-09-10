@@ -23,16 +23,6 @@
 <body>
 <main>
 
-
-<!--    <section>-->
-<!--        <div>-->
-<!--            <ul>-->
-<!--                <li><span class="avatar_box"><img class="avatar" src="assets\avatar\dog1.PNG" alt=""></span></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </section>-->
-
-
     <!-- Hero Header -->
     <header id="heroHeader" class="hero-header">
         <nav id="navBar" class="nav">
@@ -44,14 +34,14 @@
                 </button>
                 <ul id="navList" class="nav__list">
                     <li class="nav__list-item">
-                        <a class="nav__list-link active" href="#heroHeader">&lt;Home &sol;&gt;</a>
+                        <a class="nav__list-link active" href="#heroHeader">&lt;Home&sol;&gt;</a>
                     </li>
                     <li class="nav__list-item">
-                        <a class="nav__list-link" href="#Maybecanbesomething">&lt;Maybe can be something &sol;&gt;</a>
+                        <a class="nav__list-link" href="#Socials">&lt;Socials&sol;&gt;</a>
                     </li>
-<!--                    <li class="nav__list-item">-->
-<!--                        <a class="nav__list-link" href="#Socials">&lt;Socials &sol;&gt;</a>-->
-<!--                    </li>-->
+                    <li class="nav__list-item">
+                        <a class="nav__list-link" href="#more">&lt;More&sol;&gt;</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -61,14 +51,14 @@
                 <h1 class="header__title">
                     <span class="header__title-1" data-role="Chicago">Hucise</span>
                 </h1>
-                <p class="header__msg">I'm Hucise,AKA Chicago a self-taught arist</p>
-                <p class="header__msg">and currently lived in China.</p>
+                <p class="typingtxt"><span class="text first-text">I'm an</span>
+                    <span class="text sec-text" style="text-shadow:0 0 10px #00fd93;">Artist.</span>
+                </p>
+                <p class="header__msg">currently lived in China.</p>
                 <p class="header__msg">My fursona is a Wolf and bird</p>
                 <p class="header__msg">-------------------------------------------------------</p>
-                <p class="header__msg"><span
-                        style="font-size: 1.375em;position: absolute;">Commission info on the bottom</span>
-                </p>
-
+                <p class="header__msg"><span style="font-size: 30px;font-weight:600;position: absolute;">Commission info on the bottom</span></p>
+                <br>
 
                 <div id="app">
                     <div :class="{ shake: disabled }">
@@ -76,17 +66,20 @@
                         <span v-if="disabled" class="header__sup-text">&nbsp&nbspThis feature is disabled!</span>
                     </div>
                 </div>
-
             </div>
+
+            <div class="avatar"></div>
+
             <div class="header__right"></div>
 
         </section>
         <span class="header__bg"></span>
     </header>
 
+
     <!-- Socials -->
     <section id="Socials" class="section container">
-        <h2 class="section__title">Socials</h2>
+        <h2 class="section__title" style="margin-top: 100px">Socials</h2>
 
         <div class="service-cards">
             <article class="service-card__box">
@@ -118,6 +111,14 @@
                 <h3 class="service-card__title">Discord</h3>
                 <span class="service-card__bg"></span>
             </article>
+        </div>
+    </section>
+
+
+    <!--more-->
+    <section id="more" class="more">
+        <div class="more">
+        <p class="typingtxt">More interesting stuff waiting to be programmed... </p>
         </div>
     </section>
 
