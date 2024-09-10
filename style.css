@@ -1001,7 +1001,7 @@ body {
     border: 5px solid #e68d34;
     box-sizing: border-box;
     position: relative;
-    right: 100px;
+    right: 20px;
     bottom: 70px;
     background-image: url('./assets/avatar/Dog_3.jpg');
     background-size: cover;
