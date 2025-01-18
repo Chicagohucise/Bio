@@ -670,7 +670,6 @@ body {
  */
 
 
-
 /*
  * ========================
  * XLarge Screen -- 1200px
@@ -880,17 +879,16 @@ body {
  * Typing animations
  *
  */
-.typingtxt{
+.typingtxt {
     margin-top: 2rem;
     color: #00FF94;
     font-size: 20px;
     font-weight: 600;
 }
 
-.typingtxt .text.first-text{
+.typingtxt .text.first-text {
     color: #FFFFFF;
 }
-
 
 
 /*
@@ -952,5 +950,14 @@ body {
     background: #00fd93;
     color: #ffffff;
     box-shadow: 0 0 15px #00fd93;
+}
+
+.spotify {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 0;
 }
 
