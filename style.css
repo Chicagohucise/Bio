@@ -1,20 +1,14 @@
 :root {
-    /* --- 选项 A: 荧光蓝 (当前激活) --- */
+
     --main-color: #00fd93;       /* 主荧光色 */
-    --main-color-dim: #00fb92;   /* 较暗的蓝色，用于次要元素 */
+    --main-color-dim: #00fb92;  
     --main-glow: 0 0 10px #00fd93, 0 0 20px rgb(0, 251, 146);
 
-    /* --- 选项 B: 荧光绿 (如果你想换回绿色，取消下面注释，注释掉上面的蓝色) --- */
-    /* --main-color: #00FF94;
-    --main-color-dim: #37AE7C;
-    --main-glow: 0 0 10px #00FF94, 0 0 20px rgba(0, 255, 148, 0.5);
-    */
 
     --bg-color: #111111;
     --card-bg: #1a1a1a;
     --text-white: #ffffff;
 }
-
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -1070,7 +1064,7 @@ body {
 }
 
 
-/* 1. 基础文字颜色与发光（保持你喜欢的荧光绿） */
+
 .auto-type {
     color: #00FF94;
     text-shadow: 0 0 10px rgba(0, 255, 148, 0.5),
@@ -1078,7 +1072,7 @@ body {
     font-weight: 700;
 }
 
-/* 2. 炫酷的光标：紧凑、闪烁、且带有色彩 */
+
 .typed-cursor {
     margin-left: -10px;      /* 解决光标离文字太远的问题 */
     color: #00FF94;
@@ -1087,13 +1081,13 @@ body {
     animation: blink 0.7s infinite; /* 自定义闪烁动画 */
 }
 
-/* 自定义呼吸闪烁，比默认的更丝滑 */
+
 @keyframes blink {
     0%, 100% { opacity: 1; }
     50% { opacity: 0; }
 }
 
-/* 3. (可选进阶) 赋予文字微弱的“抖动”感，呼应你的 CHICAGO 动画 */
+
 .auto-type {
     position: relative;
     animation: text-pulse 3s infinite ease-in-out;
