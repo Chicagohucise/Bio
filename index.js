@@ -123,3 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
         offset: -80 // 抵消导航栏高度
     });
 });
+
+window.addEventListener('load', () => {
+    // 延迟一小会儿执行，确保 150% 缩放布局计算完成
+    setTimeout(() => {
+        const hero = document.querySelector('#heroHeader');
+        if (hero) {
+            hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, 100);
+});
