@@ -1,7 +1,7 @@
 :root {
 
     --main-color: #00fd93;       /* 主荧光色 */
-    --main-color-dim: #00fb92;  
+    --main-color-dim: #00fb92;
     --main-glow: 0 0 10px #00fd93, 0 0 20px rgb(0, 251, 146);
 
 
@@ -44,6 +44,8 @@ footer, header, hgroup, menu, nav, section {
 
 body {
     line-height: 1;
+    zoom: 1.5;
+    margin-top: -80px !important;
 }
 
 ol, ul {
@@ -984,13 +986,37 @@ body {
 #commission-section {
     width: 100%;
     background-color: #0f0f0f;
-    border-top: 1px solid var(--main-color);
+    border-top: none; /* 先关掉原本的边框 */
+    position: relative;
     overflow: hidden;
     /* 关键动画属性 */
     max-height: 0;
     opacity: 0;
     transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out;
 }
+
+#commission-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--main-color) 45%,
+        #fff 50%,
+        var(--main-color) 55%,
+        transparent 100%);
+    background-size: 200% 100%;
+    animation: flow 3s infinite linear;
+}
+
+@keyframes flow {
+    from { background-position: 100% 0; }
+    to { background-position: -100% 0; }
+}
+
 
 #commission-section.expanded {
     max-height: 2500px; /* 足够大以容纳内容 */

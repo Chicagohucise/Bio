@@ -29,10 +29,23 @@ const resetActiveState = () => {
 function toggleCommissions() {
     COMM_SECTION.classList.toggle('expanded');
 
-    // 展开后平滑滚动到目标区域
     if (COMM_SECTION.classList.contains('expanded')) {
+        // 延迟时间建议设为动画时长的一半以上（你的动画是 800ms，这里设为 400-500ms）
         setTimeout(() => {
-            COMM_SECTION.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 获取元素相对于视口的位置
+            const rect = COMM_SECTION.getBoundingClientRect();
+            // 计算绝对垂直位置：当前滚动高度 + 元素到视口顶部的距离
+            const absoluteTop = window.pageYOffset + rect.top;
+
+            // 【关键修改点】
+            // 因为你全局放大 150%，建议将偏移量设为 80-120 左右，视觉上最舒服
+            // 这样能确保滚动停止后，顶部留有一段“呼吸空间”
+            const offset = 100;
+
+            window.scrollTo({
+                top: absoluteTop - offset,
+                behavior: 'smooth'
+            });
         }, 300);
     }
 }
