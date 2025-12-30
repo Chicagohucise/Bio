@@ -1,3 +1,21 @@
+:root {
+    /* --- 选项 A: 荧光蓝 (当前激活) --- */
+    --main-color: #00fd93;       /* 主荧光色 */
+    --main-color-dim: #00fb92;   /* 较暗的蓝色，用于次要元素 */
+    --main-glow: 0 0 10px #00fd93, 0 0 20px rgb(0, 251, 146);
+
+    /* --- 选项 B: 荧光绿 (如果你想换回绿色，取消下面注释，注释掉上面的蓝色) --- */
+    /* --main-color: #00FF94;
+    --main-color-dim: #37AE7C;
+    --main-glow: 0 0 10px #00FF94, 0 0 20px rgba(0, 255, 148, 0.5);
+    */
+
+    --bg-color: #111111;
+    --card-bg: #1a1a1a;
+    --text-white: #ffffff;
+}
+
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -316,12 +334,20 @@ body {
     display: inline-flex;
     border-radius: 7px;
     text-decoration: none;
-    background-color: #37AE7C;
+    background-color: #00fb92;
     padding: 1.2rem 1.5rem;
     font-weight: 700;
     color: white;
     margin-top: 5rem;
     position: relative;
+    transition: all 0.2s ease; /* 平滑过渡效果 */
+    box-shadow: 0 4px 0 #00fb92; /* 底部深色阴影，模拟厚度 */
+}
+
+.header__resume:hover {
+    background-color: #3fca8f;
+    transform: translateY(-2px); /* 向上浮动一点 */
+    box-shadow: 0 6px 0 #00fb92;
 }
 
 .header__resume:hover::before {
@@ -342,6 +368,11 @@ body {
     z-index: -1;
     filter: blur(30px);
     transform: translate(-50%, -50%);
+}
+
+.header__resume:active {
+    transform: translateY(2px); /* 向下位移 */
+    box-shadow: 0 2px 0 #2e8f66; /* 阴影变薄 */
 }
 
 /*
@@ -874,22 +905,10 @@ body {
 }
 
 
-/*
- *
- * Typing animations
- *
- */
-.typingtxt {
-    margin-top: 2rem;
-    color: #00FF94;
-    font-size: 20px;
-    font-weight: 600;
-}
-
-.typingtxt .text.first-text {
-    color: #FFFFFF;
-}
-
+/* Typing Text */
+.typingtxt { margin-top: 2rem; color: var(--main-color); font-size: 20px; font-weight: 600; display: flex; gap: 10px; align-items: center;}
+.typingtxt .text.first-text { color: #FFFFFF; }
+.typingtxt .sec-text { text-shadow: var(--main-glow); }
 
 /*
  *
@@ -965,3 +984,133 @@ body {
     max-width: 100%;
 }
 
+/* ==================
+   NEW: Commission Section
+   ================== */
+#commission-section {
+    width: 100%;
+    background-color: #0f0f0f;
+    border-top: 1px solid var(--main-color);
+    overflow: hidden;
+    /* 关键动画属性 */
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out;
+}
+
+#commission-section.expanded {
+    max-height: 2500px; /* 足够大以容纳内容 */
+    opacity: 1;
+    padding-bottom: 50px;
+}
+
+.commission-container {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.comm-title {
+    font-size: 3rem;
+    color: var(--main-color);
+    text-align: center;
+    margin-bottom: 3rem;
+    text-shadow: var(--main-glow);
+}
+
+.comm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.comm-card {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 2rem;
+    transition: transform 0.3s, border-color 0.3s;
+}
+.comm-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--main-color);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
+.comm-type { font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem; color: white; }
+.comm-price { font-size: 1.5rem; color: var(--main-color); margin-bottom: 1rem; font-family: 'IBM Plex Mono', monospace;}
+.comm-desc { font-size: 1.4rem; color: #aaa; line-height: 1.6; margin-bottom: 1.5rem; }
+.comm-img-placeholder {
+    width: 100%; height: 200px; background: #222; margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center; color: #555; border-radius: 8px;
+}
+
+.comm-terms {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #151515;
+    border-left: 3px solid var(--main-color);
+}
+.comm-terms h3 { color: var(--main-color); margin-bottom: 1rem; }
+.comm-terms p { font-size: 1.4rem; color: #ccc; }
+
+/* Footer */
+.footer { font-size: 1.4rem; color: var(--main-color-dim); font-weight: 700; backdrop-filter: blur(75px); text-align: center; padding: 2rem 0; margin-top: auto;}
+
+/* Responsive Media Queries (Keep existing logic mostly) */
+@media only screen and (min-width: 36em) {
+    .container { max-width: 540px; }
+    .nav__list { height: unset; flex-direction: row; justify-content: flex-end; overflow-y: unset; }
+    .nav__list-item { margin-bottom: 0; margin-right: 2rem; }
+    .nav__hamburger-btn { display: none; }
+}
+@media only screen and (min-width: 62em) {
+    .container { max-width: 960px; }
+    .section__title { font-size: 8rem; }
+}
+
+
+/* 1. 基础文字颜色与发光（保持你喜欢的荧光绿） */
+.auto-type {
+    color: #00FF94;
+    text-shadow: 0 0 10px rgba(0, 255, 148, 0.5),
+                 0 0 20px rgba(0, 255, 148, 0.2);
+    font-weight: 700;
+}
+
+/* 2. 炫酷的光标：紧凑、闪烁、且带有色彩 */
+.typed-cursor {
+    margin-left: -10px;      /* 解决光标离文字太远的问题 */
+    color: #00FF94;
+    text-shadow: 0 0 12px #00FF94;
+    opacity: 1;
+    animation: blink 0.7s infinite; /* 自定义闪烁动画 */
+}
+
+/* 自定义呼吸闪烁，比默认的更丝滑 */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 3. (可选进阶) 赋予文字微弱的“抖动”感，呼应你的 CHICAGO 动画 */
+.auto-type {
+    position: relative;
+    animation: text-pulse 3s infinite ease-in-out;
+}
+
+@keyframes text-pulse {
+    0%, 100% { filter: brightness(100%) blur(0px); }
+    50% { filter: brightness(120%) blur(0.3px); }
+}
+.auto-type {
+    background: linear-gradient(90deg, #ffffff, #00FF94, #00FF94);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-move 3s linear infinite;
+}
+
+@keyframes gradient-move {
+    to { background-position: 200% center; }
+}

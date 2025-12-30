@@ -1,163 +1,112 @@
-const NAV_BAR = document.getElementById('navBar');
-const NAV_LIST = document.getElementById('navList');
-const HERO_HEADER = document.getElementById('heroHeader');
-const HAMBURGER_BTN = document.getElementById('hamburgerBtn');
-const NAV_LINKS = Array.from(document.querySelectorAll('.nav__list-link'));
-const SERVICE_BOXES = document.querySelectorAll('.service-card__box');
-const ACTIVE_LINK_CLASS = 'active';
-const BREAKPOINT = 576;
+/**
+ * ============================================================
+ * 1. 全局常量与元素获取
+ * ============================================================
+ */
+const NAV_BAR        = document.getElementById('navBar');
+const NAV_LIST       = document.getElementById('navList');
+const HERO_HEADER    = document.getElementById('heroHeader');
+const HAMBURGER_BTN  = document.getElementById('hamburgerBtn');
+const NAV_LINKS     = Array.from(document.querySelectorAll('.nav__list-link'));
+const COMM_BTN       = document.getElementById('btnCommission');
+const COMM_SECTION   = document.getElementById('commission-section');
+const NAV_COMM_LINK  = document.getElementById('navCommissionLink');
 
-let currentServiceBG = null;
-let currentActiveLink = document.querySelector('.nav__list-link.active');
+/**
+ * ============================================================
+ * 2. 公共工具函数
+ * ============================================================
+ */
 
-// Remove the active state once the breakpoint is reached
+// 重置导航栏状态（主要用于移动端收起菜单）
 const resetActiveState = () => {
     NAV_LIST.classList.remove('nav--active');
-    Object.assign(NAV_LIST.style, {
-        height: null
-    });
-    Object.assign(document.body.style, {
-        overflowY: null
-    });
+    Object.assign(NAV_LIST.style, { height: null });
+    Object.assign(document.body.style, { overflowY: null });
+};
+
+// 切换委托区域（Commission）的显示与隐藏
+function toggleCommissions() {
+    COMM_SECTION.classList.toggle('expanded');
+
+    // 展开后平滑滚动到目标区域
+    if (COMM_SECTION.classList.contains('expanded')) {
+        setTimeout(() => {
+            COMM_SECTION.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+    }
 }
 
-//Add padding to the header to make it visible because navbar has a fixed position.
-const addPaddingToHeroHeaderFn = () => {
-    const NAV_BAR_HEIGHT = NAV_BAR.getBoundingClientRect().height;
-    const HEIGHT_IN_REM = NAV_BAR_HEIGHT / 10;
+/**
+ * ============================================================
+ * 3. 交互事件监听
+ * ============================================================
+ */
 
-    // If hamburger button is active, do not add padding
-    if (NAV_LIST.classList.contains('nav--active')) {
-        return;
-    }
-    Object.assign(HERO_HEADER.style, {
-        paddingTop: HEIGHT_IN_REM + 'rem'
-    });
-}
-addPaddingToHeroHeaderFn();
-window.addEventListener('resize', () => {
-    addPaddingToHeroHeaderFn();
-
-    // When the navbar is active and the window is being resized, remove the active state once the breakpoint is reached
-    if (window.innerWidth >= BREAKPOINT) {
-        addPaddingToHeroHeaderFn();
-        resetActiveState();
-    }
-});
-
-// As the user scrolls, the active link should change based on the section currently displayed on the screen.
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('#heroHeader, #Socials, #works, #contact');
-
-    // Loop through sections and check if they are visible
-    sections.forEach((section) => {
-        const sectionTop = section.offsetTop;
-        const NAV_BAR_HEIGHT = NAV_BAR.getBoundingClientRect().height;
-        if (window.scrollY >= sectionTop - NAV_BAR_HEIGHT) {
-            const ID = section.getAttribute('id');
-            const LINK = NAV_LINKS.filter(link => {
-                return link.href.includes('#' + ID);
-            })[0];
-            console.log(LINK);
-            currentActiveLink.classList.remove(ACTIVE_LINK_CLASS);
-            LINK.classList.add(ACTIVE_LINK_CLASS);
-            currentActiveLink = LINK;
-        }
-    });
-});
-
-// Shows & hide navbar on smaller screen
+// --- 汉堡菜单逻辑 ---
 HAMBURGER_BTN.addEventListener('click', () => {
     NAV_LIST.classList.toggle('nav--active');
+
     if (NAV_LIST.classList.contains('nav--active')) {
-        Object.assign(document.body.style, {
-            overflowY: 'hidden'
-        });
-        Object.assign(NAV_LIST.style, {
-            height: '100vh'
-        });
-        return;
+        Object.assign(document.body.style, { overflowY: 'hidden' });
+        Object.assign(NAV_LIST.style, { height: '100vh' });
+    } else {
+        Object.assign(NAV_LIST.style, { height: 0 });
+        Object.assign(document.body.style, { overflowY: null });
     }
-    Object.assign(NAV_LIST.style, {
-        height: 0
-    });
-    Object.assign(document.body.style, {
-        overflowY: null
-    });
 });
 
-// When navbar link is clicked, reset the active state
+// --- 导航链接点击处理 ---
 NAV_LINKS.forEach(link => {
-    link.addEventListener('click', () => {
-        resetActiveState();
-        link.blur();
-    })
-})
-
-// Handles the hover animation on services section
-SERVICE_BOXES.forEach(service => {
-    const moveBG = (x, y) => {
-        Object.assign(currentServiceBG.style, {
-            left: x + 'px',
-            top: y + 'px',
-        })
-    }
-    service.addEventListener('mouseenter', (e) => {
-        if (currentServiceBG === null) {
-            currentServiceBG = service.querySelector('.service-card__bg');
-        }
-        moveBG(e.clientX, e.clientY);
-    });
-    service.addEventListener('mousemove', (e) => {
-        const LEFT = e.clientX - service.getBoundingClientRect().left;
-        const TOP = e.clientY - service.getBoundingClientRect().top;
-        moveBG(LEFT, TOP);
-    });
-    service.addEventListener('mouseleave', () => {
-        const IMG_POS = service.querySelector('.service-card__illustration')
-        const LEFT = IMG_POS.offsetLeft + currentServiceBG.getBoundingClientRect().width;
-        const TOP = IMG_POS.offsetTop + currentServiceBG.getBoundingClientRect().height;
-
-        moveBG(LEFT, TOP);
-        currentServiceBG = null;
-    });
+    link.addEventListener('click', resetActiveState);
 });
 
-// Handles smooth scrolling
-new SweetScroll({
-    trigger: '.nav__list-link',
-    easing: 'easeOutQuint',
-    offset: NAV_BAR.getBoundingClientRect().height - 80
-});
-
-
-
-//vue.js stuff
-const {ref, createApp} = Vue
-
-const app = createApp({
-    setup() {
-
-        const disabled = ref(false)
-
-        function warnDisabled() {
-            disabled.value = true
-            setTimeout(() => {
-                disabled.value = false
-            }, 1500)
-        }
-
-        return {
-            disabled, warnDisabled
-        }
-    }
-})
-
-document.querySelectorAll('a').forEach(function(link) {
-    link.addEventListener('dragstart', function(e) {
+// --- 委托区域触发逻辑 ---
+if (COMM_BTN) {
+    COMM_BTN.addEventListener('click', (e) => {
         e.preventDefault();
+        toggleCommissions();
+    });
+}
+
+if (NAV_COMM_LINK) {
+    NAV_COMM_LINK.addEventListener('click', (e) => {
+        e.preventDefault();
+        // 若未展开则展开，已展开则直接滚动
+        if (!COMM_SECTION.classList.contains('expanded')) {
+            toggleCommissions();
+        } else {
+            COMM_SECTION.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        resetActiveState(); // 关闭移动端菜单
+    });
+}
+
+/**
+ * ============================================================
+ * 4. 第三方库初始化
+ * ============================================================
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Typed.js 打字机动画初始化
+    if (document.querySelector(".auto-type")) {
+        new Typed(".auto-type", {
+            strings: ["Artist.", "Developer.", "Gamer.", "Furry."],
+            typeSpeed: 80,
+            backSpeed: 40,
+            backDelay: 1500,
+            startDelay: 500,
+            loop: true,
+            smartBackspace: true,
+            cursorChar: '_',
+        });
+    }
+
+    // SweetScroll 平滑滚动初始化
+    new SweetScroll({
+        trigger: '.nav__list-link[href^="#"]',
+        easing: 'easeOutQuint',
+        offset: -80 // 抵消导航栏高度
     });
 });
-
-app.mount('#app')
-

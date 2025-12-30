@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta charset="UTF-8">
 <html lang="en">
 <head>
     <!-- Google Font -->
@@ -42,12 +43,6 @@
                     <li class="nav__list-item">
                         <a class="nav__list-link active" href="#heroHeader">&lt;Home&sol;&gt;</a>
                     </li>
-<!--                    <li class="nav__list-item">-->
-<!--                        <a class="nav__list-link" href="#Socials">&lt;Socials&sol;&gt;</a>-->
-<!--                    </li>-->
-<!--                    <li class="nav__list-item">-->
-<!--                        <a class="nav__list-link" href="#more">&lt;More&sol;&gt;</a>-->
-<!--                    </li>-->
                 </ul>
             </div>
         </nav>
@@ -57,9 +52,10 @@
                 <h1 class="header__title">
                     <span class="header__title-1" data-role="Chicago">Hucise</span>
                 </h1>
-                <p class="typingtxt"><span class="text first-text">I'm an</span>
-                    <span class="text sec-text" style="text-shadow:0 0 10px #00fd93;">Artist.</span>
-                </p>
+                <div class="typingtxt">
+                    <span class="text first-text">I'm an</span>
+                    <span class="text sec-text auto-type"></span>
+                </div>
                 <p class="header__msg">Currently living in China</p>
                 <p class="header__msg">My fursonas are a wolf and a bird</p>
                 <div class="home-sci" style="margin-top: 15px">
@@ -71,72 +67,70 @@
                 </div>
                 <p class="header__msg"><span style="font-size: 30px;font-weight:600;position: absolute;">Commission info below</span></p>
                 <br>
-                <div id="app">
-                    <div :class="{ shake: disabled }">
-                        <a href="#" @click="warnDisabled" class="header__resume">Commissions</a>
-                        <span v-if="disabled" class="header__sup-text">&nbsp&nbspThis feature is disabled!</span>
-                    </div>
-                </div>
+
+                <a id="btnCommission" href="#" class="header__resume">Commissions</a>
+
             </div>
 
             <div class="avatar"></div>
 
         </section>
 
-
     </header>
 
 
+    <!-- commission -->
+<section id="commission-section">
+        <div class="commission-container">
+            <h2 class="comm-title">&lt; Commission Info /&gt;</h2>
 
+            <div class="comm-grid">
+                <div class="comm-card">
+                    <div class="comm-img-placeholder">
+                        <i class='bx bxs-user-circle' style='font-size: 5rem;'></i>
+                    </div>
+                    <h3 class="comm-type">Headshot / Icon</h3>
+                    <p class="comm-price">Start from ¥150 / $25</p>
+                    <p class="comm-desc">Perfect for social media avatars. Includes simple background. High resolution.</p>
+                </div>
 
-    <!-- Socials -->
-<!--    <section id="Socials" class="section container">-->
-<!--        <h2 class="section__title" style="margin-top: 100px">Socials</h2>-->
+                <div class="comm-card">
+                    <div class="comm-img-placeholder">
+                        <i class='bx bxs-user' style='font-size: 5rem;'></i>
+                    </div>
+                    <h3 class="comm-type">Half Body</h3>
+                    <p class="comm-price">Start from ¥300 / $45</p>
+                    <p class="comm-desc">Waist-up character drawing. More details on clothing and accessories.</p>
+                </div>
 
-<!--        <div class="service-cards">-->
-<!--            <article class="service-card__box">-->
-<!--                    <span class="service-card__illustration">-->
-<!--                      <a class="Icon" href="https://x.com/ChicagoHucise">-->
+                <div class="comm-card">
+                    <div class="comm-img-placeholder">
+                        <i class='bx bxs-user-detail' style='font-size: 5rem;'></i>
+                    </div>
+                    <h3 class="comm-type">Full Body</h3>
+                    <p class="comm-price">Start from ¥500 / $75</p>
+                    <p class="comm-desc">Full character design with dynamic pose. Transparent or simple background included.</p>
+                </div>
+            </div>
 
-<!--                         <img class="icon_box" src="./assets/illustrations/twitter-154-svgrepo-com.svg"-->
-<!--                              alt="Twitter icon"/>-->
-<!--                      </a>-->
-<!--                    </span>-->
-<!--                <h3 class="service-card__title">Twitter</h3>-->
-<!--                <span class="service-card__bg"></span>-->
-<!--            </article>-->
-<!--            <article class="service-card__box">-->
-<!--                    <span class="service-card__illustration">-->
-<!--                      <a class="Icon" href="https://steamcommunity.com/id/Hucies/">-->
-<!--                         <img class="icon_box" src="./assets/illustrations/steam-svgrepo-com.svg" alt="Steam icon"/>-->
-<!--                      </a>-->
-<!--                    </span>-->
-<!--                <h3 class="service-card__title">Steam</h3>-->
-<!--                <span class="service-card__bg"></span>-->
-<!--            </article>-->
-<!--            <article class="service-card__box">-->
-<!--                    <span class="service-card__illustration">-->
-<!--                      <a class="Icon" href="https://steamcommunity.com/id/Hucies/">-->
-<!--                         <img class="icon_box" src="./assets/illustrations/discord-svgrepo-com.svg" alt="Discord icon"/>-->
-<!--                      </a>-->
-<!--                    </span>-->
-<!--                <h3 class="service-card__title">Discord</h3>-->
-<!--                <span class="service-card__bg"></span>-->
-<!--            </article>-->
-<!--        </div>-->
-<!--    </section>-->
+            <div class="comm-terms">
+                <h3>Contact & Terms</h3>
+                <p>Payment via WeChat / Alipay / PayPal.</p>
+                <p>Please DM me on Twitter or Discord with your references.</p>
+                <p style="margin-top: 10px; color: var(--main-color);">Discord: Hucise</p>
+            </div>
+        </div>
+    </section>
 
-    <!--more-->
-<!--    <section id="more" class="more">-->
-<!--        <div class="more">-->
-<!--        <p class="typingtxt">More interesting stuff waiting to be programmed... </p>-->
-<!--        </div>-->
-<!--    </section>-->
         <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2024 chicagohucise. All Rights Reserved.</p>
+        <p>&copy; 2025 chicagohucise. All Rights Reserved.</p>
     </footer>
-
 </main>
+
+<script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
+<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+<script src="./index.js" defer></script>
+
 </body>
 </html>
