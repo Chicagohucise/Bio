@@ -11,6 +11,10 @@ const NAV_LINKS     = Array.from(document.querySelectorAll('.nav__list-link'));
 const COMM_BTN       = document.getElementById('btnCommission');
 const COMM_SECTION   = document.getElementById('commission-section');
 const NAV_COMM_LINK  = document.getElementById('navCommissionLink');
+const HISTORY_BTN     = document.getElementById('btnHistoryToggle');
+const HISTORY_CONT    = document.getElementById('historyContainer');
+const TRACKER_SECTION = document.getElementById('commission-tracker-section');
+const PORTFOLIO_SECTION = document.getElementById('portfolio-section');
 
 /**
  * ============================================================
@@ -27,19 +31,16 @@ const resetActiveState = () => {
 
 // 切换委托区域（Commission）的显示与隐藏
 function toggleCommissions() {
+    const isExpanding = !COMM_SECTION.classList.contains('expanded');
+
     COMM_SECTION.classList.toggle('expanded');
+    TRACKER_SECTION.classList.toggle('expanded');
+    PORTFOLIO_SECTION.classList.toggle('expanded');
 
-    if (COMM_SECTION.classList.contains('expanded')) {
-        // 延迟时间建议设为动画时长的一半以上（你的动画是 800ms，这里设为 400-500ms）
+    if (isExpanding) {
         setTimeout(() => {
-            // 获取元素相对于视口的位置
-            const rect = COMM_SECTION.getBoundingClientRect();
-            // 计算绝对垂直位置：当前滚动高度 + 元素到视口顶部的距离
+            const rect = TRACKER_SECTION.getBoundingClientRect();
             const absoluteTop = window.pageYOffset + rect.top;
-
-            // 【关键修改点】
-            // 因为你全局放大 150%，建议将偏移量设为 80-120 左右，视觉上最舒服
-            // 这样能确保滚动停止后，顶部留有一段“呼吸空间”
             const offset = 100;
 
             window.scrollTo({
@@ -85,13 +86,23 @@ if (COMM_BTN) {
 if (NAV_COMM_LINK) {
     NAV_COMM_LINK.addEventListener('click', (e) => {
         e.preventDefault();
-        // 若未展开则展开，已展开则直接滚动
-        if (!COMM_SECTION.classList.contains('expanded')) {
+        if (!TRACKER_SECTION.classList.contains('expanded')) {
             toggleCommissions();
         } else {
-            COMM_SECTION.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            TRACKER_SECTION.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        resetActiveState(); // 关闭移动端菜单
+        resetActiveState();
+    });
+}
+
+// --- 历史记录切换逻辑 ---
+if (HISTORY_BTN) {
+    HISTORY_CONT.style.display = 'block'; // 始终保持 block，通过 CSS 控制高度
+    HISTORY_BTN.addEventListener('click', () => {
+        const isShowing = HISTORY_CONT.classList.toggle('show');
+        HISTORY_BTN.innerHTML = isShowing
+            ? "<i class='bx bx-chevron-up'></i> Hide Commission History"
+            : "<i class='bx bx-chevron-down'></i> Show Commission History";
     });
 }
 
@@ -132,4 +143,49 @@ window.addEventListener('load', () => {
             hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, 100);
+
+    // --- 导航栏高亮逻辑 (Intersection Observer) ---
+    const sections = [
+        document.getElementById('heroHeader'),
+        document.getElementById('commission-tracker-section'),
+        document.getElementById('commission-section')
+    ];
+
+    const navLinks = {
+        'heroHeader': document.querySelector('.nav__list-link[href="#heroHeader"]'),
+        'commission-tracker-section': document.getElementById('navCommissionLink'),
+        'commission-section': null // 委托详情共用 Commissions 链接或不单独高亮
+    };
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '-40% 0px -40% 0px', // 触发区域在屏幕中间
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 清除所有高亮
+                Object.values(navLinks).forEach(link => link?.classList.remove('active'));
+
+                // 为当前板块对应的链接添加高亮
+                const activeLink = navLinks[entry.target.id];
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                } else if (entry.target.id === 'commission-section') {
+                    // 如果在委托详情板块，也高亮 Commissions 链接
+                    navLinks['commission-tracker-section']?.classList.add('active');
+                }
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        if (section) observer.observe(section);
+    });
 });
+
+
+
+

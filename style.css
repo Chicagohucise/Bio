@@ -580,6 +580,15 @@ body {
 }
 
 
+
+
+/* 确保新组件在小屏幕下也能堆叠显示 */
+@media only screen and (max-width: 48em) {
+    .projects-grid, .comm-grid, .portfolio-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 /*
  * ========================
  * Small Screen -- 576px
@@ -949,7 +958,7 @@ body {
     height: 35px;
     background: black;
     border: 2px solid #00fd93;
-    border-radius: 50%;
+    border-radius: 12%;
     font-size: 25px;
     color: #00fd93;
     text-decoration: none;
@@ -1133,4 +1142,296 @@ body {
 
 @keyframes gradient-move {
     to { background-position: 200% center; }
+}
+
+/* ============================================================
+   Commission Tracker & Portfolio Styles
+   ============================================================ */
+
+.commission-tracker-section, .portfolio-section {
+    width: 100%;
+    background-color: var(--bg-color);
+    padding: 60px 0;
+    display: none; /* 默认隐藏，由 JS 控制显示 */
+    border-top: 0;
+}
+
+.commission-tracker-section.expanded, .portfolio-section.expanded {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.tracker-title, .portfolio-title {
+    font-size: 2.5rem;
+    color: var(--main-color);
+    text-align: center;
+    margin-bottom: 40px;
+    text-shadow: var(--main-glow);
+    font-weight: bold;
+}
+
+/* Projects Grid */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.project-card {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card:hover {
+    border-color: var(--main-color);
+    box-shadow: 0 0 15px rgba(0, 253, 147, 0.2);
+    transform: translateY(-5px);
+}
+
+.project-header {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.client-avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 2px solid var(--main-color);
+    object-fit: cover;
+}
+
+.client-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-white);
+    margin-bottom: 5px;
+}
+
+.project-type {
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: var(--main-color);
+}
+
+/* Progress Bar */
+.progress-section {
+    margin-bottom: 15px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 8px;
+}
+
+.progress-percent {
+    color: var(--main-color);
+    font-weight: bold;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #333;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--main-color);
+    border-radius: 10px;
+    transition: width 0.8s ease;
+    box-shadow: 0 0 10px var(--main-color);
+}
+
+.project-footer {
+    font-size: 0.9rem;
+    color: #888;
+    text-align: right;
+}
+
+.due-date {
+    color: var(--main-color);
+}
+
+/* History Toggle */
+.history-toggle-section {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.history-toggle-btn {
+    background: transparent;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.history-toggle-btn:hover {
+    background: var(--main-color);
+    color: #000;
+    box-shadow: var(--main-glow);
+}
+
+/* History Table */
+.history-container {
+    margin-top: 0;
+    text-align: left;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.5s ease;
+    opacity: 0;
+}
+
+.history-container.show {
+    max-height: 2000px; /* 足够大的高度以容纳内容 */
+    margin-top: 40px;
+    opacity: 1;
+}
+
+.history-title {
+    font-size: 1.8rem;
+    color: var(--main-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.history-table {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+.table-header {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1fr 1.2fr 1fr;
+    gap: 15px;
+    background: #222;
+    padding: 15px;
+    font-weight: bold;
+    color: var(--main-color);
+    border-bottom: 2px solid var(--main-color);
+}
+
+.table-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1fr 1.2fr 1fr;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    align-items: center;
+}
+
+.table-cell {
+    font-size: 0.95rem;
+    color: #ccc;
+}
+
+.table-cell.amount {
+    color: var(--main-color);
+    font-weight: bold;
+}
+
+/* Portfolio Grid */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.portfolio-item {
+    background: var(--card-bg);
+    border: 1px solid #333;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.portfolio-item:hover {
+    border-color: var(--main-color);
+    box-shadow: 0 5px 15px rgba(0, 253, 147, 0.2);
+    transform: translateY(-5px);
+}
+
+.portfolio-image-container {
+    position: relative;
+    overflow: hidden;
+    height: 220px;
+    background: #222;
+}
+
+.portfolio-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/*.portfolio-item:hover .portfolio-image {*/
+/*    transform: scale(1.1);*/
+/*}*/
+
+/*.portfolio-overlay {*/
+/*    position: absolute;*/
+/*    top: 0; left: 0; right: 0; bottom: 0;*/
+/*    background: rgba(0, 253, 147, 0.1);*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    opacity: 0;*/
+/*    transition: opacity 0.3s ease;*/
+/*}*/
+
+.portfolio-item:hover .portfolio-overlay {
+    opacity: 1;
+}
+
+.portfolio-category {
+    color: var(--main-color);
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.portfolio-info {
+    padding: 20px;
+}
+
+.portfolio-item-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-white);
+    margin-bottom: 10px;
+}
+
+.portfolio-description {
+    font-size: 0.9rem;
+    color: #aaa;
+    line-height: 1.5;
 }
