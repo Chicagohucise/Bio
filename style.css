@@ -45,7 +45,14 @@ footer, header, hgroup, menu, nav, section {
 body {
     line-height: 1;
     zoom: 1.5;
-    margin-top: -80px !important;
+    margin-top: -150px !important;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        zoom: 1;
+        margin-top: 0 !important;
+    }
 }
 
 ol, ul {
@@ -152,7 +159,8 @@ body {
     flex-direction: column;
     justify-content: center;
     height: 0;
-    overflow-y: scroll;
+    overflow-y: hidden;
+    transition: height 0.3s ease-in-out;
 }
 
 .nav__list-item {
@@ -261,10 +269,46 @@ body {
 }
 
 .header__container {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     position: relative;
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+        zoom: 1;
+        margin-top: 0 !important;
+    }
+
+    .header__container {
+        flex-direction: column;
+        /* 1. 纵向：依然垂直居中，这样就不会顶到导航栏 */
+        justify-content: center;
+
+        /* 2. 横向：这才是控制靠左的关键！ */
+        align-items: flex-start;
+
+        text-align: left;
+        padding-top: 80px; /* 如果还是太高，可以增加这个值 */
+        padding-left: 25px;
+    }
+
+    .header__title {
+        font-size: 4rem;
+        align-items: flex-start; /* 标题容器靠左 */
+    }
+
+    .home-sci, .spotify, .typingtxt {
+        justify-content: flex-start !important;
+    }
+
+    .section__title::before {
+        left: 0 !important;
+        transform: none !important;
+    }
 }
 
 .header__left {
@@ -285,6 +329,12 @@ body {
     line-height: 1;
     display: flex;
     flex-direction: column;
+}
+
+@media only screen and (max-width: 600px) {
+    .header__title {
+        font-size: 4rem;
+    }
 }
 
 .header__title-1,
@@ -949,31 +999,80 @@ body {
 
 .home-sci {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    gap: 15px;
+    margin-top: 3rem;
+    justify-content: flex-start; /* 保持靠左 */
 }
 
+
 .home-sci a {
-    width: 35px;
-    height: 35px;
-    background: black;
-    border: 2px solid #00fd93;
-    border-radius: 12%;
-    font-size: 25px;
-    color: #00fd93;
-    text-decoration: none;
-    margin: 0 20px 0 0;
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: rgba(0, 253, 147, 0.05); /* 极淡的荧光底色 */
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: zoomIn 1s ease forwards;
-    animation-delay: 0.4s;
+    text-decoration: none;
+    font-size: 20px;
+    animation: pulse-glow 2s infinite ease-in-out;
+}
+
+.home-sci a::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(
+        transparent 50%,
+        rgba(0, 253, 147, 0.1) 50%
+    );
+    background-size: 100% 4px; /* 模拟老式扫描线 */
+    pointer-events: none;
 }
 
 .home-sci a:hover {
-    background: #00fd93;
-    color: #ffffff;
-    box-shadow: 0 0 15px #00fd93;
+    background: var(--main-color);
+    color: #000;
+    box-shadow: 0 0 20px var(--main-color);
+    /* 悬停时稍微拉伸或位移，模拟故障 */
+    transform: skewX(-5deg);
+    /* 关键：切角效果 */
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.home-sci a::before {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 6px;
+    height: 6px;
+    background: var(--main-color);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    transition: all 0.2s;
+}
+
+.home-sci a:hover::before {
+    background: #000;
+}
+
+@media only screen and (max-width: 600px) {
+    .home-sci a {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+        /* 手机端持续微弱闪烁，更有氛围 */
+        animation: pulse-glow 2s infinite ease-in-out;
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 5px var(--main-color); }
+    50% { opacity: 0.8; box-shadow: 0 0 12px var(--main-color); }
 }
 
 .spotify {
@@ -1339,6 +1438,12 @@ body {
     border-bottom: 2px solid var(--main-color);
 }
 
+@media only screen and (max-width: 600px) {
+    .table-header {
+        display: none;
+    }
+}
+
 .table-row {
     display: grid;
     grid-template-columns: 1.2fr 1.2fr 1fr 1.2fr 1fr;
@@ -1346,6 +1451,14 @@ body {
     padding: 15px;
     border-bottom: 1px solid #333;
     align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .table-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .table-cell:nth-child(1) { grid-column: 1 / -1; font-weight: bold; color: var(--main-color); }
 }
 
 .table-cell {
@@ -1434,4 +1547,20 @@ body {
     font-size: 0.9rem;
     color: #aaa;
     line-height: 1.5;
+}
+
+/* Commission Info Text Styles */
+.commission-info-text {
+    margin-top: 2rem;
+}
+
+.commission-info-text span {
+    font-size: 3rem;
+    font-weight: 600;
+}
+
+@media only screen and (max-width: 600px) {
+    .commission-info-text span {
+        font-size: 2.4rem;
+    }
 }
