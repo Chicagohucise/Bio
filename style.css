@@ -1009,6 +1009,7 @@ body {
     position: relative;
     width: 48px;
     height: 48px;
+    border-radius: 12%;
     background: rgba(0, 253, 147, 0.05); /* 极淡的荧光底色 */
     color: var(--main-color);
     border: 1px solid var(--main-color);
@@ -1017,7 +1018,6 @@ body {
     justify-content: center;
     text-decoration: none;
     font-size: 20px;
-    animation: pulse-glow 2s infinite ease-in-out;
 }
 
 .home-sci a::after {
@@ -1247,17 +1247,52 @@ body {
    Commission Tracker & Portfolio Styles
    ============================================================ */
 
+/* 1. 基础容器设置 */
 .commission-tracker-section, .portfolio-section {
     width: 100%;
-    background-color: var(--bg-color);
-    padding: 60px 0;
-    display: none; /* 默认隐藏，由 JS 控制显示 */
-    border-top: 0;
+    background-color: #0f0f0f;
+    position: relative;
+    overflow: hidden; /* 必须，防止伪元素溢出 */
+
+    /* 初始隐藏状态：高度为0，透明度为0 */
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease-in-out;
 }
 
+/* 2. 激活状态 (JS 控制添加 .expanded) */
 .commission-tracker-section.expanded, .portfolio-section.expanded {
-    display: block;
-    animation: fadeIn 0.5s ease-in-out;
+    max-height: 5000px; /* 尽量改大，确保能包容所有内容 */
+    opacity: 1;
+    padding: 60px 0;
+}
+
+/* 3. 流光边框效果 */
+.commission-tracker-section::before, .portfolio-section::before {
+    content: "";
+    position: absolute;
+    top: 0; /* 放置在顶部 */
+    left: 0;
+    width: 100%;
+    height: 2px; /* 边框厚度 */
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--main-color, #007bff) 45%,
+        #fff 50%,
+        var(--main-color, #007bff) 55%,
+        transparent 100%);
+    background-size: 200% 100%;
+    animation: flow 3s infinite linear;
+}
+
+/* 4. 定义流光动画 */
+@keyframes flow {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 
 @keyframes fadeIn {
@@ -1563,4 +1598,25 @@ body {
     .commission-info-text span {
         font-size: 2.4rem;
     }
+}
+
+/* Matrix Background Styles */
+#matrix-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0.2; /* Slightly lower opacity for better readability across sections */
+    background-color: #111111; /* Ensure base color matches site bg */
+}
+
+/* Ensure main content has a clear background if needed,
+   but since the site is already dark, we just need to make sure
+   the canvas doesn't block interactions. */
+main {
+    position: relative;
+    z-index: 1;
 }
