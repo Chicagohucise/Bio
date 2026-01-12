@@ -44,7 +44,7 @@ footer, header, hgroup, menu, nav, section {
 
 body {
     line-height: 1;
-    zoom: 1.5;
+    zoom: 1.35;
     margin-top: -150px !important;
 }
 
@@ -1609,7 +1609,7 @@ body {
     height: 100vh;
     z-index: -2;
     pointer-events: none;
-    opacity: 0.2; /* Slightly lower opacity for better readability across sections */
+    opacity: 0.4; /* Slightly lower opacity for better readability across sections */
     background-color: #111111; /* Ensure base color matches site bg */
 }
 
