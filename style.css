@@ -359,13 +359,13 @@ body {
 
 .header__title-1::before,
 .header__title-2::before {
-    text-shadow: -5px 0 #59FFB9;
+    text-shadow: -5px 0 #ecd471;
     animation: distort-1 2s infinite linear alternate-reverse;
 }
 
 .header__title-1::after,
 .header__title-2::after {
-    text-shadow: -5px 0 #7218FA;
+    text-shadow: -5px 0 #3242f6;
     animation: distort-2 2s infinite linear alternate-reverse;
 }
 
