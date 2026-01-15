@@ -3,16 +3,16 @@
  * 1. 全局常量与元素获取
  * ============================================================
  */
-const NAV_BAR        = document.getElementById('navBar');
-const NAV_LIST       = document.getElementById('navList');
-const HERO_HEADER    = document.getElementById('heroHeader');
-const HAMBURGER_BTN  = document.getElementById('hamburgerBtn');
-const NAV_LINKS     = Array.from(document.querySelectorAll('.nav__list-link'));
-const COMM_BTN       = document.getElementById('btnCommission');
-const COMM_SECTION   = document.getElementById('commission-section');
-const NAV_COMM_LINK  = document.getElementById('navCommissionLink');
-const HISTORY_BTN     = document.getElementById('btnHistoryToggle');
-const HISTORY_CONT    = document.getElementById('historyContainer');
+const NAV_BAR = document.getElementById('navBar');
+const NAV_LIST = document.getElementById('navList');
+const HERO_HEADER = document.getElementById('heroHeader');
+const HAMBURGER_BTN = document.getElementById('hamburgerBtn');
+const NAV_LINKS = Array.from(document.querySelectorAll('.nav__list-link'));
+const COMM_BTN = document.getElementById('btnCommission');
+const COMM_SECTION = document.getElementById('commission-section');
+const NAV_COMM_LINK = document.getElementById('navCommissionLink');
+const HISTORY_BTN = document.getElementById('btnHistoryToggle');
+const HISTORY_CONT = document.getElementById('historyContainer');
 const TRACKER_SECTION = document.getElementById('commission-tracker-section');
 const PORTFOLIO_SECTION = document.getElementById('portfolio-section');
 
@@ -25,8 +25,8 @@ const PORTFOLIO_SECTION = document.getElementById('portfolio-section');
 // 重置导航栏状态（主要用于移动端收起菜单）
 const resetActiveState = () => {
     NAV_LIST.classList.remove('nav--active');
-    Object.assign(NAV_LIST.style, { height: null });
-    Object.assign(document.body.style, { overflowY: null });
+    Object.assign(NAV_LIST.style, {height: null});
+    Object.assign(document.body.style, {overflowY: null});
 };
 
 // 切换委托区域（Commission）的显示与隐藏
@@ -62,11 +62,11 @@ HAMBURGER_BTN.addEventListener('click', () => {
     NAV_LIST.classList.toggle('nav--active');
 
     if (NAV_LIST.classList.contains('nav--active')) {
-        Object.assign(document.body.style, { overflowY: 'hidden' });
-        Object.assign(NAV_LIST.style, { height: '100vh' });
+        Object.assign(document.body.style, {overflowY: 'hidden'});
+        Object.assign(NAV_LIST.style, {height: '100vh'});
     } else {
-        Object.assign(NAV_LIST.style, { height: 0 });
-        Object.assign(document.body.style, { overflowY: null });
+        Object.assign(NAV_LIST.style, {height: 0});
+        Object.assign(document.body.style, {overflowY: null});
     }
 });
 
@@ -89,7 +89,7 @@ if (NAV_COMM_LINK) {
         if (!TRACKER_SECTION.classList.contains('expanded')) {
             toggleCommissions();
         } else {
-            TRACKER_SECTION.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            TRACKER_SECTION.scrollIntoView({behavior: 'smooth', block: 'start'});
         }
         resetActiveState();
     });
@@ -140,7 +140,7 @@ window.addEventListener('load', () => {
     setTimeout(() => {
         const hero = document.querySelector('#heroHeader');
         if (hero) {
-            hero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            hero.scrollIntoView({behavior: 'smooth', block: 'start'});
         }
     }, 100);
 
