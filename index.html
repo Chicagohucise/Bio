@@ -30,7 +30,7 @@
         :root {
             --main-color: #00fd93;
             --main-dim: rgba(0, 253, 147, 0.1);
-            --bg-dark: #050505; /* 背景色调得更深一点 */
+            --bg-dark: #050505;
             --card-bg: rgba(20, 20, 20, 0.7);
             --border-color: rgba(255, 255, 255, 0.1);
             --text-main: #e2e2e2;
@@ -40,16 +40,13 @@
             --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
             --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
 
-            /* --- NEW: 数字化网格背景定义 --- */
-            /* 1. 径向渐变模拟暗角 (Vignette)，让四周变暗，聚焦中心 */
-            /* 2. 水平网格线 */
-            /* 3. 垂直网格线 */
+            /* --- 数字化网格背景定义 --- */
             --page-bg:
                 radial-gradient(circle at 50% 50%, transparent 0%, #000 85%),
                 linear-gradient(rgba(0, 253, 147, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 253, 147, 0.03) 1px, transparent 1px);
 
-            /* 定义网格尺寸：暗角铺满，网格线 40px 间距 */
+            /* 定义网格尺寸 */
             --bg-size: 100% 100%, 40px 40px, 40px 40px;
         }
 
@@ -66,21 +63,19 @@
         ::-webkit-scrollbar-thumb:hover { background-color: var(--main-color); }
 
         html {
-            /* 开启原生平滑滚动支持，作为 SweetScroll 的补充 */
             scroll-behavior: smooth;
         }
 
         body {
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE10+/Edge */
-            user-select: none;         /* Standard */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
 
             background-color: var(--bg-dark);
-            /* 应用网格背景变量 */
             background-image: var(--page-bg);
             background-size: var(--bg-size);
-            background-attachment: fixed; /* 关键：固定背景，产生视差感 */
+            background-attachment: fixed;
             background-position: center top;
 
             color: var(--text-main);
@@ -88,8 +83,6 @@
             margin: 0;
             overflow-x: hidden;
             font-size: 16px;
-
-            /* 字体抗锯齿优化 */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -100,16 +93,12 @@
         ::selection { background: var(--main-color); color: #000; }
 
         /* =========================================
-           NEW: Scroll Reveal Animations (Optimized)
+           Scroll Reveal Animations
            ========================================= */
-
         .reveal {
             opacity: 0;
-            /* 增加位移幅度，增强动感 */
             transform: translateY(50px) scale(0.96);
-            /* 使用 Expo 曲线，结束时非常缓慢平滑 */
             transition: opacity 1.2s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
-            /* 性能优化：提前告知浏览器即将变化的属性 */
             will-change: opacity, transform;
         }
 
@@ -123,14 +112,14 @@
         .reveal-delay-300 { transition-delay: 0.3s; }
 
         /* =========================================
-           2. 导航栏 (Optimized)
+           2. 导航栏
            ========================================= */
         .nav {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
             background: rgba(11, 11, 11, 0.6);
             backdrop-filter: blur(8px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.5s var(--ease-out-expo); /* 更平滑的高度切换 */
+            transition: all 0.5s var(--ease-out-expo);
             height: 80px;
             display: flex; align-items: center;
         }
@@ -177,7 +166,6 @@
             border-bottom: 1px solid var(--main-color);
             overflow: hidden;
             max-height: 0;
-            /* 使用更复杂的贝塞尔曲线让展开动作更有弹性 */
             transition: max-height 0.6s cubic-bezier(0.65, 0, 0.35, 1);
             box-shadow: 0 15px 30px rgba(0,0,0,0.7);
         }
@@ -245,7 +233,7 @@
         }
 
         /* ----------------------------------
-           故障文字 (无需改动，保持硬朗风格)
+           故障文字
            ---------------------------------- */
         .glitch { position: relative; display: block; color: #fff; }
         .glitch::before, .glitch::after {
@@ -253,15 +241,11 @@
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-
-            /* 关键修复：恢复背景色以遮挡底部文字 */
             background-color: var(--bg-dark);
-            /* 使用与 Body 完全一致的背景配置，实现“隐身”遮挡 */
             background-image: var(--page-bg);
-            background-size: var(--bg-size); /* 必须同步尺寸 */
-            background-attachment: fixed;    /* 必须同步固定模式 */
-            background-position: center top; /* 必须同步位置 */
-
+            background-size: var(--bg-size);
+            background-attachment: fixed;
+            background-position: center top;
             overflow: hidden;
         }
         .glitch::before {
@@ -366,31 +350,27 @@
         }
 
         /* ----------------------------------
-           NEW: 重新设计的按钮 (Solid Fill Style)
+           按钮样式 (Solid Fill Style)
            ---------------------------------- */
         .cyber-btn {
             --btn-color: var(--main-color);
             position: relative;
             padding: 0.8rem 2rem;
             background: transparent;
-            /* 边框发光 */
             border: 1px solid var(--btn-color);
             box-shadow: 0 0 5px rgba(0, 253, 147, 0.2), inset 0 0 10px rgba(0, 253, 147, 0.05);
-            /* 改为圆角矩形，移除 clip-path 切角 */
             border-radius: 4px;
-
             color: var(--btn-color);
             font-family: "IBM Plex Mono", monospace;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             cursor: pointer;
-            overflow: hidden; /* 隐藏滑块 */
+            overflow: hidden;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             z-index: 1;
         }
 
-        /* 滑块背景层 */
         .cyber-btn::before {
             content: '';
             position: absolute;
@@ -399,11 +379,9 @@
             background: var(--btn-color);
             z-index: -1;
             transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            /* 移除倾斜，确保完全填满角落 */
             transform: none;
         }
 
-        /* 按钮内的文字层 */
         .cyber-btn span {
             position: relative;
             z-index: 2;
@@ -411,20 +389,17 @@
             display: flex; align-items: center; gap: 0.5rem;
         }
 
-        /* 悬停效果 */
         .cyber-btn:hover {
-            color: #000; /* 文字反色 */
-            box-shadow: 0 0 20px rgba(0, 253, 147, 0.6); /* 强烈发光 */
-            letter-spacing: 0.15em; /* 间距拉开 */
-            padding-right: 2.5rem; /* 右边给箭头留位置 */
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 253, 147, 0.6);
+            letter-spacing: 0.15em;
+            padding-right: 2.5rem;
         }
 
-        /* 背景填满 */
         .cyber-btn:hover::before {
-            width: 100%; /* 完全填满 */
+            width: 100%;
         }
 
-        /* 隐藏的箭头出现 */
         .cyber-btn::after {
             content: '>>';
             position: absolute;
@@ -443,7 +418,7 @@
 
         .cyber-btn:active { transform: scale(0.96); }
 
-        /* 社交图标 (优化悬停反馈) */
+        /* 社交图标 */
         .social-card {
             background: rgba(255,255,255,0.03);
             border: 1px solid var(--border-color);
@@ -458,26 +433,23 @@
         }
 
         /* ----------------------------------
-           NEW: 终端风格头像 (Terminal Style)
+           终端风格头像 (Terminal Style)
            ---------------------------------- */
         .avatar-wrap {
             position: relative;
-            /* 调整为矩形容器 */
             width: 280px; height: auto;
             display: flex; flex-direction: column; align-items: center; gap: 1rem;
         }
 
-        /* 外部框架 */
         .terminal-frame {
             position: relative;
             width: 260px; height: 260px;
-            padding: 8px; /* 内边距，形成双层边框感 */
+            padding: 8px;
             background: rgba(0, 20, 10, 0.6);
             border: 1px solid rgba(0, 253, 147, 0.3);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        /* 核心图片 */
         .avatar-core {
             width: 100%; height: 100%;
             background-image: url("./assets/avatar/dog4.jpg");
@@ -486,13 +458,11 @@
             background-repeat: no-repeat;
             position: relative;
             z-index: 1;
-            /* 关键：保持原色，不加滤镜 */
             filter: none;
         }
 
-        /* CRT 扫描线纹理叠加 */
         .scanlines {
-            position: absolute; inset: 4px; /* 稍微内缩 */
+            position: absolute; inset: 4px;
             background: linear-gradient(
                 to bottom,
                 rgba(255,255,255,0),
@@ -500,14 +470,13 @@
                 rgba(0,0,0,0.3) 50%,
                 rgba(0,0,0,0.3)
             );
-            background-size: 100% 4px; /* 扫描线间距 */
+            background-size: 100% 4px;
             z-index: 10;
             pointer-events: none;
             opacity: 0.4;
             transition: opacity 0.3s;
         }
 
-        /* 四角锁定框 */
         .t-corner {
             position: absolute;
             width: 15px; height: 15px;
@@ -521,7 +490,6 @@
         .bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
         .br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
 
-        /* 底部标签 */
         .terminal-label {
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.75rem;
@@ -533,32 +501,25 @@
             letter-spacing: 0.1em;
             position: relative;
         }
-        /* 标签闪烁光标 */
         .terminal-label::before {
             content: '>';
             margin-right: 5px;
             animation: blink 1s step-end infinite;
         }
 
-        /* --- 交互效果 --- */
         .avatar-wrap:hover .terminal-frame {
             border-color: var(--main-color);
             box-shadow: 0 0 20px rgba(0, 253, 147, 0.15);
             transform: scale(1.02);
         }
 
-        /* 悬停时四角向内收缩锁定 */
         .avatar-wrap:hover .tl { transform: translate(4px, 4px); }
         .avatar-wrap:hover .tr { transform: translate(-4px, 4px); }
         .avatar-wrap:hover .bl { transform: translate(4px, -4px); }
         .avatar-wrap:hover .br { transform: translate(-4px, -4px); }
 
-        /* 悬停时扫描线变明显 */
-        .avatar-wrap:hover .scanlines {
-            opacity: 0.2; /* 反而变淡一点，让图片更清晰，或者变深看需求，这里设淡一点方便看图 */
-        }
+        .avatar-wrap:hover .scanlines { opacity: 0.2; }
 
-        /* 悬停时标签变化 */
         .avatar-wrap:hover .terminal-label {
             background: var(--main-color);
             color: #000;
@@ -566,17 +527,19 @@
         }
 
         /* =========================================
-           4. 可展开区域
+           4. 可展开区域 (FIXED FOR MOBILE)
            ========================================= */
         .expand-section {
             position: relative;
             border-top: 1px solid #222;
             max-height: 0; opacity: 0; overflow: hidden;
-            /* 更自然的展开动画 */
             transition: max-height 1s cubic-bezier(0.86, 0, 0.07, 1), opacity 0.6s ease;
         }
         .expand-section.active {
-            max-height: 6000px; opacity: 1; padding-bottom: 5rem;
+            /* 关键修改：从 6000px 增加到 80000px，防止手机端单列布局导致内容被切断 */
+            max-height: 80000px;
+            opacity: 1;
+            padding-bottom: 5rem;
         }
         .scan-line {
             position: absolute; top: 0; left: 0; width: 100%; height: 1px;
@@ -584,7 +547,7 @@
             animation: scan 3s infinite linear;
             z-index: 10;
             will-change: transform;
-            transform: translateZ(0); /* 开启 GPU 加速 */
+            transform: translateZ(0);
         }
         @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
@@ -599,7 +562,7 @@
         .deco-line { width: 50px; height: 2px; background: var(--main-color); }
 
         /* =========================================
-           5. 项目卡片 (优化悬停)
+           5. 项目卡片
            ========================================= */
         .tracker-card {
             background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
@@ -629,7 +592,7 @@
         }
 
         /* =========================================
-           6. 历史记录 (Terminal Style)
+           6. 历史记录
            ========================================= */
         .terminal-box {
             background: #080808;
@@ -656,7 +619,7 @@
         .money { color: var(--main-color); font-weight: bold; }
 
         /* =========================================
-           7. 画廊 & 筛选器 (优化悬停)
+           7. 画廊 & 筛选器
            ========================================= */
         .art-card {
             break-inside: avoid;
@@ -668,7 +631,6 @@
             border: 1px solid transparent;
             transition: all 0.5s var(--ease-out-expo);
             cursor: pointer;
-            /* 避免图片变换时的抖动 */
             backface-visibility: hidden;
         }
         .art-card:hover {
@@ -691,7 +653,7 @@
         @media (min-width: 1024px) { .masonry-col { column-count: 3; } }
 
         /* =========================================
-           8. 委托价格卡片 (优化悬停)
+           8. 委托价格卡片
            ========================================= */
         .price-card {
             background: rgba(255,255,255,0.02);
@@ -788,25 +750,24 @@
         }
 
         /* ----------------------------------
-           NEW: 历史记录展开动画 (History Transition)
+           历史记录展开动画
            ---------------------------------- */
         .history-expand-enter-active,
         .history-expand-leave-active {
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); /* 丝滑的阻尼曲线 */
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
-            max-height: 1000px; /* 设置一个足够大的最大高度 */
+            max-height: 1000px;
         }
 
         .history-expand-enter-from,
         .history-expand-leave-to {
             max-height: 0;
             opacity: 0;
-            /* 同时收缩内边距和边框，防止动画最后出现跳动 */
             padding-top: 0;
             padding-bottom: 0;
             margin-top: 0;
             border-color: transparent;
-            transform: translateY(-10px); /* 轻微的上移效果 */
+            transform: translateY(-10px);
         }
     </style>
 </head>
@@ -1117,8 +1078,8 @@
 
             <!-- 中间：导航链接 -->
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-mono text-gray-500 uppercase tracking-wider">
-                <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
-                <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
+                <a href="#" @click="scrollTo('heroHeader')" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
+                <a href="#" @click="toggleCommissions" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
                 <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Terms</a>
                 <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
             </div>
@@ -1334,6 +1295,13 @@
             onMounted(() => {
                 window.addEventListener('scroll', handleScroll);
 
+                // --- 强制刷新回到顶部 ---
+                if (history.scrollRestoration) {
+                    history.scrollRestoration = 'manual';
+                }
+                window.scrollTo(0, 0);
+                // -----------------------
+
                 new Typed(typedElement.value, {
                     strings: ["Artist.", "Developer.", "Gamer.", "Furry."],
                     typeSpeed: 80,
@@ -1371,20 +1339,15 @@
         }
     }).mount('#app');
 
-                // 检查浏览器是否支持该属性
-            if (history.scrollRestoration) {
-              history.scrollRestoration = 'manual';
-            }
-
-                        // 1. 禁止右键菜单
+            // 1. 禁止右键菜单
             document.oncontextmenu = function() {
                 return false;
             };
 
             // 2. 禁止选中文字
-            document.onselectstart = function() {
-                return false;
-            };
+            // document.onselectstart = function() {
+            //     return false;
+            // };
 
             // 3. 尝试拦截 F12 和 Ctrl+U (查看源码快捷键)
             document.onkeydown = function(e) {
