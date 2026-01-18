@@ -5,21 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChicagoHucise's Bio</title>
 
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100&display=swap" rel="stylesheet">
 
-    <!-- Icons -->
     <link rel="icon" href="https://shibabox.eu/favicon.ico" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Vue 3 & Taildwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 
-    <!-- Animation Libs -->
     <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
     <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
 
@@ -774,10 +770,8 @@
 <body class="antialiased">
 
 <div id="app">
-    <!-- Navigation (Redesigned) -->
     <nav class="nav" :class="{ 'scrolled': isScrolled }">
         <div class="container mx-auto px-6 w-full flex justify-between items-center relative z-50">
-            <!-- Logo -->
             <a href="#heroHeader" @click="scrollTo('heroHeader')" class="group flex items-center gap-2">
                 <i class="bx bx-terminal text-2xl text-[#00fd93]"></i>
                 <span class="text-xl font-bold tracking-tighter text-white group-hover:text-[#00fd93] transition-colors duration-500">
@@ -785,7 +779,6 @@
                 </span>
             </a>
 
-            <!-- Desktop Menu -->
             <div class="hidden md:flex gap-12 items-center">
                 <a class="nav-item" :class="{ active: activeSection === 'home' && !showCommissions }" @click="scrollTo('heroHeader')">
                     / HOME
@@ -800,13 +793,11 @@
                 </div>
             </div>
 
-            <!-- Mobile Hamburger -->
             <button class="md:hidden text-[#00fd93] text-3xl focus:outline-none transition-transform active:scale-90 duration-200" @click="isNavOpen = !isNavOpen">
                 <i :class="isNavOpen ? 'bx bx-x' : 'bx bx-menu-alt-right'"></i>
             </button>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
         <div class="mobile-menu" :class="{ 'open': isNavOpen }">
              <ul class="flex flex-col items-center justify-center gap-6 py-8 h-full">
                 <li>
@@ -830,11 +821,9 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <header id="heroHeader" class="hero-section container mx-auto px-6">
         <div class="hero-content-wrapper">
 
-            <!-- Left Content -->
             <div class="hero-left-content">
                 <div>
                     <h2 class="text-xl text-gray-400 font-medium">Hi! I am</h2>
@@ -842,17 +831,15 @@
                 </div>
 
                 <div class="flex items-center justify-center md:justify-start gap-2 text-xl md:text-2xl font-bold h-8">
-                    <span class="text-gray-500">I'm an </span>
+                    <span class="text-gray-500">I'm {{ article }}</span>
                     <span class="auto-type" ref="typedElement"></span>
                 </div>
 
                 <p ref="bioText" class="text-gray-400 max-w-md mx-auto md:mx-0 leading-relaxed font-mono min-h-[60px]">
-                    <!-- 初始内容留空，由JS控制 -->
-                </p>
+                    </p>
 
                 <div class="hero-actions">
                     <button @click="toggleCommissions" class="cyber-btn cursor-pointer whitespace-nowrap group">
-                        <!-- 包裹文字以配合新的 z-index 层级 -->
                         <span>
                             <i class="bx bx-radar"></i> Check Status
                         </span>
@@ -867,23 +854,18 @@
                 </div>
             </div>
 
-            <!-- Right Content (Avatar) -->
             <div class="avatar-wrap group">
                 <div class="terminal-frame">
-                    <!-- 四角装饰 -->
                     <div class="t-corner tl"></div>
                     <div class="t-corner tr"></div>
                     <div class="t-corner bl"></div>
                     <div class="t-corner br"></div>
 
-                    <!-- 核心图片 -->
                     <div class="avatar-core"></div>
 
-                    <!-- 扫描线遮罩 -->
                     <div class="scanlines"></div>
                 </div>
 
-                <!-- 底部标签 -->
                 <div class="terminal-label">User_ID: 9527</div>
             </div>
         </div>
@@ -893,11 +875,9 @@
         </div>
     </header>
 
-    <!-- Expandable Content Area -->
     <div :class="['expand-section', { active: showCommissions }]" id="commission-content">
         <div class="scan-line"></div>
 
-        <!-- 1. Current Projects (Tracker) -->
         <section class="container mx-auto px-6 reveal">
             <div class="section-header">
                 <div class="deco-line"></div>
@@ -935,7 +915,6 @@
                 </div>
             </div>
 
-            <!-- History Toggle -->
             <div class="max-w-4xl mx-auto mt-12 reveal reveal-delay-200">
                 <div class="text-center mb-4">
                     <button @click="showHistory = !showHistory" class="text-xs uppercase tracking-widest text-gray-500 hover:text-[#00fd93] transition-colors flex items-center justify-center gap-2 mx-auto">
@@ -944,7 +923,6 @@
                     </button>
                 </div>
 
-                <!-- 这里的 name 改成了 history-expand -->
                 <transition name="history-expand">
                     <div v-if="showHistory" class="terminal-box">
                         <div class="terminal-header">
@@ -964,7 +942,6 @@
             </div>
         </section>
 
-        <!-- 2. Portfolio Gallery -->
         <section class="container mx-auto px-6 mt-24 reveal">
             <div class="section-header">
                 <div class="deco-line"></div>
@@ -987,7 +964,6 @@
             </div>
         </section>
 
-        <!-- 3. Pricing -->
         <section class="container mx-auto px-6 mt-24 reveal">
             <div class="section-header">
                 <div class="deco-line"></div>
@@ -1009,7 +985,6 @@
                 </div>
             </div>
 
-            <!-- Terms -->
             <div class="max-w-2xl mx-auto mt-16 p-6 border border-[#222] bg-[#0c0c0c] rounded text-center relative overflow-hidden reveal reveal-delay-200">
                 <div class="absolute top-0 left-0 w-1 h-full bg-[#00fd93]"></div>
                 <h4 class="text-white font-bold mb-4 uppercase tracking-widest">Communication Protocols</h4>
@@ -1028,7 +1003,6 @@
         </section>
     </div>
 
-    <!-- Lightbox Modal -->
     <transition enter-active-class="transition duration-400 var(--ease-out-expo)" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-300 var(--ease-out-expo)" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
         <div v-if="lightbox.open" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4" @click.self="lightbox.open = false">
             <button class="absolute top-4 right-4 text-white/50 hover:text-white text-4xl transition" @click="lightbox.open = false">
@@ -1059,24 +1033,20 @@
         </div>
     </transition>
 
-    <!-- Footer (Redesigned) -->
     <footer class="relative bg-[#050505] border-t border-[#111] overflow-hidden mt-24">
-        <!-- 装饰性顶部光条 -->
         <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#00fd93] to-transparent opacity-30"></div>
 
         <div class="container mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
-            <!-- 左侧：品牌 & 版权 -->
             <div class="text-center md:text-left">
                 <h3 class="text-2xl font-bold text-white mb-2 tracking-tighter group cursor-default">
                     &lt;Hucise<span class="text-[#00fd93] group-hover:animate-pulse">/</span>&gt;
                 </h3>
                 <p class="text-xs text-gray-600 font-mono uppercase tracking-widest leading-relaxed">
-                    &copy; 2026 Hucise Systems.<br>
+                    © 2026 Hucise Systems.<br>
                     All Rights Reserved. <span class="text-[#333]">v2.0.45</span>
                 </p>
             </div>
 
-            <!-- 中间：导航链接 -->
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-mono text-gray-500 uppercase tracking-wider">
                 <a href="#" @click="scrollTo('heroHeader')" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
                 <a href="#" @click="toggleCommissions" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
@@ -1084,7 +1054,6 @@
                 <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
             </div>
 
-            <!-- 右侧：系统状态指示器 -->
             <div class="flex items-center gap-4 border border-[#222] bg-[#0a0a0a] px-5 py-3 rounded-md hover:border-[#00fd93] hover:shadow-[0_0_15px_rgba(0,253,147,0.1)] transition-all duration-300">
                 <div class="flex flex-col items-end">
                     <span class="text-[10px] text-gray-500 uppercase tracking-wider">System Status</span>
@@ -1097,7 +1066,6 @@
             </div>
         </div>
 
-        <!-- 底部装饰性滚动数据流 -->
         <div class="w-full bg-black border-t border-[#111] py-2 overflow-hidden flex select-none opacity-40">
             <div class="footer-scroller text-[10px] font-mono text-[#333] whitespace-nowrap">
                 // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE
@@ -1182,6 +1150,7 @@
             const showHistory = ref(false);
             const typedElement = ref(null);
             const bioText = ref(null);
+            const article = ref('an');
 
             const handleScroll = () => {
                 isScrolled.value = window.scrollY > 50;
@@ -1208,7 +1177,7 @@
                 { icon: 'bx bxl-spotify', link: 'https://open.spotify.com/user/31chfbbi4id7bdjyurr27iamqrcm?si=fbb5dc6e53384b65' }
             ];
 
-                const projects = ref([
+            const projects = ref([
                 { client: 'Finn', type: 'Half Body/Painterly Style', payment: 'Prepaid ¥350', progress: 100, due: '2026/1/15', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=761874227&s=100' },
                 { client: '长者森中魔沼蛙', type: 'Expression*3/Cell Shading/Chibi*1/Painterly Style', payment: 'Prepaid ¥400', progress: 25, due: '2026/1/31', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=923339837&s=100' },
                 { client: '我要玩神鹰哥！！！', type: 'Half Body/Flat Color', payment: 'Quote ¥250', progress: 0, due: '2026/1/31', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2284852944&s=100' },
@@ -1249,7 +1218,6 @@
                 { id: 7, title: '--', category: 'Flat Color', url: 'https://pbs.twimg.com/media/G2zkbRCb0AAmIke?format=jpg&name=large', desc: 'Flat Color Half Body (2 Characters)' },
                 { id: 8, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/G-osgohaoAAP-I2?format=jpg&name=large', desc: 'Painterly Style Custom Character Half Body' }
             ]);
-
 
             const lightbox = reactive({ open: false, current: {} });
 
@@ -1295,15 +1263,22 @@
             onMounted(() => {
                 window.addEventListener('scroll', handleScroll);
 
-                // --- 强制刷新回到顶部 ---
                 if (history.scrollRestoration) {
                     history.scrollRestoration = 'manual';
                 }
                 window.scrollTo(0, 0);
-                // -----------------------
+
+                // --- 核心彩蛋修改区域 ---
+                const baseStrings = ["Artist.", "Engineer.", "Gamer.", "Furry.", "Architect.", "Illustrator.", "Analyst.", "Developer."];
+
+                // 20% 的概率触发彩蛋 (Math.random() < 0.2)
+                if (Math.random() < 0.2) {
+                    baseStrings.push("Idiot sandwich.^1000");
+                    console.log("Easter Egg: Idiot Sandwich Mode Activated 🍞");
+                }
 
                 new Typed(typedElement.value, {
-                    strings: ["Artist.", "Developer.", "Gamer.", "Furry."],
+                    strings: baseStrings, // 使用我们动态生成的列表
                     typeSpeed: 80,
                     backSpeed: 40,
                     backDelay: 1500,
@@ -1311,7 +1286,14 @@
                     loop: true,
                     smartBackspace: true,
                     cursorChar: '_',
+                    preStringTyped: (arrayPos, self) => {
+                        const word = self.strings[arrayPos];
+                        const firstChar = word.charAt(0).toLowerCase();
+                        const isVowel = ['a', 'e', 'i', 'o', 'u'].includes(firstChar);
+                        article.value = isVowel ? 'an' : 'a';
+                    }
                 });
+                // -----------------------
 
                 new SweetScroll({ trigger: 'a[href^="#"]', offset: -80 });
 
@@ -1330,6 +1312,7 @@
             });
 
             return {
+                article,
                 isNavOpen, isScrolled, activeSection, showCommissions, showHistory,
                 typedElement, socials, projects, history, commissionTypes,
                 categories, currentFilter, filteredArtworks, lightbox,
@@ -1339,32 +1322,12 @@
         }
     }).mount('#app');
 
-            // 1. 禁止右键菜单
-            document.oncontextmenu = function() {
-                return false;
-            };
-
-            // 2. 禁止选中文字
-            // document.onselectstart = function() {
-            //     return false;
-            // };
-
-            // 3. 尝试拦截 F12 和 Ctrl+U (查看源码快捷键)
-            document.onkeydown = function(e) {
-                // 拦截 F12
-                if (e.keyCode === 123) {
-                    return false;
-                }
-                // 拦截 Ctrl+Shift+I (开发者工具)
-                if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                    return false;
-                }
-                // 拦截 Ctrl+U (查看源码)
-                if (e.ctrlKey && e.keyCode === 85) {
-                    return false;
-                }
-            };
-
+    document.oncontextmenu = function() { return false; };
+    document.onkeydown = function(e) {
+        if (e.keyCode === 123) return false;
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) return false;
+        if (e.ctrlKey && e.keyCode === 85) return false;
+    };
 </script>
 </body>
 </html>
