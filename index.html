@@ -1212,16 +1212,22 @@
             const currentFilter = ref('all');
 
             const artworks = ref([
-                { id: 1, title: '--', category: 'Flat Color', url: 'https://pbs.twimg.com/media/G1tO_38agAAE1I6?format=jpg&name=large', desc: 'Flat Color Half Body (2 Characters)' },
-                { id: 2, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/G4v5oMoboAEGuwI?format=jpg&name=4096x4096', desc: 'Painterly Style Half Body (2 Characters)' },
-                { id: 3, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/G0uw2BUa4AAqRvh?format=jpg&name=large', desc: 'Painterly Style Custom Character Half Body' },
-                { id: 4, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/G6szF61XcAA98Np?format=jpg&name=large', desc: 'Painterly Style Custom Character Half Body' },
-                { id: 5, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/G5x1R8oagAED2Jf?format=jpg&name=4096x4096', desc: 'Painterly Style Custom Character Expression' },
-                { id: 6, title: '--', category: 'chibi', url: 'https://pbs.twimg.com/media/G5x1Us1bAAAJUQo?format=jpg&name=large', desc: 'Chibi Style Avatar' },
-                { id: 7, title: '--', category: 'Flat Color', url: 'https://pbs.twimg.com/media/G2zkbRCb0AAmIke?format=jpg&name=large', desc: 'Flat Color Half Body (2 Characters)' },
-                { id: 8, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/G-osgohaoAAP-I2?format=jpg&name=large', desc: 'Painterly Style Custom Character Half Body' },
-                { id: 9, title: '--', category: 'Chibi Style', url: 'https://pbs.twimg.com/media/HBBD8v0bsAEHE8c?format=jpg&name=large', desc: 'Chibi Style Expression' },
-                { id: 10, title: '--', category: 'Painterly Style', url: 'https://pbs.twimg.com/media/HAd0KPJWMAALpFr?format=jpg&name=4096x4096', desc: 'Painterly Style Avatar' }
+                { id: 1, title: '--', category: 'Flat Color', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/1.jpg', desc: 'Flat Color Half Body (2 Characters)' },
+                { id: 2, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/2.jpg', desc: 'Painterly Style Half Body (2 Characters)' },
+                { id: 3, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/3.jpg', desc: 'Painterly Style Custom Character Half Body' },
+                { id: 4, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/4.jpg', desc: 'Painterly Style Custom Character Half Body' },
+                { id: 5, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/5.jpg', desc: 'Painterly Style Custom Character Expression' },
+                { id: 6, title: '--', category: 'chibi', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/6.jpg', desc: 'Chibi Style Avatar' },
+                { id: 7, title: '--', category: 'Flat Color', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/7.jpg', desc: 'Flat Color Half Body (2 Characters)' },
+                { id: 8, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/8.jpg', desc: 'Painterly Style Custom Character Half Body' },
+                { id: 9, title: '--', category: 'Chibi Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/9.jpg', desc: 'Chibi Style Expression' },
+                { id: 10, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/10.jpg', desc: 'Painterly Style Avatar' },
+                { id: 11, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/11.jpg', desc: 'Painterly Style Avatar' },
+                { id: 12, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/12.jpg', desc: 'Painterly Style Avatar' },
+                { id: 13, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/13.jpg', desc: 'Painterly Style Avatar' },
+                { id: 14, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/14.jpg', desc: 'Painterly Style Avatar' },
+                { id: 15, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/15.jpg', desc: 'Painterly Style Avatar' },
+                { id: 16, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/16.jpg', desc: 'Painterly Style Avatar' },
             ]);
 
             const lightbox = reactive({ open: false, current: {} });
