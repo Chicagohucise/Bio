@@ -7,7 +7,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100&display=swap"
+          rel="stylesheet">
 
     <link rel="icon" href="https://shibabox.eu/favicon.ico" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -18,754 +19,8 @@
 
     <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
     <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <link rel="stylesheet" href="style.css">
 
-    <style>
-        /* =========================================
-           1. 全局配置 & 自定义变量
-           ========================================= */
-        :root {
-            --main-color: #00fd93;
-            --main-dim: rgba(0, 253, 147, 0.1);
-            --bg-dark: #050505;
-            --card-bg: rgba(20, 20, 20, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --text-main: #e2e2e2;
-            --text-muted: #888;
-
-            /* 预定义丝滑动画曲线 */
-            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
-            --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
-
-            /* --- 数字化网格背景定义 --- */
-            --page-bg:
-                radial-gradient(circle at 50% 50%, transparent 0%, #000 85%),
-                linear-gradient(rgba(0, 253, 147, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 253, 147, 0.03) 1px, transparent 1px);
-
-            /* 定义网格尺寸 */
-            --bg-size: 100% 100%, 40px 40px, 40px 40px;
-        }
-
-        /* 自定义滚动条 */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-            border: 1px solid transparent;
-            background-clip: content-box;
-            transition: background-color 0.3s;
-        }
-        ::-webkit-scrollbar-thumb:hover { background-color: var(--main-color); }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-
-            background-color: var(--bg-dark);
-            background-image: var(--page-bg);
-            background-size: var(--bg-size);
-            background-attachment: fixed;
-            background-position: center top;
-
-            color: var(--text-main);
-            font-family: "IBM Plex Mono", monospace;
-            margin: 0;
-            overflow-x: hidden;
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        a { text-decoration: none; transition: all 0.4s var(--ease-out-expo); }
-
-        /* 选中文字颜色 */
-        ::selection { background: var(--main-color); color: #000; }
-
-        /* =========================================
-           Scroll Reveal Animations
-           ========================================= */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px) scale(0.96);
-            transition: opacity 1.2s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
-            will-change: opacity, transform;
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .reveal-delay-100 { transition-delay: 0.1s; }
-        .reveal-delay-200 { transition-delay: 0.2s; }
-        .reveal-delay-300 { transition-delay: 0.3s; }
-
-        /* =========================================
-           2. 导航栏
-           ========================================= */
-        .nav {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
-            background: rgba(11, 11, 11, 0.6);
-            backdrop-filter: blur(8px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.5s var(--ease-out-expo);
-            height: 80px;
-            display: flex; align-items: center;
-        }
-
-        .nav.scrolled {
-            background: rgba(5, 5, 5, 0.95);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(0, 253, 147, 0.2);
-            height: 60px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
-
-        .nav-item {
-            position: relative;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-            padding: 0.5rem 0;
-            transition: color 0.4s var(--ease-out-expo);
-        }
-
-        .nav-item::before {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
-            background: var(--main-color);
-            transform: scaleX(0); transform-origin: right;
-            transition: transform 0.5s var(--ease-out-expo);
-        }
-
-        .nav-item:hover, .nav-item.active {
-            color: #fff;
-            text-shadow: 0 0 8px rgba(0,253,147,0.4);
-        }
-        .nav-item:hover::before, .nav-item.active::before {
-            transform: scaleX(1); transform-origin: left;
-        }
-
-        .mobile-menu {
-            position: absolute;
-            top: 100%; left: 0; width: 100%;
-            background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--main-color);
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.6s cubic-bezier(0.65, 0, 0.35, 1);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.7);
-        }
-        .mobile-menu.open {
-            max-height: 400px;
-            padding-bottom: 1.5rem;
-        }
-
-        .logo-cursor {
-            animation: blink 1s step-end infinite;
-            color: var(--main-color);
-        }
-
-        /* =========================================
-           3. Hero Header UI
-           ========================================= */
-        .hero-section {
-            min-height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding-top: 100px;
-            padding-bottom: 50px;
-        }
-
-        .hero-content-wrapper {
-            display: flex;
-            flex-direction: column-reverse;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            gap: 3rem;
-        }
-
-        @media (min-width: 768px) {
-            .hero-content-wrapper {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                gap: 4rem;
-            }
-        }
-
-        .hero-left-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            text-align: center;
-            z-index: 10;
-        }
-
-        @media (min-width: 768px) {
-            .hero-left-content {
-                text-align: left;
-                gap: 1.5rem;
-            }
-        }
-
-        .hero-title {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-        }
-
-        /* ----------------------------------
-           故障文字
-           ---------------------------------- */
-        .glitch { position: relative; display: block; color: #fff; }
-        .glitch::before, .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: var(--bg-dark);
-            background-image: var(--page-bg);
-            background-size: var(--bg-size);
-            background-attachment: fixed;
-            background-position: center top;
-            overflow: hidden;
-        }
-        .glitch::before {
-            left: 2px;
-            text-shadow: -5px 0 #ecd471;
-            animation: distort-1 2s infinite linear alternate-reverse;
-        }
-        .glitch::after {
-            left: -2px;
-            text-shadow: -5px 0 #3242f6;
-            animation: distort-2 2s infinite linear alternate-reverse;
-        }
-
-        @keyframes distort-1 {
-            0% { clip: rect(57px, 9999px, 46px, 0); }
-            5% { clip: rect(15px, 9999px, 56px, 0); }
-            10% { clip: rect(6px, 9999px, 70px, 0); }
-            15% { clip: rect(40px, 9999px, 80px, 0); }
-            20% { clip: rect(32px, 9999px, 44px, 0); }
-            25% { clip: rect(65px, 9999px, 85px, 0); }
-            30% { clip: rect(27px, 9999px, 78px, 0); }
-            35% { clip: rect(59px, 9999px, 93px, 0); }
-            40% { clip: rect(44px, 9999px, 77px, 0); }
-            45% { clip: rect(74px, 9999px, 10px, 0); }
-            50% { clip: rect(73px, 9999px, 42px, 0); }
-            55% { clip: rect(32px, 9999px, 58px, 0); }
-            60% { clip: rect(21px, 9999px, 54px, 0); }
-            65% { clip: rect(71px, 9999px, 11px, 0); }
-            70% { clip: rect(85px, 9999px, 25px, 0); }
-            75% { clip: rect(83px, 9999px, 77px, 0); }
-            80% { clip: rect(62px, 9999px, 52px, 0); }
-            85% { clip: rect(68px, 9999px, 84px, 0); }
-            90% { clip: rect(37px, 9999px, 20px, 0); }
-            95% { clip: rect(10px, 9999px, 15px, 0); }
-            100% { clip: rect(83px, 9999px, 28px, 0); }
-        }
-
-        @keyframes distort-2 {
-            0% { clip: rect(20px, 9999px, 96px, 0); }
-            5% { clip: rect(62px, 9999px, 2px, 0); }
-            10% { clip: rect(63px, 9999px, 39px, 0); }
-            15% { clip: rect(92px, 9999px, 75px, 0); }
-            20% { clip: rect(54px, 9999px, 2px, 0); }
-            25% { clip: rect(22px, 9999px, 96px, 0); }
-            30% { clip: rect(39px, 9999px, 98px, 0); }
-            35% { clip: rect(49px, 9999px, 37px, 0); }
-            40% { clip: rect(90px, 9999px, 17px, 0); }
-            45% { clip: rect(36px, 9999px, 57px, 0); }
-            50% { clip: rect(92px, 9999px, 78px, 0); }
-            55% { clip: rect(97px, 9999px, 65px, 0); }
-            60% { clip: rect(69px, 9999px, 30px, 0); }
-            65% { clip: rect(92px, 9999px, 13px, 0); }
-            70% { clip: rect(74px, 9999px, 76px, 0); }
-            75% { clip: rect(2px, 9999px, 45px, 0); }
-            80% { clip: rect(30px, 9999px, 21px, 0); }
-            85% { clip: rect(58px, 9999px, 34px, 0); }
-            90% { clip: rect(79px, 9999px, 27px, 0); }
-            95% { clip: rect(32px, 9999px, 1px, 0); }
-            100% { clip: rect(87px, 9999px, 63px, 0); }
-        }
-
-        .auto-type {
-            color: #00ff94;
-            text-shadow: 0 0 10px rgba(0, 255, 148, 0.5), 0 0 20px rgba(0, 255, 148, 0.2);
-            font-weight: 700;
-            position: relative;
-            background: linear-gradient(90deg, #ffffff, #00ff94, #00ff94);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: text-pulse 3s infinite ease-in-out, gradient-move 3s linear infinite;
-        }
-
-        .typed-cursor {
-            margin-left: -10px;
-            color: #00ff94;
-            text-shadow: 0 0 12px #00ff94;
-            opacity: 1;
-            animation: blink 0.7s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        @keyframes text-pulse {
-            0%, 100% { filter: brightness(100%) blur(0px); }
-            50% { filter: brightness(120%) blur(0.3px); }
-        }
-
-        @keyframes gradient-move {
-            to { background-position: 200% center; }
-        }
-
-        .scramble-dud {
-            color: #ececec;
-            opacity: 1;
-            background-color: #9a9a9a;
-            padding: 0 1px;
-            font-weight: bold;
-        }
-
-        /* ----------------------------------
-           按钮样式 (Solid Fill Style)
-           ---------------------------------- */
-        .cyber-btn {
-            --btn-color: var(--main-color);
-            position: relative;
-            padding: 0.8rem 2rem;
-            background: transparent;
-            border: 1px solid var(--btn-color);
-            box-shadow: 0 0 5px rgba(0, 253, 147, 0.2), inset 0 0 10px rgba(0, 253, 147, 0.05);
-            border-radius: 4px;
-            color: var(--btn-color);
-            font-family: "IBM Plex Mono", monospace;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            z-index: 1;
-        }
-
-        .cyber-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 0%; height: 100%;
-            background: var(--btn-color);
-            z-index: -1;
-            transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            transform: none;
-        }
-
-        .cyber-btn span {
-            position: relative;
-            z-index: 2;
-            transition: color 0.3s;
-            display: flex; align-items: center; gap: 0.5rem;
-        }
-
-        .cyber-btn:hover {
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 253, 147, 0.6);
-            letter-spacing: 0.15em;
-            padding-right: 2.5rem;
-        }
-
-        .cyber-btn:hover::before {
-            width: 100%;
-        }
-
-        .cyber-btn::after {
-            content: '>>';
-            position: absolute;
-            right: 1rem; top: 50%;
-            transform: translateY(-50%) translateX(20px);
-            opacity: 0;
-            color: #000;
-            font-weight: 800;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            z-index: 2;
-        }
-        .cyber-btn:hover::after {
-            transform: translateY(-50%) translateX(0);
-            opacity: 1;
-        }
-
-        .cyber-btn:active { transform: scale(0.96); }
-
-        /* 社交图标 */
-        .social-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-color);
-            transition: all 0.4s var(--ease-out-expo);
-        }
-        .social-card:hover {
-            background: var(--main-dim);
-            border-color: var(--main-color);
-            color: var(--main-color);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-        }
-
-        /* ----------------------------------
-           终端风格头像 (Terminal Style)
-           ---------------------------------- */
-        .avatar-wrap {
-            position: relative;
-            width: 280px; height: auto;
-            display: flex; flex-direction: column; align-items: center; gap: 1rem;
-        }
-
-        .terminal-frame {
-            position: relative;
-            width: 260px; height: 260px;
-            padding: 8px;
-            background: rgba(0, 20, 10, 0.6);
-            border: 1px solid rgba(0, 253, 147, 0.3);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .avatar-core {
-            width: 100%; height: 100%;
-            background-image: url("./assets/avatar/Dog.jpg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-            z-index: 1;
-            filter: none;
-        }
-
-        .scanlines {
-            position: absolute; inset: 4px;
-            background: linear-gradient(
-                to bottom,
-                rgba(255,255,255,0),
-                rgba(255,255,255,0) 50%,
-                rgba(0,0,0,0.3) 50%,
-                rgba(0,0,0,0.3)
-            );
-            background-size: 100% 4px;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0.4;
-            transition: opacity 0.3s;
-        }
-
-        .t-corner {
-            position: absolute;
-            width: 15px; height: 15px;
-            border: 2px solid var(--main-color);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            z-index: 20;
-            box-shadow: 0 0 5px var(--main-color);
-        }
-        .tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-        .tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
-        .bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
-        .br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
-
-        .terminal-label {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.75rem;
-            color: var(--main-color);
-            background: rgba(0, 253, 147, 0.1);
-            padding: 4px 12px;
-            border: 1px solid var(--main-color);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            position: relative;
-        }
-        .terminal-label::before {
-            content: '>';
-            margin-right: 5px;
-            animation: blink 1s step-end infinite;
-        }
-
-        .avatar-wrap:hover .terminal-frame {
-            border-color: var(--main-color);
-            box-shadow: 0 0 20px rgba(0, 253, 147, 0.15);
-            transform: scale(1.02);
-        }
-
-        .avatar-wrap:hover .tl { transform: translate(4px, 4px); }
-        .avatar-wrap:hover .tr { transform: translate(-4px, 4px); }
-        .avatar-wrap:hover .bl { transform: translate(4px, -4px); }
-        .avatar-wrap:hover .br { transform: translate(-4px, -4px); }
-
-        .avatar-wrap:hover .scanlines { opacity: 0.2; }
-
-        .avatar-wrap:hover .terminal-label {
-            background: var(--main-color);
-            color: #000;
-            font-weight: bold;
-        }
-
-        /* =========================================
-           4. 可展开区域 (FIXED FOR MOBILE)
-           ========================================= */
-        .expand-section {
-            position: relative;
-            border-top: 1px solid #222;
-            max-height: 0; opacity: 0; overflow: hidden;
-            transition: max-height 1s cubic-bezier(0.86, 0, 0.07, 1), opacity 0.6s ease;
-        }
-        .expand-section.active {
-            /* 关键修改：从 6000px 增加到 80000px，防止手机端单列布局导致内容被切断 */
-            max-height: 80000px;
-            opacity: 1;
-            padding-bottom: 5rem;
-        }
-        .scan-line {
-            position: absolute; top: 0; left: 0; width: 100%; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--main-color), transparent);
-            animation: scan 3s infinite linear;
-            z-index: 10;
-            will-change: transform;
-            transform: translateZ(0);
-        }
-        @keyframes scan { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-
-        .section-header {
-            display: flex; align-items: center; justify-content: center; gap: 1rem;
-            margin: 4rem 0 3rem;
-        }
-        .section-header h2 {
-            font-size: 2rem; font-weight: 700; color: #fff; text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-        .deco-line { width: 50px; height: 2px; background: var(--main-color); }
-
-        /* =========================================
-           5. 项目卡片
-           ========================================= */
-        .tracker-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--border-color);
-            border-left: 3px solid transparent;
-            padding: 1.5rem;
-            border-radius: 8px;
-            transition: all 0.4s var(--ease-out-expo);
-            position: relative;
-            overflow: hidden;
-        }
-        .tracker-card:hover {
-            border-left-color: var(--main-color);
-            background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-            transform: translateX(6px) translateY(-2px);
-            box-shadow: -8px 8px 25px rgba(0,0,0,0.6);
-        }
-
-        .progress-track {
-            height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;
-            margin-top: 1rem;
-        }
-        .progress-bar {
-            height: 100%; background: var(--main-color);
-            box-shadow: 0 0 10px var(--main-color);
-            position: relative;
-        }
-
-        /* =========================================
-           6. 历史记录
-           ========================================= */
-        .terminal-box {
-            background: #080808;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 1rem;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
-        }
-        .terminal-header {
-            display: grid; grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
-            padding: 0.8rem;
-            border-bottom: 1px dashed #333;
-            color: #666; font-weight: bold; text-transform: uppercase;
-        }
-        .terminal-row {
-            display: grid; grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
-            padding: 0.8rem;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            transition: background 0.2s;
-            color: #aaa;
-        }
-        .terminal-row:hover { background: rgba(0, 253, 147, 0.05); color: #fff; }
-        .money { color: var(--main-color); font-weight: bold; }
-
-        /* =========================================
-           7. 画廊 & 筛选器
-           ========================================= */
-        .art-card {
-            break-inside: avoid;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            background: #000;
-            border: 1px solid transparent;
-            transition: all 0.5s var(--ease-out-expo);
-            cursor: pointer;
-            backface-visibility: hidden;
-        }
-        .art-card:hover {
-            border-color: var(--main-color);
-            transform: scale(1.03);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            z-index: 10;
-        }
-        .art-overlay {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            padding: 2rem 1rem 1rem;
-            transform: translateY(100%);
-            transition: transform 0.4s var(--ease-out-expo);
-        }
-        .art-card:hover .art-overlay { transform: translateY(0); }
-
-        .masonry-col { column-count: 1; column-gap: 1.5rem; }
-        @media (min-width: 640px) { .masonry-col { column-count: 2; } }
-        @media (min-width: 1024px) { .masonry-col { column-count: 3; } }
-
-        /* =========================================
-           8. 委托价格卡片
-           ========================================= */
-        .price-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid var(--border-color);
-            padding: 2.5rem;
-            text-align: center;
-            border-radius: 12px;
-            transition: all 0.5s var(--ease-out-expo);
-            position: relative;
-        }
-        .corner {
-            position: absolute; width: 10px; height: 10px;
-            border: 2px solid var(--main-color);
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .c-tl { top: -1px; left: -1px; border-bottom: 0; border-right: 0; }
-        .c-br { bottom: -1px; right: -1px; border-top: 0; border-left: 0; }
-
-        .price-card:hover .corner { opacity: 1; }
-        .price-card:hover {
-            background: rgba(255,255,255,0.04);
-            transform: translateY(-8px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .icon-box {
-            font-size: 3rem; color: #555; margin-bottom: 1rem;
-            transition: color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
-        }
-        .price-card:hover .icon-box { color: var(--main-color); transform: scale(1.15) rotate(5deg); text-shadow: 0 0 20px rgba(0, 253, 147, 0.4); }
-
-        @media (max-width: 768px) {
-            .hero-title { font-size: 3rem; }
-            .terminal-header { display: none; }
-            .terminal-row { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-            .terminal-row span:nth-child(1) { grid-column: span 2; font-weight: bold; color: #fff; }
-        }
-
-        .hero-actions {
-            margin-top: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        @media (min-width: 768px) {
-            .hero-actions {
-                flex-direction: row;
-                justify-content: flex-start;
-                gap: 1.5rem;
-            }
-        }
-
-        .scroll-down-indicator {
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-            color: #888;
-            font-size: 2rem;
-            display: none;
-            cursor: pointer;
-            transition: color 0.3s;
-            z-index: 20;
-        }
-        .scroll-down-indicator:hover {
-            color: var(--main-color);
-        }
-
-        @media (min-width: 768px) and (min-height: 800px) {
-            .scroll-down-indicator {
-                display: block;
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
-            40% {transform: translateX(-50%) translateY(-10px);}
-            60% {transform: translateX(-50%) translateY(-5px);}
-        }
-
-        @keyframes footer-scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .footer-scroller {
-            display: inline-block;
-            white-space: nowrap;
-            animation: footer-scroll 30s linear infinite;
-            will-change: transform;
-            transform: translateZ(0); /* GPU 加速 */
-        }
-
-        /* ----------------------------------
-           历史记录展开动画
-           ---------------------------------- */
-        .history-expand-enter-active,
-        .history-expand-leave-active {
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-            max-height: 1000px;
-        }
-
-        .history-expand-enter-from,
-        .history-expand-leave-to {
-            max-height: 0;
-            opacity: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-            margin-top: 0;
-            border-color: transparent;
-            transform: translateY(-10px);
-        }
-    </style>
 </head>
 <body class="antialiased">
 
@@ -780,7 +35,8 @@
             </a>
 
             <div class="hidden md:flex gap-12 items-center">
-                <a class="nav-item" :class="{ active: activeSection === 'home' && !showCommissions }" @click="scrollTo('heroHeader')">
+                <a class="nav-item" :class="{ active: activeSection === 'home' && !showCommissions }"
+                   @click="scrollTo('heroHeader')">
                     / HOME
                 </a>
                 <a class="nav-item" :class="{ active: showCommissions }" @click.prevent="toggleCommissions">
@@ -788,28 +44,31 @@
                 </a>
                 <div class="h-4 w-[1px] bg-gray-800 mx-2"></div>
                 <div class="flex gap-4 text-gray-500">
-                     <a href="https://x.com/ChicagoHucise" class="hover:text-white transition duration-300"><i class="bx bxl-twitter"></i></a>
-                     <a href="https://github.com/ChicagoHucise" class="hover:text-white transition duration-300"><i class="bx bxl-github"></i></a>
+                    <a href="https://x.com/ChicagoHucise" class="hover:text-white transition duration-300"><i
+                            class="bx bxl-twitter"></i></a>
+                    <a href="https://github.com/ChicagoHucise" class="hover:text-white transition duration-300"><i
+                            class="bx bxl-github"></i></a>
                 </div>
             </div>
 
-            <button class="md:hidden text-[#00fd93] text-3xl focus:outline-none transition-transform active:scale-90 duration-200" @click="isNavOpen = !isNavOpen">
+            <button class="md:hidden text-[#00fd93] text-3xl focus:outline-none transition-transform active:scale-90 duration-200"
+                    @click="isNavOpen = !isNavOpen">
                 <i :class="isNavOpen ? 'bx bx-x' : 'bx bx-menu-alt-right'"></i>
             </button>
         </div>
 
         <div class="mobile-menu" :class="{ 'open': isNavOpen }">
-             <ul class="flex flex-col items-center justify-center gap-6 py-8 h-full">
+            <ul class="flex flex-col items-center justify-center gap-6 py-8 h-full">
                 <li>
                     <a class="text-2xl font-bold text-gray-300 tracking-widest hover:text-[#00fd93] transition-colors font-mono"
                        href="#heroHeader" @click="scrollTo('heroHeader')">
-                       [ HOME ]
+                        [ HOME ]
                     </a>
                 </li>
                 <li>
                     <a class="text-2xl font-bold text-[#00fd93] tracking-widest hover:text-white transition-colors font-mono"
                        href="#" @click.prevent="toggleCommissions">
-                       [ STATUS ]
+                        [ STATUS ]
                     </a>
                 </li>
                 <li class="w-12 h-[1px] bg-gray-800 my-2"></li>
@@ -817,7 +76,7 @@
                     <a href="https://x.com/ChicagoHucise"><i class="bx bxl-twitter"></i></a>
                     <a href="https://github.com/ChicagoHucise#"><i class="bx bxl-github"></i></a>
                 </li>
-             </ul>
+            </ul>
         </div>
     </nav>
 
@@ -836,7 +95,7 @@
                 </div>
 
                 <p ref="bioText" class="text-gray-400 max-w-md mx-auto md:mx-0 leading-relaxed font-mono min-h-[60px]">
-                    </p>
+                </p>
 
                 <div class="hero-actions">
                     <button @click="toggleCommissions" class="cyber-btn cursor-pointer whitespace-nowrap group">
@@ -886,13 +145,16 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="(project, index) in projects" :key="project.client" class="tracker-card reveal" :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
+                <div v-for="(project, index) in projects" :key="project.client" class="tracker-card reveal"
+                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
-                            <img :src="project.avatar" class="w-12 h-12 rounded-full border border-gray-600 object-cover">
+                            <img :src="project.avatar"
+                                 class="w-12 h-12 rounded-full border border-gray-600 object-cover">
                             <div>
                                 <h3 class="font-bold text-white leading-tight">{{ project.client }}</h3>
-                                <span class="text-[10px] uppercase tracking-wider text-gray-500 bg-[#111] px-1 rounded border border-[#333]">{{ project.payment }}</span>
+                                <span class="text-[10px] uppercase tracking-wider text-gray-500 bg-[#111] px-1 rounded border border-[#333]">{{ project.payment
+                                    }}</span>
                             </div>
                         </div>
                         <div class="text-right">
@@ -907,7 +169,8 @@
 
                     <div class="flex justify-between text-xs mb-1">
                         <span class="text-gray-500">{{ project.progress === 100 ? 'Status' : 'Progress' }}</span>
-                        <span class="font-mono text-[#00fd93] font-bold">{{ project.progress === 100 ? 'Completed' : project.progress + '%' }}</span>
+                        <span class="font-mono text-[#00fd93] font-bold">{{ project.progress === 100 ? 'Completed' : project.progress + '%'
+                            }}</span>
                     </div>
                     <div class="progress-track">
                         <div class="progress-bar" :style="{ width: project.progress + '%' }"></div>
@@ -917,7 +180,8 @@
 
             <div class="max-w-4xl mx-auto mt-12 reveal reveal-delay-200">
                 <div class="text-center mb-4">
-                    <button @click="showHistory = !showHistory" class="text-xs uppercase tracking-widest text-gray-500 hover:text-[#00fd93] transition-colors flex items-center justify-center gap-2 mx-auto">
+                    <button @click="showHistory = !showHistory"
+                            class="text-xs uppercase tracking-widest text-gray-500 hover:text-[#00fd93] transition-colors flex items-center justify-center gap-2 mx-auto">
                         <i :class="showHistory ? 'bx bx-minus' : 'bx bx-plus'"></i>
                         {{ showHistory ? 'Hide Archives' : 'Access Archives' }}
                     </button>
@@ -950,16 +214,19 @@
             </div>
 
             <div class="masonry-col">
-                <div v-for="(art, index) in filteredArtworks" :key="art.id" class="art-card group reveal" :class="'reveal-delay-' + ((index % 3 + 1) * 100)" @click="openLightbox(art)">
-                    <img :src="art.url" class="w-full h-auto block transition duration-700 group-hover:scale-110 group-hover:opacity-60" loading="lazy">
+                <div v-for="(art, index) in artworks" :key="art.id" class="art-card group reveal"
+                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)" @click="openLightbox(art)">
+                    <img :src="art.url"
+                         class="w-full h-auto block transition duration-700 group-hover:scale-110 group-hover:opacity-60"
+                         loading="lazy">
                     <div class="art-overlay">
                         <h3 class="text-lg font-bold text-white">{{ art.title }}</h3>
-                        <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ getCategoryName(art.category) }}</p>
+                        <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ art.category }}</p>
                     </div>
                 </div>
             </div>
 
-            <div v-if="filteredArtworks.length === 0" class="text-center py-10 text-gray-600 font-mono">
+            <div v-if="artworks.length === 0" class="text-center py-10 text-gray-600 font-mono">
                 // ERR: NO DATA FOUND IN THIS SECTOR
             </div>
         </section>
@@ -972,7 +239,8 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-                <div v-for="(item, index) in commissionTypes" :key="item.title" class="price-card group reveal" :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
+                <div v-for="(item, index) in commissionTypes" :key="item.title" class="price-card group reveal"
+                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
                     <div class="corner c-tl"></div>
                     <div class="corner c-br"></div>
 
@@ -1003,14 +271,20 @@
         </section>
     </div>
 
-    <transition enter-active-class="transition duration-400 var(--ease-out-expo)" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-300 var(--ease-out-expo)" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-        <div v-if="lightbox.open" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4" @click.self="lightbox.open = false">
-            <button class="absolute top-4 right-4 text-white/50 hover:text-white text-4xl transition" @click="lightbox.open = false">
+    <transition enter-active-class="transition duration-400 var(--ease-out-expo)" enter-from-class="opacity-0 scale-95"
+                enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-300 var(--ease-out-expo)"
+                leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+        <div v-if="lightbox.open"
+             class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+             @click.self="lightbox.open = false">
+            <button class="absolute top-4 right-4 text-white/50 hover:text-white text-4xl transition"
+                    @click="lightbox.open = false">
                 <i class="bx bx-x"></i>
             </button>
             <div class="max-w-7xl max-h-[90vh] flex flex-col md:flex-row gap-8 items-center pointer-events-auto">
                 <div class="relative group">
-                    <img :src="lightbox.current.url" class="max-h-[80vh] max-w-full rounded shadow-[0_0_50px_rgba(0,253,147,0.15)] border border-[#222]">
+                    <img :src="lightbox.current.url"
+                         class="max-h-[80vh] max-w-full rounded shadow-[0_0_50px_rgba(0,253,147,0.15)] border border-[#222]">
                 </div>
                 <div class="bg-[#111] p-8 rounded border border-[#333] min-w-[320px] shadow-2xl">
                     <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">Project Name</div>
@@ -1022,7 +296,7 @@
                     <div class="flex items-center justify-between pt-6 border-t border-[#222]">
                         <div>
                             <div class="text-xs text-gray-500">Category</div>
-                            <div class="text-[#00fd93] font-bold">{{ getCategoryName(lightbox.current.category) }}</div>
+                            <div class="text-[#00fd93] font-bold">{{ lightbox.current.category }}</div>
                         </div>
                         <button class="text-gray-500 hover:text-white transition">
                             <i class="bx bx-share-alt text-xl"></i>
@@ -1039,7 +313,7 @@
         <div class="container mx-auto px-6 py-12 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
             <div class="text-center md:text-left">
                 <h3 class="text-2xl font-bold text-white mb-2 tracking-tighter group cursor-default">
-                    &lt;Hucise<span class="text-[#00fd93] group-hover:animate-pulse">/</span>&gt;
+                    Hucise<span class="text-[#00fd93] group-hover:animate-pulse">/</span>>
                 </h3>
                 <p class="text-xs text-gray-600 font-mono uppercase tracking-widest leading-relaxed">
                     © 2026 Hucise Systems.<br>
@@ -1048,10 +322,14 @@
             </div>
 
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-mono text-gray-500 uppercase tracking-wider">
-                <a href="#" @click="scrollTo('heroHeader')" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
-                <a href="#" @click="toggleCommissions" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
-                <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Terms</a>
-                <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
+                <a href="#" @click="scrollTo('heroHeader')"
+                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
+                <a href="#" @click="toggleCommissions"
+                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
+                <a href="#"
+                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Terms</a>
+                <a href="#"
+                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
             </div>
 
             <div class="flex items-center gap-4 border border-[#222] bg-[#0a0a0a] px-5 py-3 rounded-md hover:border-[#00fd93] hover:shadow-[0_0_15px_rgba(0,253,147,0.1)] transition-all duration-300">
@@ -1068,277 +346,19 @@
 
         <div class="w-full bg-black border-t border-[#111] py-2 overflow-hidden flex select-none opacity-40">
             <div class="footer-scroller text-[10px] font-mono text-[#333] whitespace-nowrap">
-                // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE
+                // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX //
+                NODE_VERIFIED // DATA_STREAM_ACTIVE // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED //
+                PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE
             </div>
             <div class="footer-scroller text-[10px] font-mono text-[#333] whitespace-nowrap">
-                // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE
+                // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED // PING_32MS // ENCRYPTION_LEVEL_MAX //
+                NODE_VERIFIED // DATA_STREAM_ACTIVE // CONNECTED_TO_MAINNET // SECURE_CONNECTION_ESTABLISHED //
+                PING_32MS // ENCRYPTION_LEVEL_MAX // NODE_VERIFIED // DATA_STREAM_ACTIVE
             </div>
         </div>
     </footer>
 </div>
-
-<script>
-    const { createApp, ref, computed, onMounted, reactive, onUnmounted, nextTick } = Vue;
-    
-    class TextScramble {
-        constructor(el) {
-            this.el = el;
-            this.chars = '[]░▒▓█▀▄⣿';
-            this.update = this.update.bind(this);
-        }
-
-        setText(newText) {
-            const oldText = this.el.innerText;
-            const length = Math.max(oldText.length, newText.length);
-            const promise = new Promise((resolve) => (this.resolve = resolve));
-
-            this.queue = [];
-            for (let i = 0; i < length; i++) {
-                const from = oldText[i] || '';
-                const to = newText[i] || '';
-
-                const start = Math.floor(i * 1.5);
-                const end = start + Math.floor(Math.random() * 15) + 15;
-
-                this.queue.push({ from, to, start, end });
-            }
-
-            cancelAnimationFrame(this.frameRequest);
-            this.frame = 0;
-            this.update();
-            return promise;
-        }
-
-        update() {
-            let output = '';
-            let complete = 0;
-            for (let i = 0, n = this.queue.length; i < n; i++) {
-                let { from, to, start, end, char } = this.queue[i];
-                if (this.frame >= end) {
-                    complete++;
-                    output += to;
-                } else if (this.frame >= start) {
-                    if (!char || Math.random() < 0.28) {
-                        char = this.randomChar();
-                        this.queue[i].char = char;
-                    }
-                    output += `<span class="scramble-dud">${char}</span>`;
-                } else {
-                    output += from;
-                }
-            }
-            this.el.innerHTML = output;
-            if (complete === this.queue.length) {
-                this.resolve();
-            } else {
-                this.frameRequest = requestAnimationFrame(this.update);
-                this.frame++;
-            }
-        }
-
-        randomChar() {
-            return this.chars[Math.floor(Math.random() * this.chars.length)];
-        }
-    }
-
-    createApp({
-        setup() {
-            const isNavOpen = ref(false);
-            const isScrolled = ref(false);
-            const activeSection = ref('home');
-            const showCommissions = ref(false);
-            const showHistory = ref(false);
-            const typedElement = ref(null);
-            const bioText = ref(null);
-            const article = ref('an');
-
-            const handleScroll = () => {
-                isScrolled.value = window.scrollY > 50;
-            };
-
-            const initScrollReveal = () => {
-                const revealElements = document.querySelectorAll('.reveal');
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('active');
-                        }
-                    });
-                }, { threshold: 0.15 });
-
-                revealElements.forEach((el) => observer.observe(el));
-            };
-
-            const socials = [
-                { icon: 'bx bxl-twitter', link: 'https://x.com/ChicagoHucise' },
-                { icon: 'bx bxl-github', link: 'https://github.com/Chicagohucise' },
-                { icon: 'bx bxl-discord', link: 'https://discordapp.com/users/792591311190228994' },
-                { icon: 'bx bxl-steam', link: 'https://steamcommunity.com/id/Hucies' },
-                { icon: 'bx bxl-spotify', link: 'https://open.spotify.com/user/31chfbbi4id7bdjyurr27iamqrcm?si=fbb5dc6e53384b65' }
-            ];
-
-            const projects = ref([
-                { client: 'Finn', type: 'Half Body/Painterly Style', payment: 'Prepaid ¥350', progress: 100, due: '2026/1/15', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=761874227&s=100' },
-                { client: '长者森中魔沼蛙', type: 'Expression*3/Chibi Style||Avatar*1/Painterly Style', payment: 'Prepaid ¥400', progress: 100, due: '2026/2/28', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=923339837&s=100' },
-                { client: 'ALExEWolf', type: 'Painterly Style Half Body (2 Characters)', payment: 'Prepaid ？', progress: 100, due: '2026/2/12', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=1069454358&s=100' },
-                { client: 'Seigfried', type: 'Painterly Style Half Body (2 Characters)', payment: 'Prepaid ¥450', progress: 100, due: '2026/3/6', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2208439874&s=100' },
-                { client: 'TowDas', type: 'Half Body/Flat Color', payment: 'Quote ¥250', progress: 10, due: '2026/3/10', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2284852944&s=100' },
-                { client: 'kirin_white 麒麟白牙', type: 'Half Body Background included/Flat Color/', payment: 'Quote ¥300', progress: 10, due: '2026/3/10', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100' },
-                { client: '哈草咪', type: 'Queue', payment: '-', progress: 0, due: '2026/3/10', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2318219600&s=100' },
-                { client: 'AzoRyan', type: 'Painterly Style Half Body (2 Characters)', payment: '--', progress: 20, due: '2026/-/-', avatar: 'http://q1.qlogo.cn/g?b=qq&nk=3040129349&s=100' }
-            ]);
-
-            const history = ref([
-                { client: '沧屿', type: 'Half Body/Painterly Style', amount: '¥350', date: '2025/11/7' },
-                { client: 'kirin_white 麒麟白牙', type: 'Chibi Avatar', amount: '¥150', date: '2025/11/15' },
-                { client: '沧屿', type: 'Expression', amount: '¥50', date: '2025/11/7' },
-                { client: 'Seigfried', type: 'Half Body (2 Characters)/Painterly Style', amount: '¥450', date: '2025/11/3' },
-                { client: '零贰', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖', date: '2025/10/9' },
-                { client: 'Seigfried', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250', date: '2025/9/25' },
-            ]);
-
-            const commissionTypes = [
-                { title: 'ICON / HEAD', price: 'Start from ¥150 / $25', desc: 'Perfect for social media avatars. High resolution with simple background.', icon: 'bx bxs-face' },
-                { title: 'HALF BODY', price: 'Start from ¥300 / $45', desc: 'Waist-up character drawing showing clothing details and accessories.', icon: 'bx bxs-user' },
-                { title: 'FULL BODY', price: 'Start from ¥500 / $75', desc: 'Full character design with dynamic posing and complex shading.', icon: 'bx bxs-user-detail' }
-            ];
-
-            const categories = [
-                { id: 'all', name: 'ALL' },
-                { id: 'halfbody', name: 'HALF BODY' },
-                { id: 'chibi', name: 'CHIBI' },
-                { id: 'painterly', name: 'PAINTERLY' }
-            ];
-            const currentFilter = ref('all');
-
-            const artworks = ref([
-                { id: 1, title: '--', category: 'Flat Color', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/1.jpg', desc: 'Flat Color Half Body (2 Characters)' },
-                { id: 2, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/2.jpg', desc: 'Painterly Style Half Body (2 Characters)' },
-                { id: 3, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/3.jpg', desc: 'Painterly Style Custom Character Half Body' },
-                { id: 4, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/4.jpg', desc: 'Painterly Style Custom Character Half Body' },
-                { id: 5, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/5.jpg', desc: 'Painterly Style Custom Character Expression' },
-                { id: 6, title: '--', category: 'chibi', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/6.jpg', desc: 'Chibi Style Avatar' },
-                { id: 7, title: '--', category: 'Flat Color', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/7.jpg', desc: 'Flat Color Half Body (2 Characters)' },
-                { id: 8, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/8.jpg', desc: 'Painterly Style Custom Character Half Body' },
-                { id: 9, title: '--', category: 'Chibi Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/9.jpg', desc: 'Chibi Style Expression' },
-                { id: 10, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/10.jpg', desc: 'Painterly Style Avatar' },
-                { id: 11, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/11.jpg', desc: 'Painterly Style Avatar' },
-                { id: 12, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/12.jpg', desc: 'Painterly Style Avatar' },
-                { id: 13, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/13.jpg', desc: 'Painterly Style Avatar' },
-                { id: 14, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/14.jpg', desc: 'Painterly Style Avatar' },
-                { id: 15, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/15.jpg', desc: 'Painterly Style Avatar' },
-                { id: 16, title: '--', category: 'Painterly Style', url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/16.jpg', desc: 'Painterly Style Avatar' },
-            ]);
-
-            const lightbox = reactive({ open: false, current: {} });
-
-            const filteredArtworks = computed(() => {
-                if (currentFilter.value === 'all') return artworks.value;
-                return artworks.value.filter(art => art.category === currentFilter.value);
-            });
-
-            const toggleCommissions = () => {
-                if (!showCommissions.value) {
-                    showCommissions.value = true;
-                    setTimeout(() => {
-                        const el = document.getElementById('commission-content');
-                        if (el) {
-                            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                    }, 150);
-
-                    nextTick(() => {
-                        setTimeout(initScrollReveal, 300);
-                    });
-                } else {
-                    showCommissions.value = false;
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            };
-
-            const scrollTo = (id) => {
-                isNavOpen.value = false;
-                document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-            };
-
-            const getCategoryName = (id) => {
-                const cat = categories.find(c => c.id === id);
-                return cat ? cat.name : id;
-            };
-
-            const openLightbox = (art) => {
-                lightbox.current = art;
-                lightbox.open = true;
-            };
-
-            onMounted(() => {
-                window.addEventListener('scroll', handleScroll);
-
-                if (history.scrollRestoration) {
-                    history.scrollRestoration = 'manual';
-                }
-                window.scrollTo(0, 0);
-
-                // --- 核心彩蛋修改区域 ---
-                const baseStrings = ["Artist.", "Engineer.", "Gamer.", "Furry.", "Architect.", "Illustrator.", "Analyst.", "Developer."];
-
-                // 20% 的概率触发彩蛋 (Math.random() < 0.2)
-                if (Math.random() < 0.2) {
-                    baseStrings.push("Idiot sandwich.^1000");
-                    console.log("Easter Egg: Idiot Sandwich Mode Activated 🍞");
-                }
-
-                new Typed(typedElement.value, {
-                    strings: baseStrings, // 使用我们动态生成的列表
-                    typeSpeed: 80,
-                    backSpeed: 40,
-                    backDelay: 1500,
-                    startDelay: 500,
-                    loop: true,
-                    smartBackspace: true,
-                    cursorChar: '_',
-                    preStringTyped: (arrayPos, self) => {
-                        const word = self.strings[arrayPos];
-                        const firstChar = word.charAt(0).toLowerCase();
-                        const isVowel = ['a', 'e', 'i', 'o', 'u'].includes(firstChar);
-                        article.value = isVowel ? 'an' : 'a';
-                    }
-                });
-                // -----------------------
-
-                new SweetScroll({ trigger: 'a[href^="#"]', offset: -80 });
-
-                if (bioText.value) {
-                    const el = bioText.value;
-                    const targetText = "A digital artist & developer based in China. My fursonas are a wolf and a bird. I love bringing characters to life through code and art.";
-                    const fx = new TextScramble(el);
-                    setTimeout(() => {
-                        fx.setText(targetText);
-                    }, 800);
-                }
-            });
-
-            onUnmounted(() => {
-                window.removeEventListener('scroll', handleScroll);
-            });
-
-            return {
-                article,
-                isNavOpen, isScrolled, activeSection, showCommissions, showHistory,
-                typedElement, socials, projects, history, commissionTypes,
-                categories, currentFilter, filteredArtworks, lightbox,
-                toggleCommissions, scrollTo, getCategoryName, openLightbox,
-                bioText
-            };
-        }
-    }).mount('#app');
-
-    document.oncontextmenu = function() { return false; };
-    document.onkeydown = function(e) {
-        if (e.keyCode === 123) return false;
-        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) return false;
-        if (e.ctrlKey && e.keyCode === 85) return false;
-    };
-</script>
+<script src="script.js"></script>
 </body>
 </html>
+
