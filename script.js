@@ -1,4 +1,3 @@
-
 const {createApp, ref, computed, onMounted, reactive, onUnmounted, nextTick} = Vue;
 
 class TextScramble {
@@ -211,120 +210,41 @@ createApp({
         ];
 
 
-        const artworks = ref([
-            {
-                id: 1,
+        const baseUrl = 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/';
+
+        const list = [
+            'Chibi Style Avatar',                       // id: 1
+            'Painterly Style Half Body',                // id: 2
+            'Chibi Style Avatar',                       // id: 3
+            'Flat Color Full Body (2 Characters)',      // id: 4
+            'Flat Color Custom Character Expression',   // id: 5
+            'Painterly Style Half Body',                // id: 6
+            'Flat Color Full Body',                     // id: 7
+            'Painterly Style Half Body',                // id: 8
+            'Painterly Style Half Body',                // id: 9
+            'Painterly Style Half Body (2 Characters)', // id: 10
+            'Painterly Style Half Body',                // id: 11
+            'Flat Color Half Body (2 Characters)',      // id: 12
+            'Painterly Style Half Body',                // id: 13
+            'Painterly Style Custom Character Expression', // 14
+            'Chibi Style Avatar',                       // 15
+            'Painterly Style Avatar',                   // 16
+            'Painterly Style Avatar'                    // 17
+        ];
+
+        const artworks = ref(list.map((desc, index) => {
+            const id = index + 1;
+
+            const category = desc.split(' ').slice(0, 2).join(' ');
+
+            return {
+                id: id,
                 title: '--',
-                category: 'Flat Color',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/1.jpg',
-                desc: 'Flat Color Half Body (2 Characters)'
-            },
-            {
-                id: 2,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/2.jpg',
-                desc: 'Painterly Style Half Body (2 Characters)'
-            },
-            {
-                id: 3,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/3.jpg',
-                desc: 'Painterly Style Custom Character Half Body'
-            },
-            {
-                id: 4,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/4.jpg',
-                desc: 'Painterly Style Custom Character Half Body'
-            },
-            {
-                id: 5,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/5.jpg',
-                desc: 'Painterly Style Custom Character Expression'
-            },
-            {
-                id: 6,
-                title: '--',
-                category: 'chibi',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/6.jpg',
-                desc: 'Chibi Style Avatar'
-            },
-            {
-                id: 7,
-                title: '--',
-                category: 'Flat Color',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/7.jpg',
-                desc: 'Flat Color Half Body (2 Characters)'
-            },
-            {
-                id: 8,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/8.jpg',
-                desc: 'Painterly Style Custom Character Half Body'
-            },
-            {
-                id: 9,
-                title: '--',
-                category: 'Chibi Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/9.jpg',
-                desc: 'Chibi Style Expression'
-            },
-            {
-                id: 10,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/10.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-            {
-                id: 11,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/11.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-            {
-                id: 12,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/12.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-            {
-                id: 13,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/13.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-            {
-                id: 14,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/14.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-            {
-                id: 15,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/15.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-            {
-                id: 16,
-                title: '--',
-                category: 'Painterly Style',
-                url: 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/16.jpg',
-                desc: 'Painterly Style Avatar'
-            },
-        ]);
+                category: category,
+                url: `${baseUrl}${id}.jpg`,
+                desc: desc
+            };
+        }));
 
         const lightbox = reactive({open: false, current: {}});
 
