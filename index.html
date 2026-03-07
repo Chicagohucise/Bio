@@ -298,9 +298,6 @@
                             <div class="text-xs text-gray-500">Category</div>
                             <div class="text-[#00fd93] font-bold">{{ lightbox.current.category }}</div>
                         </div>
-                        <button class="text-gray-500 hover:text-white transition">
-                            <i class="bx bx-share-alt text-xl"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -332,14 +329,32 @@
                    class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
             </div>
 
-            <div class="flex items-center gap-4 border border-[#222] bg-[#0a0a0a] px-5 py-3 rounded-md hover:border-[#00fd93] hover:shadow-[0_0_15px_rgba(0,253,147,0.1)] transition-all duration-300">
+            <div class="flex items-center gap-4 border bg-[#0a0a0a] px-5 py-3 rounded-md transition-all duration-300"
+                 :style="{
+                    borderColor: hoverDiscord ? currentStatus.color : '#222',
+                    boxShadow: hoverDiscord ? `0 0 15px ${currentStatus.color}33` : 'none'
+                 }"
+                 @mouseenter="hoverDiscord = true"
+                 @mouseleave="hoverDiscord = false">
                 <div class="flex flex-col items-end">
                     <span class="text-[10px] text-gray-500 uppercase tracking-wider">System Status</span>
-                    <span class="text-xs text-[#00fd93] font-mono font-bold tracking-widest shadow-green">ONLINE</span>
+                    <span class="text-xs font-mono font-bold tracking-widest transition-colors duration-300"
+                          :class="currentStatus.twText"
+                          :style="{ textShadow: `0 0 10px ${currentStatus.color}80` }">
+                        {{ currentStatus.text }}
+                    </span>
+                    <span v-if="currentActivity" class="text-[10px] text-gray-400 mt-1 max-w-[150px] truncate" :title="currentActivity.name">
+                        {{ currentActivity.type }}: <span class="text-gray-300">{{ currentActivity.name }}</span>
+                    </span>
                 </div>
                 <div class="relative w-3 h-3">
-                    <div class="absolute inset-0 bg-[#00fd93] rounded-full animate-ping opacity-75"></div>
-                    <div class="relative w-3 h-3 bg-[#00fd93] rounded-full shadow-[0_0_10px_#00fd93]"></div>
+                    <div v-if="lanyardData && lanyardData.discord_status !== 'offline'"
+                         class="absolute inset-0 rounded-full animate-ping opacity-75 transition-colors duration-300"
+                         :class="currentStatus.twBg">
+                    </div>
+                    <div class="relative w-3 h-3 rounded-full transition-colors duration-300"
+                         :class="[currentStatus.twBg, currentStatus.twShadow]">
+                    </div>
                 </div>
             </div>
         </div>
@@ -361,4 +376,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-

@@ -72,6 +72,58 @@ createApp({
         const bioText = ref(null);
         const article = ref('an');
 
+        // ==========================================
+        // Discord Lanyard 状态逻辑
+        // ==========================================
+        const hoverDiscord = ref(false);
+        const discordId = '792591311190228994';
+        const lanyardData = ref(null);
+
+        const statusConfig = {
+            online: { color: '#00fd93', text: 'ONLINE', twText: 'text-[#00fd93]', twBg: 'bg-[#00fd93]', twShadow: 'shadow-[0_0_10px_#00fd93]' },
+            dnd: { color: '#f04747', text: 'DND', twText: 'text-[#f04747]', twBg: 'bg-[#f04747]', twShadow: 'shadow-[0_0_10px_#f04747]' },
+            idle: { color: '#faa61a', text: 'IDLE', twText: 'text-[#faa61a]', twBg: 'bg-[#faa61a]', twShadow: 'shadow-[0_0_10px_#faa61a]' },
+            offline: { color: '#747f8d', text: 'OFFLINE', twText: 'text-[#747f8d]', twBg: 'bg-[#747f8d]', twShadow: 'shadow-[0_0_10px_#747f8d]' }
+        };
+
+        const currentStatus = computed(() => {
+            if (!lanyardData.value) return statusConfig.offline;
+            return statusConfig[lanyardData.value.discord_status] || statusConfig.offline;
+        });
+
+        const currentActivity = computed(() => {
+            if (!lanyardData.value) return null;
+
+            if (lanyardData.value.spotify) {
+                return {
+                    type: 'Listening',
+                    name: `${lanyardData.value.spotify.song} - ${lanyardData.value.spotify.artist}`
+                };
+            }
+
+            const activities = lanyardData.value.activities.filter(a => a.type === 0);
+            if (activities.length > 0) {
+                return {
+                    type: 'Playing',
+                    name: activities[0].name
+                };
+            }
+            return null;
+        });
+
+        let lanyardInterval = null;
+        const fetchLanyard = async () => {
+            try {
+                const res = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
+                const json = await res.json();
+                if (json.success) {
+                    lanyardData.value = json.data;
+                }
+            } catch (err) {
+                console.error('获取 Discord 状态失败', err);
+            }
+        };
+
         const handleScroll = () => {
             isScrolled.value = window.scrollY > 50;
         };
@@ -168,7 +220,6 @@ createApp({
             }
         ]);
 
-
         const history = ref([
             {client: '沧屿', type: 'Half Body/Painterly Style', amount: '¥350', date: '2025/11/7'},
             {client: 'kirin_white 麒麟白牙', type: 'Chibi Avatar', amount: '¥150', date: '2025/11/15'},
@@ -209,7 +260,7 @@ createApp({
             }
         ];
 
-
+        // 已经修改为 Cloudflare Pages 函数代理的图片地址
         const baseUrl = '/api/images/';
 
         const list = [
@@ -234,9 +285,7 @@ createApp({
 
         const artworks = ref(list.map((desc, index) => {
             const id = index + 1;
-
             const category = desc.split(' ').slice(0, 2).join(' ');
-
             return {
                 id: id,
                 title: '--',
@@ -285,6 +334,9 @@ createApp({
             }
             window.scrollTo(0, 0);
 
+            fetchLanyard();
+            lanyardInterval = setInterval(fetchLanyard, 15000);
+
             const baseStrings = ["Artist.", "Engineer.", "Gamer.", "Furry.", "Architect.", "Illustrator.", "Analyst.", "Developer."];
 
             if (Math.random() < 0.2) {
@@ -321,9 +373,9 @@ createApp({
             }
         });
 
-
         onUnmounted(() => {
             window.removeEventListener('scroll', handleScroll);
+            if (lanyardInterval) clearInterval(lanyardInterval);
         });
 
         return {
@@ -332,7 +384,8 @@ createApp({
             typedElement, socials, projects, history, commissionTypes,
             artworks, lightbox,
             toggleCommissions, scrollTo, openLightbox,
-            bioText
+            bioText,
+            hoverDiscord, currentStatus, currentActivity, lanyardData
         };
     }
 }).mount('#app');
