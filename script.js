@@ -210,7 +210,7 @@ createApp({
         ];
 
 
-        const baseUrl = 'https://pub-0be96f4b2d824a70991069e1b40da744.r2.dev/';
+        const baseUrl = '/api/images/';
 
         const list = [
             'Chibi Style Avatar',                       // id: 1
