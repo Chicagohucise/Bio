@@ -189,8 +189,8 @@ createApp({
                 client: 'TowDas',
                 type: 'Half Body/Flat Color',
                 payment: 'Quote ¥250',
-                progress: 10,
-                due: '2026/3/10',
+                progress: 30,
+                due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2284852944&s=100'
             },
             {
@@ -198,7 +198,7 @@ createApp({
                 type: 'Half Body Background included/Flat Color/',
                 payment: 'Quote ¥300',
                 progress: 10,
-                due: '2026/3/10',
+                due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
             },
             {
@@ -206,7 +206,7 @@ createApp({
                 type: 'Queue',
                 payment: '-',
                 progress: 0,
-                due: '2026/3/10',
+                due: '2026/-/-',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2318219600&s=100'
             },
             {
