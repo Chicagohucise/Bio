@@ -189,7 +189,7 @@ createApp({
                 client: 'TowDas',
                 type: 'Half Body/Flat Color',
                 payment: 'Quote ¥250',
-                progress: 30,
+                progress: 55,
                 due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2284852944&s=100'
             },
@@ -280,7 +280,8 @@ createApp({
             'Painterly Style Custom Character Expression', // 14
             'Chibi Style Avatar',                       // 15
             'Painterly Style Avatar',                   // 16
-            'Painterly Style Avatar'                    // 17
+            'Painterly Style Avatar' ,                   // 17
+            '-- -- --'                    // 18
         ];
 
         const artworks = ref(list.map((desc, index) => {
