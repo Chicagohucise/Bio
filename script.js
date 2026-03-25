@@ -189,7 +189,7 @@ createApp({
                 client: 'TowDas',
                 type: 'Half Body/Flat Color',
                 payment: 'Quote ¥250',
-                progress: 55,
+                progress: 100,
                 due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2284852944&s=100'
             },
@@ -197,7 +197,7 @@ createApp({
                 client: 'kirin_white 麒麟白牙',
                 type: 'Half Body Background included/Flat Color/',
                 payment: 'Quote ¥300',
-                progress: 10,
+                progress: 29,
                 due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
             },
@@ -213,7 +213,7 @@ createApp({
                 client: 'AzoRyan',
                 type: 'Painterly Style Half Body (2 Characters)',
                 payment: '--',
-                progress: 20,
+                progress: 30,
                 due: '2026/-/-',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=3040129349&s=100'
 
@@ -281,7 +281,8 @@ createApp({
             'Chibi Style Avatar',                       // 15
             'Painterly Style Avatar',                   // 16
             'Painterly Style Avatar' ,                   // 17
-            '-- -- --'                    // 18
+            '-- -- --',                                 // 18
+            'Flat Color Half Body'                      // 19
         ];
 
         const artworks = ref(list.map((desc, index) => {
