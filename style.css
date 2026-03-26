@@ -859,10 +859,9 @@ a {
     opacity: 0.6;
 }
 
-/* 3. 卡片基础属性 */
+/* 3. 卡片基礎屬性 */
 .art-card {
-    --art-bg: none; /* 加入這行：給 Linter 一個交代，消除編輯器報錯 */
-
+    --art-bg: none;
     break-inside: avoid;
     margin-bottom: 1.5rem;
     position: relative;
@@ -871,32 +870,45 @@ a {
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     cursor: pointer;
     transform-style: preserve-3d;
+
+    /* ★ 效能優化 1：告訴瀏覽器這個元素會做 3D 變換，提前分配 GPU 資源 */
+    will-change: transform;
+    /* ★ 效能優化 2：隱藏背面，強制創建獨立的 GPU 渲染層 (Compositing Layer) */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
-/* ★ 新增：环境光晕底层！提取画作边缘颜色的核心魔法 */
+/* 環境光暈底層 */
 .art-card::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image: var(--art-bg); /* 读取 HTML 传过来的图片 */
+    background-image: var(--art-bg);
     background-size: cover;
     background-position: center;
-    /* 强力模糊 + 提亮 + 增加饱和度，变成完美的光晕 */
     filter: blur(25px) brightness(1.2) saturate(1.2);
     opacity: 0;
     z-index: -1;
     transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-    /* 初始状态：往后退且缩小一点，隐藏在卡片后面 */
-    transform: translateZ(-10px) scale(0.9);
+
+    /* ★ 效能優化 3：使用 translate3d 代替 translateZ，這是強制觸發硬體加速的終極指令 */
+    transform: translate3d(0, 0, -10px) scale(0.9);
+
+    /* ★ 效能優化 4：光暈是效能最吃重的地方，聲明它會改變透明度和變換，讓 GPU 專門處理它 */
+    will-change: transform, opacity;
 }
 
-/* ★ 新增：内部包裹层 (接管原本卡片的黑底和圆角裁剪功能) */
+/* 內部包裹層 */
 .art-card-inner {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
     background: #000;
     transform-style: preserve-3d;
+
+    /* ★ 效能優化 5：同樣為內部內容創建獨立 GPU 圖層，避免重繪 (Repaint) 互相干擾 */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .art-card-inner img {
@@ -906,25 +918,26 @@ a {
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 4. 悬浮时的 3D 浮雕与动态发光效果 */
+/* 4. 懸浮時的 3D 浮雕與動態發光效果 */
 .art-card:hover {
-    transform: scale(1.06) translateZ(40px) translateY(-5px);
-    /* 这里只保留普通的黑色阴影作为物理高度感，发光任务交给 ::before */
+    /* 這裡也改用 translate3d */
+    transform: scale(1.06) translate3d(0, 0, 40px) translateY(-5px);
     box-shadow: 0 40px 70px rgba(0, 0, 0, 0.8);
     z-index: 50;
 }
 
-/* 悬浮时：光晕显示并向四周放大扩散！ */
+/* 懸浮時：光暈顯示並向四周放大擴散！ */
 .art-card:hover::before {
-    opacity: 0.85; /* 光晕透明度，太亮可以调低 */
-    transform: translateZ(-20px) scale(1.15); /* 光晕往外扩散 */
+    opacity: 0.85;
+    /* 這裡也改用 translate3d */
+    transform: translate3d(0, 0, -20px) scale(1.15);
 }
 
-/* 图片微距放大 */
+/* 圖片微距放大 */
 .art-card:hover .art-card-inner img {
     transform: scale(1.08);
     opacity: 1;
-    filter: brightness(1.05);
+    filter: brightness(1);
 }
 
 /* 图片下方的文字遮罩层 */
