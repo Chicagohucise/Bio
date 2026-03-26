@@ -215,14 +215,16 @@
 
             <div class="masonry-col">
                 <div v-for="(art, index) in artworks" :key="art.id" class="art-card group reveal"
-                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)" @click="openLightbox(art)">
-                    <img :src="art.url"
-                         class="w-full h-auto block transition duration-700 group-hover:scale-110 group-hover:opacity-60"
-                         loading="lazy">
-                    <div class="art-overlay">
-                        <h3 class="text-lg font-bold text-white">{{ art.title }}</h3>
-                        <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ art.category }}</p>
+                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)" @click="openLightbox(art)"
+                     :style="{ '--art-bg': `url(${art.url})` }">
+                    <div class="art-card-inner">
+                        <img :src="art.url" class="w-full h-auto block" loading="lazy">
+                        <div class="art-overlay">
+                            <h3 class="text-lg font-bold text-white">{{ art.title }}</h3>
+                            <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ art.category }}</p>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -343,7 +345,8 @@
                           :style="{ textShadow: `0 0 10px ${currentStatus.color}80` }">
                         {{ currentStatus.text }}
                     </span>
-                    <span v-if="currentActivity" class="text-[10px] text-gray-400 mt-1 max-w-[150px] truncate" :title="currentActivity.name">
+                    <span v-if="currentActivity" class="text-[10px] text-gray-400 mt-1 max-w-[150px] truncate"
+                          :title="currentActivity.name">
                         {{ currentActivity.type }}: <span class="text-gray-300">{{ currentActivity.name }}</span>
                     </span>
                 </div>

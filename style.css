@@ -859,46 +859,75 @@ a {
     opacity: 0.6;
 }
 
-/* 3. 卡片基礎屬性 */
+/* 3. 卡片基础属性 */
 .art-card {
+    --art-bg: none; /* 加入這行：給 Linter 一個交代，消除編輯器報錯 */
+
     break-inside: avoid;
     margin-bottom: 1.5rem;
-    border-radius: 8px;
-    overflow: hidden;
     position: relative;
-    background: #000;
+    background: transparent;
     border: 1px solid transparent;
-    /* 調整過渡曲線 (cubic-bezier) 讓放大和模糊的過程非常絲滑 */
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     cursor: pointer;
-    backface-visibility: hidden;
     transform-style: preserve-3d;
 }
 
-.art-card img {
+/* ★ 新增：环境光晕底层！提取画作边缘颜色的核心魔法 */
+.art-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--art-bg); /* 读取 HTML 传过来的图片 */
+    background-size: cover;
+    background-position: center;
+    /* 强力模糊 + 提亮 + 增加饱和度，变成完美的光晕 */
+    filter: blur(25px) brightness(1.2) saturate(1.2);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    /* 初始状态：往后退且缩小一点，隐藏在卡片后面 */
+    transform: translateZ(-10px) scale(0.9);
+}
+
+/* ★ 新增：内部包裹层 (接管原本卡片的黑底和圆角裁剪功能) */
+.art-card-inner {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    transform-style: preserve-3d;
+}
+
+.art-card-inner img {
     width: 100%;
     height: auto;
     display: block;
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 4. 懸浮時的 3D 浮雕凸出效果 */
+/* 4. 悬浮时的 3D 浮雕与动态发光效果 */
 .art-card:hover {
-    border-color: var(--main-color);
-    /* 使用 translateZ 配合之前的 perspective，讓圖片真正在 Z 軸上朝向用戶凸出來 */
     transform: scale(1.06) translateZ(40px) translateY(-5px);
-    /* 加入強烈的深色底部陰影，以及主題色的環境光，營造脫離牆面的浮雕感 */
-    box-shadow: 0 40px 70px rgba(0, 0, 0, 0.9), 0 0 25px rgba(0, 253, 147, 0.25);
+    /* 这里只保留普通的黑色阴影作为物理高度感，发光任务交给 ::before */
+    box-shadow: 0 40px 70px rgba(0, 0, 0, 0.8);
     z-index: 50;
 }
 
-/* 圖片內部也做輕微的微距放大，增加視覺張力 */
-.art-card:hover img {
-    transform: scale(1.08);
-    opacity: 0.9;
+/* 悬浮时：光晕显示并向四周放大扩散！ */
+.art-card:hover::before {
+    opacity: 0.85; /* 光晕透明度，太亮可以调低 */
+    transform: translateZ(-20px) scale(1.15); /* 光晕往外扩散 */
 }
 
-/* 圖片下方的文字遮罩層維持原樣即可 */
+/* 图片微距放大 */
+.art-card:hover .art-card-inner img {
+    transform: scale(1.08);
+    opacity: 1;
+    filter: brightness(1.05);
+}
+
+/* 图片下方的文字遮罩层 */
 .art-overlay {
     position: absolute;
     bottom: 0;
@@ -914,7 +943,6 @@ a {
 .art-card:hover .art-overlay {
     transform: translateY(0);
 }
-
 /* =========================================
    8. 委托价格卡片
    ========================================= */
