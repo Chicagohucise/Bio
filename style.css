@@ -871,7 +871,6 @@ a {
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     cursor: pointer;
     transform-style: preserve-3d;
-    will-change: transform;
 }
 
 /* ★ 新增：环境光晕底层！提取画作边缘颜色的核心魔法 */
@@ -889,7 +888,6 @@ a {
     transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     /* 初始状态：往后退且缩小一点，隐藏在卡片后面 */
     transform: translateZ(-10px) scale(0.9);
-    will-change: transform, opacity;
 }
 
 /* ★ 新增：内部包裹层 (接管原本卡片的黑底和圆角裁剪功能) */
@@ -926,7 +924,7 @@ a {
 .art-card:hover .art-card-inner img {
     transform: scale(1.08);
     opacity: 1;
-    filter: brightness(1.05);
+    filter: brightness(1);
 }
 
 /* 图片下方的文字遮罩层 */
