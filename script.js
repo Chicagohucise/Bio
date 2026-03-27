@@ -80,34 +80,10 @@ createApp({
         const lanyardData = ref(null);
 
         const statusConfig = {
-            online: {
-                color: '#00fd93',
-                text: 'ONLINE',
-                twText: 'text-[#00fd93]',
-                twBg: 'bg-[#00fd93]',
-                twShadow: 'shadow-[0_0_10px_#00fd93]'
-            },
-            dnd: {
-                color: '#f04747',
-                text: 'DND',
-                twText: 'text-[#f04747]',
-                twBg: 'bg-[#f04747]',
-                twShadow: 'shadow-[0_0_10px_#f04747]'
-            },
-            idle: {
-                color: '#faa61a',
-                text: 'IDLE',
-                twText: 'text-[#faa61a]',
-                twBg: 'bg-[#faa61a]',
-                twShadow: 'shadow-[0_0_10px_#faa61a]'
-            },
-            offline: {
-                color: '#747f8d',
-                text: 'OFFLINE',
-                twText: 'text-[#747f8d]',
-                twBg: 'bg-[#747f8d]',
-                twShadow: 'shadow-[0_0_10px_#747f8d]'
-            }
+            online: { color: '#00fd93', text: 'ONLINE', twText: 'text-[#00fd93]', twBg: 'bg-[#00fd93]', twShadow: 'shadow-[0_0_10px_#00fd93]' },
+            dnd: { color: '#f04747', text: 'DND', twText: 'text-[#f04747]', twBg: 'bg-[#f04747]', twShadow: 'shadow-[0_0_10px_#f04747]' },
+            idle: { color: '#faa61a', text: 'IDLE', twText: 'text-[#faa61a]', twBg: 'bg-[#faa61a]', twShadow: 'shadow-[0_0_10px_#faa61a]' },
+            offline: { color: '#747f8d', text: 'OFFLINE', twText: 'text-[#747f8d]', twBg: 'bg-[#747f8d]', twShadow: 'shadow-[0_0_10px_#747f8d]' }
         };
 
         const currentStatus = computed(() => {
@@ -304,7 +280,7 @@ createApp({
             'Painterly Style Custom Character Expression', // 14
             'Chibi Style Avatar',                       // 15
             'Painterly Style Avatar',                   // 16
-            'Painterly Style Avatar',                   // 17
+            'Painterly Style Avatar' ,                   // 17
             '-- -- --',                                 // 18
             'Flat Color Half Body'                      // 19
         ];
@@ -350,28 +326,10 @@ createApp({
         const openLightbox = (art) => {
             lightbox.current = art;
             lightbox.open = true;
-            // 彻底锁死滚动条：同时锁住 body 和 html
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-        };
-
-        const closeLightbox = () => {
-            lightbox.open = false;
-            // 恢复滚动条
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-        };
-
-        // 按 Esc 键关闭图片的键盘事件监听
-        const handleKeydown = (e) => {
-            if (e.key === 'Escape' && lightbox.open) {
-                closeLightbox();
-            }
         };
 
         onMounted(() => {
             window.addEventListener('scroll', handleScroll);
-            window.addEventListener('keydown', handleKeydown); // 注册 Esc 事件
 
             if (history.scrollRestoration) {
                 history.scrollRestoration = 'manual';
@@ -419,12 +377,6 @@ createApp({
 
         onUnmounted(() => {
             window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('keydown', handleKeydown); // 卸载事件防止内存泄漏
-
-            // 防止异常退出时滚动条锁死
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-
             if (lanyardInterval) clearInterval(lanyardInterval);
         });
 
