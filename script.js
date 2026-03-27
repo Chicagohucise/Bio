@@ -80,10 +80,34 @@ createApp({
         const lanyardData = ref(null);
 
         const statusConfig = {
-            online: { color: '#00fd93', text: 'ONLINE', twText: 'text-[#00fd93]', twBg: 'bg-[#00fd93]', twShadow: 'shadow-[0_0_10px_#00fd93]' },
-            dnd: { color: '#f04747', text: 'DND', twText: 'text-[#f04747]', twBg: 'bg-[#f04747]', twShadow: 'shadow-[0_0_10px_#f04747]' },
-            idle: { color: '#faa61a', text: 'IDLE', twText: 'text-[#faa61a]', twBg: 'bg-[#faa61a]', twShadow: 'shadow-[0_0_10px_#faa61a]' },
-            offline: { color: '#747f8d', text: 'OFFLINE', twText: 'text-[#747f8d]', twBg: 'bg-[#747f8d]', twShadow: 'shadow-[0_0_10px_#747f8d]' }
+            online: {
+                color: '#00fd93',
+                text: 'ONLINE',
+                twText: 'text-[#00fd93]',
+                twBg: 'bg-[#00fd93]',
+                twShadow: 'shadow-[0_0_10px_#00fd93]'
+            },
+            dnd: {
+                color: '#f04747',
+                text: 'DND',
+                twText: 'text-[#f04747]',
+                twBg: 'bg-[#f04747]',
+                twShadow: 'shadow-[0_0_10px_#f04747]'
+            },
+            idle: {
+                color: '#faa61a',
+                text: 'IDLE',
+                twText: 'text-[#faa61a]',
+                twBg: 'bg-[#faa61a]',
+                twShadow: 'shadow-[0_0_10px_#faa61a]'
+            },
+            offline: {
+                color: '#747f8d',
+                text: 'OFFLINE',
+                twText: 'text-[#747f8d]',
+                twBg: 'bg-[#747f8d]',
+                twShadow: 'shadow-[0_0_10px_#747f8d]'
+            }
         };
 
         const currentStatus = computed(() => {
@@ -280,7 +304,7 @@ createApp({
             'Painterly Style Custom Character Expression', // 14
             'Chibi Style Avatar',                       // 15
             'Painterly Style Avatar',                   // 16
-            'Painterly Style Avatar' ,                   // 17
+            'Painterly Style Avatar',                   // 17
             '-- -- --',                                 // 18
             'Flat Color Half Body'                      // 19
         ];
@@ -323,7 +347,6 @@ createApp({
             document.getElementById(id).scrollIntoView({behavior: 'smooth'});
         };
 
-// ====== 优化 Lightbox 开关逻辑 ======
         const openLightbox = (art) => {
             lightbox.current = art;
             lightbox.open = true;
@@ -355,7 +378,43 @@ createApp({
             }
             window.scrollTo(0, 0);
 
-            // ... (中间的 Typed.js 等代码保持不变) ...
+            fetchLanyard();
+            lanyardInterval = setInterval(fetchLanyard, 15000);
+
+            const baseStrings = ["Artist.", "Engineer.", "Gamer.", "Furry.", "Architect.", "Illustrator.", "Analyst.", "Developer."];
+
+            if (Math.random() < 0.2) {
+                baseStrings.push("Idiot sandwich.^1000");
+                console.log("Easter Egg: Idiot Sandwich Mode Activated 🍞");
+            }
+
+            new Typed(typedElement.value, {
+                strings: baseStrings,
+                typeSpeed: 80,
+                backSpeed: 40,
+                backDelay: 1500,
+                startDelay: 500,
+                loop: true,
+                smartBackspace: true,
+                cursorChar: '_',
+                preStringTyped: (arrayPos, self) => {
+                    const word = self.strings[arrayPos];
+                    const firstChar = word.charAt(0).toLowerCase();
+                    const isVowel = ['a', 'e', 'i', 'o', 'u'].includes(firstChar);
+                    article.value = isVowel ? 'an' : 'a';
+                }
+            });
+
+            new SweetScroll({trigger: 'a[href^="#"]', offset: -80});
+
+            if (bioText.value) {
+                const el = bioText.value;
+                const targetText = "A digital artist & developer based in China. My fursonas are a wolf and a bird. I love bringing characters to life through code and art.";
+                const fx = new TextScramble(el);
+                setTimeout(() => {
+                    fx.setText(targetText);
+                }, 800);
+            }
         });
 
         onUnmounted(() => {

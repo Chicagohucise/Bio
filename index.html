@@ -215,16 +215,14 @@
 
             <div class="masonry-col">
                 <div v-for="(art, index) in artworks" :key="art.id" class="art-card group reveal"
-                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)" @click="openLightbox(art)"
-                     :style="{ '--art-bg': `url(${art.url})` }">
-                    <div class="art-card-inner">
-                        <img :src="art.url" class="w-full h-auto block" loading="lazy">
-                        <div class="art-overlay">
-                            <h3 class="text-lg font-bold text-white">{{ art.title }}</h3>
-                            <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ art.category }}</p>
-                        </div>
+                     :class="'reveal-delay-' + ((index % 3 + 1) * 100)" @click="openLightbox(art)">
+                    <img :src="art.url"
+                         class="w-full h-auto block transition duration-700 group-hover:scale-110 group-hover:opacity-60"
+                         loading="lazy">
+                    <div class="art-overlay">
+                        <h3 class="text-lg font-bold text-white">{{ art.title }}</h3>
+                        <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ art.category }}</p>
                     </div>
-
                 </div>
             </div>
 
@@ -276,22 +274,18 @@
     <transition enter-active-class="transition duration-400 var(--ease-out-expo)" enter-from-class="opacity-0 scale-95"
                 enter-to-class="opacity-100 scale-100" leave-active-class="transition duration-300 var(--ease-out-expo)"
                 leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
-
         <div v-if="lightbox.open"
              class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
-             @click="closeLightbox">
-
-            <button class="absolute top-4 right-4 text-white/50 hover:text-white text-4xl transition">
+             @click.self="lightbox.open = false">
+            <button class="absolute top-4 right-4 text-white/50 hover:text-white text-4xl transition"
+                    @click="lightbox.open = false">
                 <i class="bx bx-x"></i>
             </button>
-
             <div class="max-w-7xl max-h-[90vh] flex flex-col md:flex-row gap-8 items-center pointer-events-auto">
-
                 <div class="relative group">
                     <img :src="lightbox.current.url"
                          class="max-h-[80vh] max-w-full rounded shadow-[0_0_50px_rgba(0,253,147,0.15)] border border-[#222]">
                 </div>
-
                 <div class="bg-[#111] p-8 rounded border border-[#333] min-w-[320px] shadow-2xl">
                     <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">Project Name</div>
                     <h2 class="text-2xl font-bold text-white mb-4">{{ lightbox.current.title }}</h2>
@@ -306,7 +300,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </transition>
@@ -350,8 +343,7 @@
                           :style="{ textShadow: `0 0 10px ${currentStatus.color}80` }">
                         {{ currentStatus.text }}
                     </span>
-                    <span v-if="currentActivity" class="text-[10px] text-gray-400 mt-1 max-w-[150px] truncate"
-                          :title="currentActivity.name">
+                    <span v-if="currentActivity" class="text-[10px] text-gray-400 mt-1 max-w-[150px] truncate" :title="currentActivity.name">
                         {{ currentActivity.type }}: <span class="text-gray-300">{{ currentActivity.name }}</span>
                     </span>
                 </div>
