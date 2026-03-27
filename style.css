@@ -848,13 +848,22 @@ a {
     transform-style: preserve-3d;
 }
 
-@media (min-width: 640px) { .masonry-col { column-count: 2; } }
-@media (min-width: 1024px) { .masonry-col { column-count: 3; } }
+@media (min-width: 640px) {
+    .masonry-col {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .masonry-col {
+        column-count: 3;
+    }
+}
 
 /* 2. 核心魔法：高斯模糊邏輯 */
 /* 使用 :has() 偽類，當容器內有卡片被 hover 時，讓「沒有被 hover」的卡片變模糊且變暗 */
 .masonry-col:has(.art-card:hover) .art-card:not(:hover) {
-    filter: blur(8px) brightness(0.4);
+    filter: blur(8px) brightness(0.5);
     transform: scale(0.98); /* 稍微往後縮，增強對比 */
     opacity: 0.7;
 }
@@ -892,11 +901,10 @@ a {
     z-index: 50;
 }
 
-/* 圖片內部也做輕微的微距放大，增加視覺張力 */
 .art-card:hover img {
     transform: scale(1.08);
     opacity: 1; /* 取消透明度，恢復原本色彩 */
-    filter: brightness(1); /* (可選) 讓當前被指著的圖片亮度提升 10%，會更有發光凸出的感覺 */
+    filter: brightness(1.1); /* (可選) 讓當前被指著的圖片亮度提升 10%，會更有發光凸出的感覺 */
 }
 
 /* 圖片下方的文字遮罩層維持原樣即可 */
