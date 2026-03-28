@@ -836,58 +836,72 @@ a {
 }
 
 /* =========================================
-   7. 画廊 & 筛选器 - 修复亮度版本
+   7. 画廊 & 筛选器 - 修复亮度和性能版本
    ========================================= */
 
 /* 容器设置 */
 .masonry-col {
     column-count: 1;
     column-gap: 1.5rem;
-    transition: all 0.5s ease;
 }
 
 @media (min-width: 640px) { .masonry-col { column-count: 2; } }
 @media (min-width: 1024px) { .masonry-col { column-count: 3; } }
 
 /* 核心逻辑：当容器内有卡片被悬浮时，让“非悬浮”的卡片变暗变模糊 */
-.masonry-col:has(.art-card:hover) .art-card:not(:hover) {
-    filter: blur(4px) brightness(0.5); /* 降低其他图片的亮度 */
-    opacity: 0.6;
-    transform: scale(0.98);
+/* 修复点：仅在支持 hover 的设备（如电脑）上启用，防止手机端误触碰造成性能卡顿！ */
+@media (hover: hover) {
+    .masonry-col:has(.art-card:hover) .art-card:not(:hover) {
+        filter: blur(4px) brightness(0.5); /* 降低其他图片的亮度 */
+        opacity: 0.6;
+        transform: scale(0.98);
+    }
 }
 
 /* 基础卡片属性 */
 .art-card {
     break-inside: avoid;
+    -webkit-column-break-inside: avoid; /* 兼容旧版本 Safari */
     margin-bottom: 1.5rem;
     border-radius: 8px;
     overflow: hidden;
     position: relative;
-    background: #000; /* 底色为黑 */
+    background: #080808; /* 给卡片一个浅灰色底，防止高度坍塌看不见 */
     border: 1px solid transparent;
-    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+
+    /* 性能修复点：严禁使用 transition: all，只过渡确切的属性，避免浏览器每帧重绘整个 DOM 树 */
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, filter 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+
+    /* 性能修复点：强制开启 GPU 硬件加速 */
+    transform: translateZ(0);
+    will-change: transform, filter, opacity;
+
     cursor: pointer;
+    min-height: 150px; /* 强制给一个最小高度，彻底解决 Lazy Loading 因为 0px 不触发图片抓取的问题 */
 }
 
 .art-card img {
     width: 100%;
     height: auto;
     display: block;
-    transition: all 0.5s ease;
+
+    /* 性能修复点：同理，去掉 all 动画 */
+    transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
     filter: brightness(1); /* 默认亮度 */
+    will-change: transform;
 }
 
 /* 【关键修复点】：确保悬浮卡片亮度充足 */
 .art-card:hover {
     border-color: var(--main-color);
-    transform: scale(1.05);
+    transform: scale(1.05) translateZ(0); /* 保持硬件加速 */
     z-index: 10;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
 }
 
 .art-card:hover img {
     opacity: 1 !important; /* 强制不透明 */
-    filter: brightness(1); /* 稍微提升亮度（1.1倍），抵消遮罩层的影响 */
+    filter: brightness(1);
 }
 
 /* 文字遮罩层优化 */

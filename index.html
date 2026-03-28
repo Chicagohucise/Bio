@@ -227,7 +227,8 @@
 
             <div class="masonry-col">
                 <div v-for="(art, index) in artworks" :key="art.id" class="art-card group" @click="openLightbox(art)">
-                    <img :src="art.url" :alt="art.title" loading="lazy">
+                    <!-- 性能优化修复点：添加 decoding="async" 防止加载图片时卡住主线程 -->
+                    <img :src="art.url" :alt="art.title" loading="lazy" decoding="async">
                     <div class="art-overlay">
                         <h3 class="text-lg font-bold text-white">{{ art.title }}</h3>
                         <p class="text-xs text-[#00fd93] font-bold mt-1 uppercase">{{ art.category }}</p>
