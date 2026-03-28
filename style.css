@@ -981,6 +981,11 @@ a {
     text-shadow: 0 0 20px rgba(0, 253, 147, 0.4);
 }
 
+/* 修复侧边栏锚点跳转时，标题被顶部固定导航栏遮挡的问题 */
+section[id], header[id] {
+    scroll-margin-top: 100px;
+}
+
 @media (max-width: 768px) {
     .hero-title {
         font-size: 3rem;

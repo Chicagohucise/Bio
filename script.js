@@ -73,6 +73,22 @@ createApp({
         const article = ref('an');
 
         // ==========================================
+        // Commission Status 逻辑 (接单状态指示灯)
+        // ==========================================
+        const currentCommissionState = ref('full'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
+
+        const commissionStatusConfig = {
+            open: { text: 'Commission: OPEN', color: '#00fd93', dotClass: 'bg-[#00fd93]', shadowClass: 'shadow-[0_0_8px_#00fd93]' },
+            full: { text: 'Commission: FULL', color: '#f04747', dotClass: 'bg-[#f04747]', shadowClass: 'shadow-[0_0_8px_#f04747]' },
+            hold: { text: 'ON HOLD', color: '#faa61a', dotClass: 'bg-[#faa61a]', shadowClass: 'shadow-[0_0_8px_#faa61a]' }
+        };
+
+        const activeCommissionStatus = computed(() => commissionStatusConfig[currentCommissionState.value] || commissionStatusConfig.open);
+
+        // 新增：判断是否显示胶囊（需处于展开状态且不能在 home 顶部）
+        const showCapsule = computed(() => showCommissions.value && activeSection.value !== 'heroHeader');
+
+        // ==========================================
         // Discord Lanyard 状态逻辑
         // ==========================================
         const hoverDiscord = ref(false);
@@ -136,9 +152,31 @@ createApp({
                         entry.target.classList.add('active');
                     }
                 });
-            }, {threshold: 0.02, rootMargin: "0px 0px -50px 0px"}); // 将 threshold 从 0.15 改为 0.02，并添加 rootMargin
+            }, {threshold: 0.02, rootMargin: "0px 0px -50px 0px"});
 
             revealElements.forEach((el) => observer.observe(el));
+        };
+
+        // ==========================================
+        // 侧边栏胶囊导航滚动监听
+        // ==========================================
+        const initSectionObserver = () => {
+            const sections = [
+                document.getElementById('heroHeader'),
+                document.getElementById('mission-log'),
+                document.getElementById('visual-database'),
+                document.getElementById('service-rates')
+            ].filter(Boolean);
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        activeSection.value = entry.target.id;
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: "-30% 0px -40% 0px" }); // 中间偏上区域判定激活
+
+            sections.forEach(sec => observer.observe(sec));
         };
 
         const socials = [
@@ -336,6 +374,9 @@ createApp({
             }
             window.scrollTo(0, 0);
 
+            // 延迟加载区块监视器，等 DOM 完全渲染
+            setTimeout(initSectionObserver, 500);
+
             fetchLanyard();
             lanyardInterval = setInterval(fetchLanyard, 15000);
 
@@ -387,7 +428,8 @@ createApp({
             artworks, lightbox,
             toggleCommissions, scrollTo, openLightbox,
             bioText,
-            hoverDiscord, currentStatus, currentActivity, lanyardData
+            hoverDiscord, currentStatus, currentActivity, lanyardData,
+            currentCommissionState, activeCommissionStatus, showCapsule
         };
     }
 }).mount('#app');
