@@ -136,7 +136,7 @@ createApp({
                         entry.target.classList.add('active');
                     }
                 });
-            }, {threshold: 0.15});
+            }, {threshold: 0.02, rootMargin: "0px 0px -50px 0px"}); // 将 threshold 从 0.15 改为 0.02，并添加 rootMargin
 
             revealElements.forEach((el) => observer.observe(el));
         };
