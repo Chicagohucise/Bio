@@ -235,16 +235,16 @@ createApp({
                 client: 'kirin_white 麒麟白牙',
                 type: 'Half Body Background included/Flat Color/',
                 payment: 'Prepaid ¥300',
-                progress: 50,
+                progress: 70,
                 due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
             },
             {
                 client: '哈草咪',
-                type: 'Queue',
-                payment: '-',
-                progress: 0,
-                due: '2026/-/-',
+                type: 'Painterly Style Half Body',
+                payment: 'Quote ¥350',
+                progress: 5,
+                due: '2026/4/14',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2318219600&s=100'
             },
             {
