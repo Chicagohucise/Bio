@@ -235,7 +235,7 @@ createApp({
                 client: 'kirin_white 麒麟白牙',
                 type: 'Half Body Background included/Flat Color/',
                 payment: 'Prepaid ¥300',
-                progress: 70,
+                progress: 90,
                 due: '2026/4/10',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
             },
