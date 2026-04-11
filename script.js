@@ -243,7 +243,7 @@ createApp({
                 client: '哈草咪',
                 type: 'Painterly Style Half Body',
                 payment: 'Quote ¥350',
-                progress: 5,
+                progress: 20,
                 due: '2026/4/14',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2318219600&s=100'
             },
