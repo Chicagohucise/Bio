@@ -244,7 +244,7 @@ createApp({
                 type: 'Painterly Style Half Body',
                 payment: 'Quote ¥350',
                 progress: 20,
-                due: '2026/4/14',
+                due: '2026/4/20',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2318219600&s=100'
             },
             {
