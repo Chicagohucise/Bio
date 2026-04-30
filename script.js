@@ -75,12 +75,22 @@ createApp({
         // ==========================================
         // Commission Status 逻辑 (接单状态指示灯)
         // ==========================================
-        const currentCommissionState = ref('full'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
+        const currentCommissionState = ref('open'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
 
         const commissionStatusConfig = {
-            open: { text: 'Commission: OPEN', color: '#00fd93', dotClass: 'bg-[#00fd93]', shadowClass: 'shadow-[0_0_8px_#00fd93]' },
-            full: { text: 'Commission: FULL', color: '#f04747', dotClass: 'bg-[#f04747]', shadowClass: 'shadow-[0_0_8px_#f04747]' },
-            hold: { text: 'ON HOLD', color: '#faa61a', dotClass: 'bg-[#faa61a]', shadowClass: 'shadow-[0_0_8px_#faa61a]' }
+            open: {
+                text: 'Commission: OPEN',
+                color: '#00fd93',
+                dotClass: 'bg-[#00fd93]',
+                shadowClass: 'shadow-[0_0_8px_#00fd93]'
+            },
+            full: {
+                text: 'Commission: FULL',
+                color: '#f04747',
+                dotClass: 'bg-[#f04747]',
+                shadowClass: 'shadow-[0_0_8px_#f04747]'
+            },
+            hold: {text: 'ON HOLD', color: '#faa61a', dotClass: 'bg-[#faa61a]', shadowClass: 'shadow-[0_0_8px_#faa61a]'}
         };
 
         const activeCommissionStatus = computed(() => commissionStatusConfig[currentCommissionState.value] || commissionStatusConfig.open);
@@ -96,10 +106,34 @@ createApp({
         const lanyardData = ref(null);
 
         const statusConfig = {
-            online: { color: '#00fd93', text: 'ONLINE', twText: 'text-[#00fd93]', twBg: 'bg-[#00fd93]', twShadow: 'shadow-[0_0_10px_#00fd93]' },
-            dnd: { color: '#f04747', text: 'DND', twText: 'text-[#f04747]', twBg: 'bg-[#f04747]', twShadow: 'shadow-[0_0_10px_#f04747]' },
-            idle: { color: '#faa61a', text: 'IDLE', twText: 'text-[#faa61a]', twBg: 'bg-[#faa61a]', twShadow: 'shadow-[0_0_10px_#faa61a]' },
-            offline: { color: '#747f8d', text: 'OFFLINE', twText: 'text-[#747f8d]', twBg: 'bg-[#747f8d]', twShadow: 'shadow-[0_0_10px_#747f8d]' }
+            online: {
+                color: '#00fd93',
+                text: 'ONLINE',
+                twText: 'text-[#00fd93]',
+                twBg: 'bg-[#00fd93]',
+                twShadow: 'shadow-[0_0_10px_#00fd93]'
+            },
+            dnd: {
+                color: '#f04747',
+                text: 'DND',
+                twText: 'text-[#f04747]',
+                twBg: 'bg-[#f04747]',
+                twShadow: 'shadow-[0_0_10px_#f04747]'
+            },
+            idle: {
+                color: '#faa61a',
+                text: 'IDLE',
+                twText: 'text-[#faa61a]',
+                twBg: 'bg-[#faa61a]',
+                twShadow: 'shadow-[0_0_10px_#faa61a]'
+            },
+            offline: {
+                color: '#747f8d',
+                text: 'OFFLINE',
+                twText: 'text-[#747f8d]',
+                twBg: 'bg-[#747f8d]',
+                twShadow: 'shadow-[0_0_10px_#747f8d]'
+            }
         };
 
         const currentStatus = computed(() => {
@@ -174,7 +208,7 @@ createApp({
                         activeSection.value = entry.target.id;
                     }
                 });
-            }, { threshold: 0.1, rootMargin: "-30% 0px -40% 0px" }); // 中间偏上区域判定激活
+            }, {threshold: 0.1, rootMargin: "-30% 0px -40% 0px"}); // 中间偏上区域判定激活
 
             sections.forEach(sec => observer.observe(sec));
         };
@@ -192,62 +226,6 @@ createApp({
 
         const projects = ref([
             {
-                client: 'Finn',
-                type: 'Half Body/Painterly Style',
-                payment: 'Prepaid ¥350',
-                progress: 100,
-                due: '2026/1/15',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=761874227&s=100'
-            },
-            {
-                client: '长者森中魔沼蛙',
-                type: 'Expression*3/Chibi Style||Avatar*1/Painterly Style',
-                payment: 'Prepaid ¥400',
-                progress: 100,
-                due: '2026/2/28',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=923339837&s=100'
-            },
-            {
-                client: 'ALExEWolf',
-                type: 'Painterly Style Half Body (2 Characters)',
-                payment: 'Prepaid ？',
-                progress: 100,
-                due: '2026/2/12',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=1069454358&s=100'
-            },
-            {
-                client: 'Seigfried',
-                type: 'Painterly Style Half Body (2 Characters)',
-                payment: 'Prepaid ¥450',
-                progress: 100,
-                due: '2026/3/6',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2208439874&s=100'
-            },
-            {
-                client: 'TowDas',
-                type: 'Half Body/Flat Color',
-                payment: 'Quote ¥250',
-                progress: 100,
-                due: '2026/4/10',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2284852944&s=100'
-            },
-            {
-                client: 'kirin_white 麒麟白牙',
-                type: 'Half Body Background included/Flat Color/',
-                payment: 'Prepaid ¥300',
-                progress: 100,
-                due: '2026/4/10',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
-            },
-            {
-                client: '哈草咪',
-                type: 'Painterly Style Half Body',
-                payment: 'Quote ¥350',
-                progress: 100,
-                due: '2026/4/20',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2318219600&s=100'
-            },
-            {
                 client: 'AzoRyan',
                 type: 'Painterly Style Half Body (2 Characters)',
                 payment: '--',
@@ -259,21 +237,18 @@ createApp({
         ]);
 
         const history = ref([
+            {client: '哈草咪', type: 'Painterly Style Half Body', amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖', date: '2026/4/30'},
+            {client: 'kirin_white 麒麟白牙', type: 'Half Body Background included/Flat Color/', amount: '¥300', date: '2026/4/10'},
+            {client: 'TowDas', type: 'Half Body/Flat Color', amount: '¥450', date: '2026/4/10'},
+            {client: 'Seigfried', type: 'Painterly Style Half Body (2 Characters)', amount: '¥450', date: '2026/3/6'},
+            {client: '沧屿', type: 'Expression*3/Chibi Style||Avatar*1/Painterly Style', amount: '¥400', date: '2026/2/28'},
+            {client: 'ALExEWolf', type: 'Painterly Style Half Body (2 Characters)', amount: '<3', date: '2026/2/12'},
+            {client: 'Finn', type: 'Half Body/Painterly Style', amount: '¥350', date: '2026/1/15'},
             {client: '沧屿', type: 'Half Body/Painterly Style', amount: '¥350', date: '2025/11/7'},
             {client: 'kirin_white 麒麟白牙', type: 'Chibi Avatar', amount: '¥150', date: '2025/11/15'},
             {client: '沧屿', type: 'Expression', amount: '¥50', date: '2025/11/7'},
-            {
-                client: 'Seigfried',
-                type: 'Half Body (2 Characters)/Painterly Style',
-                amount: '¥450',
-                date: '2025/11/3'
-            },
-            {
-                client: '零贰',
-                type: 'Half Body (2 Characters)/Flat Color',
-                amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖',
-                date: '2025/10/9'
-            },
+            {client: 'Seigfried', type: 'Half Body (2 Characters)/Painterly Style', amount: '¥450', date: '2025/11/3'},
+            {client: '零贰', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖', date: '2025/10/9'},
             {client: 'Seigfried', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250', date: '2025/9/25'},
         ]);
 
@@ -318,7 +293,7 @@ createApp({
             'Painterly Style Custom Character Expression', // 14
             'Chibi Style Avatar',                       // 15
             'Painterly Style Avatar',                   // 16
-            'Painterly Style Avatar' ,                   // 17
+            'Painterly Style Avatar',                   // 17
             '-- -- --',                                 // 18
             'Flat Color Half Body',                      // 19
             'Flat Color Half Body Background included'                      // 20
