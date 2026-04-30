@@ -226,6 +226,34 @@ createApp({
 
         const projects = ref([
             {
+                client: '玄鸟',
+                type: 'Painterly Style Half Body',
+                payment: 'Prepay ¥350',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2301995114&s=100'
+
+            },
+            {
+                client: 'Semk',
+                type: 'Painterly Style Half Body',
+                payment: 'Prepay ¥350 + Tip ¥50',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2361855610&s=100'
+
+            },
+            {
+                client: 'Brred',
+                type: 'Painterly Style Half Body',
+                payment: 'Prepay ¥350 + Tip ¥50',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=826875680&s=100'
+
+            },
+
+            {
                 client: 'AzoRyan',
                 type: 'Painterly Style Half Body (2 Characters)',
                 payment: '--',
@@ -237,18 +265,38 @@ createApp({
         ]);
 
         const history = ref([
-            {client: '哈草咪', type: 'Painterly Style Half Body', amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖', date: '2026/4/30'},
-            {client: 'kirin_white 麒麟白牙', type: 'Half Body Background included/Flat Color/', amount: '¥300', date: '2026/4/10'},
+            {
+                client: '哈草咪',
+                type: 'Painterly Style Half Body',
+                amount: '¥350+Support Tip ¥150 Thank you for the additional tip 💖',
+                date: '2026/4/30'
+            },
+            {
+                client: 'kirin_white 麒麟白牙',
+                type: 'Half Body Background included/Flat Color/',
+                amount: '¥300',
+                date: '2026/4/10'
+            },
             {client: 'TowDas', type: 'Half Body/Flat Color', amount: '¥450', date: '2026/4/10'},
             {client: 'Seigfried', type: 'Painterly Style Half Body (2 Characters)', amount: '¥450', date: '2026/3/6'},
-            {client: '沧屿', type: 'Expression*3/Chibi Style||Avatar*1/Painterly Style', amount: '¥400', date: '2026/2/28'},
+            {
+                client: '沧屿',
+                type: 'Expression*3/Chibi Style||Avatar*1/Painterly Style',
+                amount: '¥400',
+                date: '2026/2/28'
+            },
             {client: 'ALExEWolf', type: 'Painterly Style Half Body (2 Characters)', amount: '<3', date: '2026/2/12'},
             {client: 'Finn', type: 'Half Body/Painterly Style', amount: '¥350', date: '2026/1/15'},
             {client: '沧屿', type: 'Half Body/Painterly Style', amount: '¥350', date: '2025/11/7'},
             {client: 'kirin_white 麒麟白牙', type: 'Chibi Avatar', amount: '¥150', date: '2025/11/15'},
             {client: '沧屿', type: 'Expression', amount: '¥50', date: '2025/11/7'},
             {client: 'Seigfried', type: 'Half Body (2 Characters)/Painterly Style', amount: '¥450', date: '2025/11/3'},
-            {client: '零贰', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖', date: '2025/10/9'},
+            {
+                client: '零贰',
+                type: 'Half Body (2 Characters)/Flat Color',
+                amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖',
+                date: '2025/10/9'
+            },
             {client: 'Seigfried', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250', date: '2025/9/25'},
         ]);
 
