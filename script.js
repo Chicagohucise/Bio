@@ -295,8 +295,9 @@ createApp({
             'Painterly Style Avatar',                   // 16
             'Painterly Style Avatar',                   // 17
             '-- -- --',                                 // 18
-            'Flat Color Half Body',                      // 19
-            'Flat Color Half Body Background included'                      // 20
+            'Flat Color Half Body',                     // 19
+            'Flat Color Half Body Background included', // 20
+            'Painterly Style Half Body'                 // 21
         ];
 
         const artworks = ref(list.map((desc, index) => {
