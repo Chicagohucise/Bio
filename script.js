@@ -75,7 +75,7 @@ createApp({
         // ==========================================
         // Commission Status 逻辑 (接单状态指示灯)
         // ==========================================
-        const currentCommissionState = ref('open'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
+        const currentCommissionState = ref('hold'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
 
         const commissionStatusConfig = {
             open: {
@@ -250,6 +250,51 @@ createApp({
                 progress: 0,
                 due: '2026/-/-',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=826875680&s=100'
+
+            },
+            {
+                client: 'Kuno',
+                type: 'Painterly Style Half Body',
+                payment: 'Prepay ¥350',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'https://cdn.discordapp.com/avatars/307672763814903811/97f43e0fabc60a572c03c995b9bb41c5.webp?size=1024'
+
+            },
+            {
+                client: 'shenryo',
+                type: 'Flat Color Half Body',
+                payment: 'Prepay ¥250',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'https://cdn.discordapp.com/avatars/695038509622362143/e468ebaf174fa21a0062c86564c3d1fe.webp?size=1024'
+            },
+
+            {
+                client: 'kirin_white 麒麟白牙',
+                type: 'Flat Color 2-View Reference (With Outfit)',
+                payment: 'Prepay ¥350',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
+
+            },
+            {
+                client: '睿彦',
+                type: 'Flat Color Half Body/Outfit variations',
+                payment: 'quote: ¥300',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=3524537435&s=100'
+
+            },
+            {
+                client: '筱狼',
+                type: 'Painterly Style Half Body',
+                payment: 'Pending',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2647236142&s=100'
 
             },
 
