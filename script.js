@@ -393,17 +393,19 @@ createApp({
             'Painterly Style Half Body'                 // 21
         ];
 
-        const artworks = ref(list.map((desc, index) => {
-            const id = index + 1;
-            const category = desc.split(' ').slice(0, 2).join(' ');
-            return {
-                id: id,
-                title: '--',
-                category: category,
-                url: `${baseUrl}${id}.jpg`,
-                desc: desc
-            };
-        }));
+        const artworks = ref(
+            list.map((desc, index) => {
+                const id = index + 1;
+                const category = desc.split(' ').slice(0, 2).join(' ');
+                return {
+                    id: id,
+                    title: '--',
+                    category: category,
+                    url: `${baseUrl}${id}.jpg`,
+                    desc: desc
+                };
+            }).reverse()
+        );
 
         const lightbox = reactive({open: false, current: {}});
 
