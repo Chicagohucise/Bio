@@ -256,9 +256,8 @@ createApp({
                 client: 'Kuno',
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350',
-                progress: 0,
                 due: '2026/-/-',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
+                avatar: '/api/avatar/Kuno.jpg'
             },
             {
                 client: 'shenryo',
