@@ -229,8 +229,8 @@ createApp({
                 client: '玄鸟',
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350',
-                progress: 0,
-                due: '2026/-/-',
+                progress: 3,
+                due: '2026/5/12',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2301995114&s=100'
 
             },
@@ -239,7 +239,7 @@ createApp({
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350 + Tip ¥50',
                 progress: 0,
-                due: '2026/-/-',
+                due: '2026/5/22',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2361855610&s=100'
 
             },
@@ -248,7 +248,7 @@ createApp({
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350 + Tip ¥50',
                 progress: 0,
-                due: '2026/-/-',
+                due: '2026/6/1',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=826875680&s=100'
 
             },
