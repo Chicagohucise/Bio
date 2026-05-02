@@ -302,7 +302,7 @@ createApp({
                 payment: 'Pending',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: '/api/avatar/Sola空.jpg'
+                avatar: '/api/avatar/Sola.jpg'
 
             },
 
