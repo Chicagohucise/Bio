@@ -296,6 +296,15 @@ createApp({
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2647236142&s=100'
 
             },
+            {
+                client: 'Sola空',
+                type: 'Flat Color Half Body/Outfit variations',
+                payment: 'Pending',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: '/api/avatar/Sola空.jpg'
+
+            },
 
             {
                 client: 'AzoRyan',
