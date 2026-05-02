@@ -279,6 +279,16 @@ createApp({
 
             },
             {
+                client: 'Sola空',
+                type: 'Painterly Style Half Body',
+                payment: 'Prepay: ¥350',
+                progress: 0,
+                due: '2026/-/-',
+                avatar: '/api/avatar/Sola.jpg'
+
+            },
+
+            {
                 client: '睿彦',
                 type: 'Flat Color Half Body/Outfit variations',
                 payment: 'quote: ¥300',
@@ -296,16 +306,6 @@ createApp({
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2647236142&s=100'
 
             },
-            {
-                client: 'Sola空',
-                type: 'Painterly Style Half Body',
-                payment: 'quote: ¥350',
-                progress: 0,
-                due: '2026/-/-',
-                avatar: '/api/avatar/Sola.jpg'
-
-            },
-
             {
                 client: 'AzoRyan',
                 type: 'Painterly Style Half Body (2 Characters)',
