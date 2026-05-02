@@ -258,7 +258,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: '/api/avatar/Kuno.jpg'
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
             },
             {
                 client: 'shenryo',
