@@ -298,8 +298,8 @@ createApp({
             },
             {
                 client: 'Sola空',
-                type: 'Pending',
-                payment: 'Pending',
+                type: 'Painterly Style Half Body',
+                payment: 'quote: ¥350',
                 progress: 0,
                 due: '2026/-/-',
                 avatar: '/api/avatar/Sola.jpg'
