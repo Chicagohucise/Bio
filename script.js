@@ -256,6 +256,7 @@ createApp({
                 client: 'Kuno',
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350',
+                progress: 0,
                 due: '2026/-/-',
                 avatar: '/api/avatar/Kuno.jpg'
             },
