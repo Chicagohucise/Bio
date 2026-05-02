@@ -258,7 +258,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'https://cdn.discordapp.com/avatars/307672763814903811/97f43e0fabc60a572c03c995b9bb41c5.webp?size=1024'
+                avatar: <img src="/avatar/Kuno.jpg"/>
 
             },
             {
@@ -267,7 +267,7 @@ createApp({
                 payment: 'Prepay ¥250',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'https://cdn.discordapp.com/avatars/695038509622362143/e468ebaf174fa21a0062c86564c3d1fe.webp?size=1024'
+                avatar: <img src="/avatar/shenryo.jpg"/>
             },
 
             {
