@@ -298,7 +298,7 @@ createApp({
             },
             {
                 client: 'Sola空',
-                type: 'Flat Color Half Body/Outfit variations',
+                type: 'Pending',
                 payment: 'Pending',
                 progress: 0,
                 due: '2026/-/-',
