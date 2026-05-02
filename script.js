@@ -454,7 +454,7 @@ createApp({
             const baseStrings = ["Artist.", "Engineer.", "Gamer.", "Furry.", "Architect.", "Illustrator.", "Analyst.", "Developer."];
 
             if (Math.random() < 0.2) {
-                baseStrings.push("Idiot sandwich.^1000");
+                baseStrings.push("Idiot sandwich 🍞.^1000");
                 console.log("Easter Egg: Idiot Sandwich Mode Activated 🍞");
             }
 
