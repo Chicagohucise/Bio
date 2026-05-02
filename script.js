@@ -258,8 +258,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'http://avatar/Kuno.jpg'
-
+                avatar: '/api/avatar/Kuno.jpg'
             },
             {
                 client: 'shenryo',
@@ -267,7 +266,7 @@ createApp({
                 payment: 'Prepay ¥250',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'http://avatar/shenryo.jpg'
+                avatar: '/api/avatar/shenryo.jpg'
             },
 
             {
