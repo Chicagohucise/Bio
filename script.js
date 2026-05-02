@@ -75,7 +75,7 @@ createApp({
         // ==========================================
         // Commission Status 逻辑 (接单状态指示灯)
         // ==========================================
-        const currentCommissionState = ref('hold'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
+        const currentCommissionState = ref('full'); // ⬅️ 手动修改状态: 'open', 'full', 或 'hold'
 
         const commissionStatusConfig = {
             open: {
