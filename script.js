@@ -226,10 +226,20 @@ createApp({
 
         const projects = ref([
             {
+                client: '碳酸野六',
+                type: '--',
+                payment: 'Prepay ？',
+                progress: 90,
+                due: '2026/5/9',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=947523897&s=100'
+
+            },
+
+            {
                 client: '玄鸟',
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350',
-                progress: 26,
+                progress: 33,
                 due: '2026/5/13',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2301995114&s=100'
 
