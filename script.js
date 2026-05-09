@@ -229,7 +229,7 @@ createApp({
                 client: '碳酸野六',
                 type: '--',
                 payment: 'Prepay ？',
-                progress: 90,
+                progress: 100,
                 due: '2026/5/9',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=947523897&s=100'
 
