@@ -239,7 +239,7 @@ createApp({
                 client: '玄鸟',
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350',
-                progress: 33,
+                progress: 50,
                 due: '2026/5/13',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2301995114&s=100'
 
