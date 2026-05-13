@@ -245,21 +245,21 @@ createApp({
 
             },
             {
-                client: 'Semk',
-                type: 'Painterly Style Half Body',
-                payment: 'Prepay ¥350 + Tip ¥50',
-                progress: 0,
-                due: '2026/5/23',
-                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2361855610&s=100'
-
-            },
-            {
                 client: 'Brred',
                 type: 'Painterly Style Half Body',
                 payment: 'Prepay ¥350 + Tip ¥50',
                 progress: 0,
-                due: '2026/6/2',
+                due: '2026/5/23',
                 avatar: 'http://q1.qlogo.cn/g?b=qq&nk=826875680&s=100'
+
+            },
+            {
+                client: 'Semk',
+                type: 'Painterly Style Half Body',
+                payment: 'Prepay ¥350 + Tip ¥50',
+                progress: 0,
+                due: '2026/6/2',
+                avatar: 'http://q1.qlogo.cn/g?b=qq&nk=2361855610&s=100'
 
             },
             {
