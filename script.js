@@ -231,7 +231,7 @@ createApp({
                 payment: 'Prepay ？',
                 progress: 100,
                 due: '2026/5/9',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=947523897&s=100'
+                avatar: '/api/avatar/碳酸野六.jpg'
 
             },
 
@@ -241,7 +241,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 70,
                 due: '2026/5/13',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=2301995114&s=100'
+                avatar: '/api/avatar/玄鸟.jpg'
 
             },
             {
@@ -250,7 +250,7 @@ createApp({
                 payment: 'Prepay ¥350 + Tip ¥50',
                 progress: 15,
                 due: '2026/5/23',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=826875680&s=100'
+                avatar: '/api/avatar/Brred.jpg'
 
             },
             {
@@ -259,7 +259,7 @@ createApp({
                 payment: 'Prepay ¥350 + Tip ¥50',
                 progress: 0,
                 due: '2026/6/2',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=2361855610&s=100'
+                avatar: '/api/avatar/Semk.jpg'
 
             },
             {
@@ -285,7 +285,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=2302740884&s=100'
+                avatar: '/api/avatar/kirin_white 麒麟白牙.jpg'
 
             },
             {
@@ -304,7 +304,7 @@ createApp({
                 payment: 'quote: ¥300',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=3524537435&s=100'
+                avatar: '/api/avatar/Semk.jpg'
 
             },
             {
@@ -313,7 +313,7 @@ createApp({
                 payment: 'Pending',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=2647236142&s=100'
+                avatar: '/api/avatar/筱狼.jpg'
 
             },
             {
@@ -322,7 +322,7 @@ createApp({
                 payment: '--',
                 progress: 30,
                 due: '2026/-/-',
-                avatar: 'https://q1.qlogo.cn/g?b=qq&nk=3040129349&s=100'
+                avatar: '/api/avatar/AzoRyan.jpg'
 
             }
         ]);
