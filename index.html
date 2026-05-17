@@ -802,48 +802,80 @@
         }
 
         /* =========================================
-           8. 委托价格卡片
+           8. 委托价格卡片 (新版玻璃拟态点阵风格)
            ========================================= */
         .price-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(20, 20, 20, 0.8) 0%, rgba(10, 10, 10, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 3rem 2rem;
             text-align: center;
-            border-radius: 12px;
-            transition: all 0.5s var(--ease-out-expo);
+            border-radius: 16px;
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
             position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
-        .corner {
+        /* 顶部装饰发光条 */
+        .price-card::before {
+            content: '';
             position: absolute;
-            width: 10px;
-            height: 10px;
-            border: 2px solid var(--main-color);
-            opacity: 0;
-            transition: opacity 0.3s;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 3px;
+            background: var(--main-color);
+            opacity: 0.3;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 10px var(--main-color);
+            border-radius: 0 0 4px 4px;
         }
 
-        .c-tl { top: -1px; left: -1px; border-bottom: 0; border-right: 0; }
-        .c-br { bottom: -1px; right: -1px; border-top: 0; border-left: 0; }
+        /* 装饰点阵 */
+        .price-card-dots {
+             position: absolute;
+             top: 1.5rem;
+             right: 1.5rem;
+             width: 24px;
+             height: 24px;
+             background-image: radial-gradient(rgba(255,255,255,0.2) 2px, transparent 2px);
+             background-size: 6px 6px;
+             opacity: 0.5;
+             transition: opacity 0.4s;
+        }
 
-        .price-card:hover .corner { opacity: 1; }
         .price-card:hover {
-            background: rgba(255, 255, 255, 0.04);
-            transform: translateY(-8px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 253, 147, 0.05);
+            border-color: rgba(0, 253, 147, 0.3);
+            background: linear-gradient(135deg, rgba(25, 25, 25, 0.9) 0%, rgba(12, 12, 12, 1) 100%);
+        }
+
+        .price-card:hover::before {
+            width: 80%;
+            opacity: 1;
+            box-shadow: 0 0 20px var(--main-color), 0 0 40px var(--main-color);
+        }
+
+        .price-card:hover .price-card-dots {
+            opacity: 1;
+            background-image: radial-gradient(rgba(0,253,147,0.5) 2px, transparent 2px);
         }
 
         .icon-box {
-            font-size: 3rem;
-            color: #555;
-            margin-bottom: 1rem;
-            transition: color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+            font-size: 3.5rem;
+            color: #444;
+            margin-bottom: 1.5rem;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
         }
 
         .price-card:hover .icon-box {
             color: var(--main-color);
-            transform: scale(1.15) rotate(5deg);
-            text-shadow: 0 0 20px rgba(0, 253, 147, 0.4);
+            transform: scale(1.2) translateY(-5px);
+            filter: drop-shadow(0 0 15px rgba(0, 253, 147, 0.5));
         }
 
         section[id], header[id] { scroll-margin-top: 100px; }
@@ -1221,40 +1253,45 @@
                 <div class="deco-line"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <!-- PRICE CARDS (New Design maintained) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto relative z-10">
                 <div v-for="(item, index) in commissionTypes" :key="item.title" class="price-card group reveal"
                      :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
-                    <div class="corner c-tl"></div>
-                    <div class="corner c-br"></div>
 
-                    <div class="icon-box">
+                    <div class="price-card-dots"></div>
+
+                    <div class="icon-box relative z-10">
                         <i :class="item.icon"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-2">{{ item.title }}</h3>
-                    <div class="text-[#00fd93] font-mono text-lg mb-4">{{ item.price }}</div>
-                    <p class="text-gray-500 text-sm leading-relaxed">{{ item.desc }}</p>
+                    <h3 class="text-2xl font-black text-white mb-3 tracking-wide uppercase relative z-10">{{ item.title }}</h3>
+                    <div class="text-[#00fd93] font-mono text-xl font-bold mb-6 relative z-10" style="text-shadow: 0 0 10px rgba(0,253,147,0.3);">{{ item.price }}</div>
+
+                    <div class="h-px w-16 bg-gradient-to-r from-transparent via-[#333] to-transparent mx-auto mb-6 transition-all duration-300 group-hover:via-[#00fd93] relative z-10"></div>
+
+                    <p class="text-gray-400 text-sm leading-relaxed font-medium relative z-10">{{ item.desc }}</p>
                 </div>
             </div>
 
-            <div class="max-w-2xl mx-auto mt-16 p-6 border border-[#222] bg-[#0c0c0c] rounded text-center relative overflow-hidden reveal reveal-delay-200">
-                <div class="absolute top-0 left-0 w-1 h-full bg-[#00fd93]"></div>
-                <h4 class="text-white font-bold mb-4 uppercase tracking-widest">Communication Protocols</h4>
-                <div class="flex flex-col md:flex-row justify-center gap-8 text-sm text-gray-400">
-                    <div class="flex items-center justify-center gap-2">
-                        <i class="bx bxl-discord text-[#5865F2] text-xl"></i> Hucise
+            <div class="max-w-3xl mx-auto mt-20 p-8 border border-[#222] bg-gradient-to-br from-[#0c0c0c] to-[#050505] rounded-lg text-center relative overflow-hidden reveal reveal-delay-200 shadow-2xl">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#00fd93] shadow-[0_0_15px_#00fd93]"></div>
+                <h4 class="text-white font-bold mb-6 uppercase tracking-[0.2em]">Communication Protocols</h4>
+                <div class="flex flex-col md:flex-row justify-center gap-10 text-sm text-gray-400 font-mono">
+                    <div class="flex items-center justify-center gap-3 transition-colors hover:text-white group">
+                        <i class="bx bxl-discord text-[#5865F2] text-2xl group-hover:scale-110 transition-transform"></i> Hucise
                     </div>
-                    <div class="flex items-center justify-center gap-2">
-                        <i class="bx bxs-chat text-[#00fd93] text-xl"></i> QQ: 1617208095
+                    <div class="flex items-center justify-center gap-3 transition-colors hover:text-white group">
+                        <i class="bx bxs-chat text-[#00fd93] text-2xl group-hover:scale-110 transition-transform"></i> QQ: 1617208095
                     </div>
-                    <div class="flex items-center justify-center gap-2">
-                        <i class="bx bx-money text-gray-600 text-xl"></i> <del>Paypal</del> / Alipay / Wechat
+                    <div class="flex items-center justify-center gap-3 transition-colors hover:text-white group">
+                        <i class="bx bx-money text-gray-600 text-2xl group-hover:text-white transition-all"></i>
+                        <span><del class="opacity-50">Paypal</del> / Alipay / Wechat</span>
                     </div>
                 </div>
             </div>
         </section>
     </div>
 
-    <!-- 优化：全新无边框全屏 Lightbox 缩放查看器 -->
+    <!-- 优化：全新无边框全屏 Lightbox 缩放查看器，带氛围环境光 -->
     <transition
             v-cloak
             enter-active-class="transition duration-400 var(--ease-out-expo)"
@@ -1279,20 +1316,32 @@
                 <i class="bx bx-x"></i>
             </button>
 
-            <!-- 中心全屏显示图片 -->
-            <img :src="lightbox.current.url"
-                 @load="onImgLoad"
-                 class="select-none origin-center shadow-[0_0_50px_rgba(0,253,147,0.15)] rounded-sm"
+            <!-- 中心全屏显示图片包装器 (包含氛围光影和实体图片，确保它们同步拖拽和缩放) -->
+            <div class="relative origin-center flex items-center justify-center touch-none"
                  :style="{
                     transform: `translate(${lightbox.translateX}px, ${lightbox.translateY}px) scale(${lightbox.scale})`,
-                    maxWidth: '95vw',
-                    maxHeight: '95vh',
-                    transition: lightbox.isDragging ? 'none' : 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)',
-                    cursor: lightbox.scale > 1 ? (lightbox.isDragging ? 'grabbing' : 'grab') : 'zoom-in'
-                 }"
-                 draggable="false"
-                 @click.stop="handleImgClick"
-            >
+                    transition: lightbox.isDragging ? 'none' : 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)'
+                 }">
+
+                <!-- 💡 氛围光 (Ambient Glow) - 通过原图高斯模糊实现边缘发光效果 -->
+                <img :src="lightbox.current.url"
+                     class="absolute z-0 select-none pointer-events-none blur-[60px] opacity-75 scale-105 saturate-150"
+                     style="max-width: 95vw; max-height: 95vh;"
+                     draggable="false"
+                >
+
+                <!-- 实体主图片 -->
+                <img :src="lightbox.current.url"
+                     @load="onImgLoad"
+                     class="relative z-10 select-none rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+                     style="max-width: 95vw; max-height: 95vh;"
+                     :style="{
+                        cursor: lightbox.scale > 1 ? (lightbox.isDragging ? 'grabbing' : 'grab') : 'zoom-in'
+                     }"
+                     draggable="false"
+                     @click.stop="handleImgClick"
+                >
+            </div>
 
             <!-- 动态缩略图 (只有在放大状态才显示) -->
             <transition enter-active-class="transition opacity-300" leave-active-class="transition opacity-300" enter-from-class="opacity-0" leave-to-class="opacity-0">
