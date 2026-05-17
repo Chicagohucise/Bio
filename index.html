@@ -17,29 +17,928 @@
     <meta property="og:type" content="website">
     <meta name="robots" content="index, follow">
 
+    <!-- 优化：预连接和预获取关键资源以提升加载速度 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://unpkg.com/vue@3/dist/vue.global.js" as="script">
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,100&display=swap"
           rel="stylesheet">
 
     <link rel="icon" href=/api/avatar/Hucise.PNG type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+    <!-- 样式全部内联，减少一次 HTTP 请求以加快首屏加载 -->
+    <style>
+        /* =========================================
+           1. 全局配置 & 自定义变量
+           ========================================= */
+        :root {
+            --main-color: #00fd93;
+            --main-dim: rgba(0, 253, 147, 0.1);
+            --bg-dark: #050505;
+            --card-bg: rgba(20, 20, 20, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #e2e2e2;
+            --text-muted: #888;
+
+            /* 预定义丝滑动画曲线 */
+            --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+            /* --- 数字化网格背景定义 --- */
+            --page-bg: radial-gradient(circle at 50% 50%, transparent 0%, #000 85%),
+            linear-gradient(rgba(0, 253, 147, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 253, 147, 0.03) 1px, transparent 1px);
+
+            /* 定义网格尺寸 */
+            --bg-size: 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            background-clip: content-box;
+            transition: background-color 0.3s;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: var(--main-color);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
+            background-color: var(--bg-dark);
+            background-image: var(--page-bg);
+            background-size: var(--bg-size);
+            background-attachment: fixed;
+            background-position: center top;
+
+            color: var(--text-main);
+            font-family: "IBM Plex Mono", monospace;
+            margin: 0;
+            overflow-x: hidden;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            text-decoration: none;
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        /* 选中文字颜色 */
+        ::selection {
+            background: var(--main-color);
+            color: #000;
+        }
+
+        /* =========================================
+           Scroll Reveal Animations
+           ========================================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px) scale(0.96);
+            transition: opacity 1.2s var(--ease-out-expo), transform 1.2s var(--ease-out-expo);
+            will-change: opacity, transform;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .reveal-delay-100 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-delay-200 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-delay-300 {
+            transition-delay: 0.3s;
+        }
+
+        /* =========================================
+           2. 导航栏
+           ========================================= */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            background: rgba(11, 11, 11, 0.6);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.5s var(--ease-out-expo);
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav.scrolled {
+            background: rgba(5, 5, 5, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(0, 253, 147, 0.2);
+            height: 60px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-item {
+            position: relative;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            padding: 0.5rem 0;
+            transition: color 0.4s var(--ease-out-expo);
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--main-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s var(--ease-out-expo);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(0, 253, 147, 0.4);
+        }
+
+        .nav-item:hover::before, .nav-item.active::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .mobile-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--main-color);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .mobile-menu.open {
+            max-height: 400px;
+            padding-bottom: 1.5rem;
+        }
+
+        .logo-cursor {
+            animation: blink 1s step-end infinite;
+            color: var(--main-color);
+        }
+
+        /* =========================================
+           3. Hero Header UI
+           ========================================= */
+        .hero-section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-top: 100px;
+            padding-bottom: 50px;
+        }
+
+        .hero-content-wrapper {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            gap: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content-wrapper {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 4rem;
+            }
+        }
+
+        .hero-left-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .hero-left-content {
+                text-align: left;
+                gap: 1.5rem;
+            }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        /* ----------------------------------
+           故障文字
+           ---------------------------------- */
+        .glitch {
+            position: relative;
+            display: block;
+            color: #fff;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            background-image: var(--page-bg);
+            background-size: var(--bg-size);
+            background-attachment: fixed;
+            background-position: center top;
+            overflow: hidden;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -5px 0 #ecd471;
+            animation: distort-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -5px 0 #3242f6;
+            animation: distort-2 2s infinite linear alternate-reverse;
+        }
+
+        @keyframes distort-1 {
+            0% { clip: rect(57px, 9999px, 46px, 0); }
+            5% { clip: rect(15px, 9999px, 56px, 0); }
+            10% { clip: rect(6px, 9999px, 70px, 0); }
+            15% { clip: rect(40px, 9999px, 80px, 0); }
+            20% { clip: rect(32px, 9999px, 44px, 0); }
+            25% { clip: rect(65px, 9999px, 85px, 0); }
+            30% { clip: rect(27px, 9999px, 78px, 0); }
+            35% { clip: rect(59px, 9999px, 93px, 0); }
+            40% { clip: rect(44px, 9999px, 77px, 0); }
+            45% { clip: rect(74px, 9999px, 10px, 0); }
+            50% { clip: rect(73px, 9999px, 42px, 0); }
+            55% { clip: rect(32px, 9999px, 58px, 0); }
+            60% { clip: rect(21px, 9999px, 54px, 0); }
+            65% { clip: rect(71px, 9999px, 11px, 0); }
+            70% { clip: rect(85px, 9999px, 25px, 0); }
+            75% { clip: rect(83px, 9999px, 77px, 0); }
+            80% { clip: rect(62px, 9999px, 52px, 0); }
+            85% { clip: rect(68px, 9999px, 84px, 0); }
+            90% { clip: rect(37px, 9999px, 20px, 0); }
+            95% { clip: rect(10px, 9999px, 15px, 0); }
+            100% { clip: rect(83px, 9999px, 28px, 0); }
+        }
+
+        @keyframes distort-2 {
+            0% { clip: rect(20px, 9999px, 96px, 0); }
+            5% { clip: rect(62px, 9999px, 2px, 0); }
+            10% { clip: rect(63px, 9999px, 39px, 0); }
+            15% { clip: rect(92px, 9999px, 75px, 0); }
+            20% { clip: rect(54px, 9999px, 2px, 0); }
+            25% { clip: rect(22px, 9999px, 96px, 0); }
+            30% { clip: rect(39px, 9999px, 98px, 0); }
+            35% { clip: rect(49px, 9999px, 37px, 0); }
+            40% { clip: rect(90px, 9999px, 17px, 0); }
+            45% { clip: rect(36px, 9999px, 57px, 0); }
+            50% { clip: rect(92px, 9999px, 78px, 0); }
+            55% { clip: rect(97px, 9999px, 65px, 0); }
+            60% { clip: rect(69px, 9999px, 30px, 0); }
+            65% { clip: rect(92px, 9999px, 13px, 0); }
+            70% { clip: rect(74px, 9999px, 76px, 0); }
+            75% { clip: rect(2px, 9999px, 45px, 0); }
+            80% { clip: rect(30px, 9999px, 21px, 0); }
+            85% { clip: rect(58px, 9999px, 34px, 0); }
+            90% { clip: rect(79px, 9999px, 27px, 0); }
+            95% { clip: rect(32px, 9999px, 1px, 0); }
+            100% { clip: rect(87px, 9999px, 63px, 0); }
+        }
+
+        .auto-type {
+            color: #00ff94;
+            text-shadow: 0 0 10px rgba(0, 255, 148, 0.5), 0 0 20px rgba(0, 255, 148, 0.2);
+            font-weight: 700;
+            position: relative;
+            background: linear-gradient(90deg, #ffffff, #00ff94, #00ff94);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: text-pulse 3s infinite ease-in-out, gradient-move 3s linear infinite;
+        }
+
+        .typed-cursor {
+            margin-left: -10px;
+            color: #00ff94;
+            text-shadow: 0 0 12px #00ff94;
+            opacity: 1;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes text-pulse {
+            0%, 100% { filter: brightness(100%) blur(0px); }
+            50% { filter: brightness(120%) blur(0.3px); }
+        }
+
+        @keyframes gradient-move {
+            to { background-position: 200% center; }
+        }
+
+        .scramble-dud {
+            color: #ececec;
+            opacity: 1;
+            background-color: #9a9a9a;
+            padding: 0 1px;
+            font-weight: bold;
+        }
+
+        /* ----------------------------------
+           按钮样式 (Solid Fill Style)
+           ---------------------------------- */
+        .cyber-btn {
+            --btn-color: var(--main-color);
+            position: relative;
+            padding: 0.8rem 2rem;
+            background: transparent;
+            border: 1px solid var(--btn-color);
+            box-shadow: 0 0 5px rgba(0, 253, 147, 0.2), inset 0 0 10px rgba(0, 253, 147, 0.05);
+            border-radius: 4px;
+            color: var(--btn-color);
+            font-family: "IBM Plex Mono", monospace;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 1;
+        }
+
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: var(--btn-color);
+            z-index: -1;
+            transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: none;
+        }
+
+        .cyber-btn span {
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cyber-btn:hover {
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 253, 147, 0.6);
+            letter-spacing: 0.15em;
+            padding-right: 2.5rem;
+        }
+
+        .cyber-btn:hover::before {
+            width: 100%;
+        }
+
+        .cyber-btn::after {
+            content: '>>';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%) translateX(20px);
+            opacity: 0;
+            color: #000;
+            font-weight: 800;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 2;
+        }
+
+        .cyber-btn:hover::after {
+            transform: translateY(-50%) translateX(0);
+            opacity: 1;
+        }
+
+        .cyber-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* 社交图标 */
+        .social-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .social-card:hover {
+            background: var(--main-dim);
+            border-color: var(--main-color);
+            color: var(--main-color);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        /* ----------------------------------
+           终端风格头像 (Terminal Style)
+           ---------------------------------- */
+        .avatar-wrap {
+            position: relative;
+            width: 280px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .terminal-frame {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            padding: 8px;
+            background: rgba(0, 20, 10, 0.6);
+            border: 1px solid rgba(0, 253, 147, 0.3);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .avatar-core {
+            width: 100%;
+            height: 100%;
+            background-image: url("./assets/avatar/Dog.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            z-index: 1;
+            filter: none;
+        }
+
+        .scanlines {
+            position: absolute;
+            inset: 4px;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0),
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.3) 50%,
+                    rgba(0, 0, 0, 0.3)
+            );
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+
+        .t-corner {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 2px solid var(--main-color);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            z-index: 20;
+            box-shadow: 0 0 5px var(--main-color);
+        }
+
+        .tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+        .tr { top: -1px; right: -1px; border-left: 0; border-bottom: 0; }
+        .bl { bottom: -1px; left: -1px; border-right: 0; border-top: 0; }
+        .br { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+        .terminal-label {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.75rem;
+            color: var(--main-color);
+            background: rgba(0, 253, 147, 0.1);
+            padding: 4px 12px;
+            border: 1px solid var(--main-color);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        .terminal-label::before {
+            content: '>';
+            margin-right: 5px;
+            animation: blink 1s step-end infinite;
+        }
+
+        .avatar-wrap:hover .terminal-frame {
+            border-color: var(--main-color);
+            box-shadow: 0 0 20px rgba(0, 253, 147, 0.15);
+            transform: scale(1.02);
+        }
+
+        .avatar-wrap:hover .tl { transform: translate(4px, 4px); }
+        .avatar-wrap:hover .tr { transform: translate(-4px, 4px); }
+        .avatar-wrap:hover .bl { transform: translate(4px, -4px); }
+        .avatar-wrap:hover .br { transform: translate(-4px, -4px); }
+
+        .avatar-wrap:hover .scanlines { opacity: 0.2; }
+        .avatar-wrap:hover .terminal-label { background: var(--main-color); color: #000; font-weight: bold; }
+
+        /* =========================================
+           4. 可展开区域
+           ========================================= */
+        .expand-section {
+            position: relative;
+            border-top: 1px solid #222;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 1s cubic-bezier(0.86, 0, 0.07, 1), opacity 0.6s ease;
+        }
+
+        .expand-section.active {
+            max-height: 80000px;
+            opacity: 1;
+            padding-bottom: 5rem;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--main-color), transparent);
+            animation: scan 3s infinite linear;
+            z-index: 10;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 4rem 0 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .deco-line {
+            width: 50px;
+            height: 2px;
+            background: var(--main-color);
+        }
+
+        /* =========================================
+           5. 项目卡片
+           ========================================= */
+        .tracker-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid transparent;
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tracker-card:hover {
+            border-left-color: var(--main-color);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+            transform: translateX(6px) translateY(-2px);
+            box-shadow: -8px 8px 25px rgba(0, 0, 0, 0.6);
+        }
+
+        .progress-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--main-color);
+            box-shadow: 0 0 10px var(--main-color);
+            position: relative;
+        }
+
+        /* =========================================
+           6. 历史记录
+           ========================================= */
+        .terminal-box {
+            background: #080808;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+
+        .terminal-header {
+            display: grid;
+            grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+            padding: 0.8rem;
+            border-bottom: 1px dashed #333;
+            color: #666;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .terminal-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.2s;
+            color: #aaa;
+        }
+
+        .terminal-row:hover {
+            background: rgba(0, 253, 147, 0.05);
+            color: #fff;
+        }
+
+        .money {
+            color: var(--main-color);
+            font-weight: bold;
+        }
+
+        /* =========================================
+           7. 画廊 & 筛选器
+           ========================================= */
+        .masonry-col {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+
+        @media (min-width: 640px) { .masonry-col { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-col { column-count: 3; } }
+
+        @media (hover: hover) {
+            .masonry-col:has(.art-card:hover) .art-card:not(:hover) {
+                filter: blur(4px) brightness(0.5);
+                opacity: 0.6;
+                transform: scale(0.98);
+            }
+        }
+
+        .art-card {
+            break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: #080808;
+            border: 1px solid transparent;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease, filter 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+            transform: translateZ(0);
+            will-change: transform, filter, opacity;
+            cursor: pointer;
+            min-height: 150px;
+        }
+
+        .art-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+            filter: brightness(1);
+            will-change: transform;
+        }
+
+        .art-card:hover {
+            border-color: var(--main-color);
+            transform: scale(1.05) translateZ(0);
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .art-card:hover img {
+            opacity: 1 !important;
+            filter: brightness(1);
+        }
+
+        .art-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 2rem 1rem 1rem;
+            transform: translateY(100%);
+            transition: transform 0.4s var(--ease-out-expo);
+            pointer-events: none;
+        }
+
+        .art-card:hover .art-overlay {
+            transform: translateY(0);
+        }
+
+        /* =========================================
+           8. 委托价格卡片
+           ========================================= */
+        .price-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem;
+            text-align: center;
+            border-radius: 12px;
+            transition: all 0.5s var(--ease-out-expo);
+            position: relative;
+        }
+
+        .corner {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--main-color);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .c-tl { top: -1px; left: -1px; border-bottom: 0; border-right: 0; }
+        .c-br { bottom: -1px; right: -1px; border-top: 0; border-left: 0; }
+
+        .price-card:hover .corner { opacity: 1; }
+        .price-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .icon-box {
+            font-size: 3rem;
+            color: #555;
+            margin-bottom: 1rem;
+            transition: color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+        }
+
+        .price-card:hover .icon-box {
+            color: var(--main-color);
+            transform: scale(1.15) rotate(5deg);
+            text-shadow: 0 0 20px rgba(0, 253, 147, 0.4);
+        }
+
+        section[id], header[id] { scroll-margin-top: 100px; }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 3rem; }
+            .terminal-header { display: none; }
+            .terminal-row { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+            .terminal-row span:nth-child(1) { grid-column: span 2; font-weight: bold; color: #fff; }
+        }
+
+        .hero-actions {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .hero-actions {
+                flex-direction: row;
+                justify-content: flex-start;
+                gap: 1.5rem;
+            }
+        }
+
+        .scroll-down-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: #888;
+            font-size: 2rem;
+            display: none;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 20;
+        }
+
+        .scroll-down-indicator:hover { color: var(--main-color); }
+
+        @media (min-width: 768px) and (min-height: 800px) {
+            .scroll-down-indicator { display: block; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        @keyframes footer-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .footer-scroller {
+            display: inline-block;
+            white-space: nowrap;
+            animation: footer-scroll 30s linear infinite;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .history-expand-enter-active,
+        .history-expand-leave-active {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            max-height: 1000px;
+        }
+
+        .history-expand-enter-from,
+        .history-expand-leave-to {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            border-color: transparent;
+            transform: translateY(-10px);
+        }
+
+        [v-cloak] { display: none !important; }
+    </style>
+
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-    <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
-    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-    <link rel="stylesheet" href="style.css">
-
 </head>
 <body class="antialiased">
 
 <div id="app">
     <nav class="nav" :class="{ 'scrolled': isScrolled }">
         <div class="container mx-auto px-6 w-full flex justify-between items-center relative z-50">
-
             <div class="flex items-center gap-4 md:gap-6">
                 <a href="#heroHeader" @click="scrollTo('heroHeader')" class="group flex items-center gap-2">
                     <i class="bx bx-terminal text-2xl text-[#00fd93]"></i>
@@ -72,10 +971,8 @@
                 </a>
                 <div class="h-4 w-[1px] bg-gray-800 mx-2"></div>
                 <div class="flex gap-4 text-gray-500">
-                    <a href="https://x.com/ChicagoHucise" class="hover:text-white transition duration-300"><i
-                            class="bx bxl-twitter"></i></a>
-                    <a href="https://github.com/ChicagoHucise" class="hover:text-white transition duration-300"><i
-                            class="bx bxl-github"></i></a>
+                    <a href="https://x.com/ChicagoHucise" class="hover:text-white transition duration-300"><i class="bx bxl-twitter"></i></a>
+                    <a href="https://github.com/ChicagoHucise" class="hover:text-white transition duration-300"><i class="bx bxl-github"></i></a>
                 </div>
             </div>
 
@@ -123,7 +1020,7 @@
         </div>
     </nav>
 
-    <!-- ====== 新增：左侧终端侧边栏悬浮胶囊 ====== -->
+    <!-- 侧边栏悬浮胶囊 -->
     <transition
             enter-active-class="transition-all duration-700 delay-300"
             enter-from-class="-translate-x-full opacity-0"
@@ -132,10 +1029,8 @@
             leave-from-class="translate-x-0 opacity-100"
             leave-to-class="-translate-x-full opacity-0">
 
-        <!-- 仅在大屏幕 (lg以上) 显示，避免遮挡手机内容 -->
         <div v-show="showCapsule" class="fixed left-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col items-center gap-5 py-6 px-2.5 bg-[#080808]/90 backdrop-blur-xl border border-[#222] rounded-full shadow-[0_0_30px_rgba(0,0,0,0.8)]">
 
-            <!-- 回到主页/顶部 -->
             <button @click="scrollTo('heroHeader')"
                     class="relative group w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300"
                     :class="activeSection === 'heroHeader' ? 'bg-[#00fd93]/20 text-[#00fd93] shadow-[0_0_15px_rgba(0,253,147,0.3)] border border-[#00fd93]/50' : 'text-gray-500 hover:text-white hover:bg-[#222] border border-transparent'">
@@ -147,7 +1042,6 @@
 
             <div class="w-4 h-[1px] bg-[#333]"></div>
 
-            <!-- 委托进度 (Mission Log) -->
             <button @click="scrollTo('mission-log')"
                     class="relative group w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300"
                     :class="activeSection === 'mission-log' ? 'bg-[#00fd93]/20 text-[#00fd93] shadow-[0_0_15px_rgba(0,253,147,0.3)] border border-[#00fd93]/50' : 'text-gray-500 hover:text-white hover:bg-[#222] border border-transparent'">
@@ -157,7 +1051,6 @@
                 </span>
             </button>
 
-            <!-- 视觉数据库 (Visual Database) -->
             <button @click="scrollTo('visual-database')"
                     class="relative group w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300"
                     :class="activeSection === 'visual-database' ? 'bg-[#00fd93]/20 text-[#00fd93] shadow-[0_0_15px_rgba(0,253,147,0.3)] border border-[#00fd93]/50' : 'text-gray-500 hover:text-white hover:bg-[#222] border border-transparent'">
@@ -167,7 +1060,6 @@
                 </span>
             </button>
 
-            <!-- 价格表 (Service Rates) -->
             <button @click="scrollTo('service-rates')"
                     class="relative group w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300"
                     :class="activeSection === 'service-rates' ? 'bg-[#00fd93]/20 text-[#00fd93] shadow-[0_0_15px_rgba(0,253,147,0.3)] border border-[#00fd93]/50' : 'text-gray-500 hover:text-white hover:bg-[#222] border border-transparent'">
@@ -178,7 +1070,6 @@
             </button>
         </div>
     </transition>
-    <!-- ============================================= -->
 
     <header id="heroHeader" class="hero-section container mx-auto px-6">
         <div class="hero-content-wrapper">
@@ -249,12 +1140,12 @@
                      :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
-                            <img :src="project.avatar"
-                                 class="w-12 h-12 rounded-full border border-gray-600 object-cover">
+                            <!-- 已替换为正确的错误捕获占位 -->
+                            <img :src="project.avatar" onerror="this.style.display='none'"
+                                 class="w-12 h-12 rounded-full border border-gray-600 object-cover bg-gray-800">
                             <div>
                                 <h3 class="font-bold text-white leading-tight">{{ project.client }}</h3>
-                                <span class="text-[10px] uppercase tracking-wider text-gray-500 bg-[#111] px-1 rounded border border-[#333]">{{ project.payment
-                                    }}</span>
+                                <span class="text-[10px] uppercase tracking-wider text-gray-500 bg-[#111] px-1 rounded border border-[#333]">{{ project.payment }}</span>
                             </div>
                         </div>
                         <div class="text-right">
@@ -269,8 +1160,7 @@
 
                     <div class="flex justify-between text-xs mb-1">
                         <span class="text-gray-500">{{ project.progress === 100 ? 'Status' : 'Progress' }}</span>
-                        <span class="font-mono text-[#00fd93] font-bold">{{ project.progress === 100 ? 'Completed' : project.progress + '%'
-                            }}</span>
+                        <span class="font-mono text-[#00fd93] font-bold">{{ project.progress === 100 ? 'Completed' : project.progress + '%' }}</span>
                     </div>
                     <div class="progress-track">
                         <div class="progress-bar" :style="{ width: project.progress + '%' }"></div>
@@ -364,6 +1254,7 @@
         </section>
     </div>
 
+    <!-- 优化：全新无边框全屏 Lightbox 缩放查看器 -->
     <transition
             v-cloak
             enter-active-class="transition duration-400 var(--ease-out-expo)"
@@ -374,36 +1265,46 @@
             leave-to-class="opacity-0 scale-95">
 
         <div v-if="lightbox.open"
-             class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
-             @click.self="lightbox.open = false">
+             class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm overflow-hidden touch-none"
+             @wheel.prevent="handleWheel"
+             @mousedown="startDrag"
+             @mousemove="onDrag"
+             @mouseup="stopDrag"
+             @mouseleave="stopDrag"
+             @click.self="resetLightbox">
 
-            <button class="absolute top-4 right-4 text-white/50 hover:text-white text-4xl transition"
-                    @click="lightbox.open = false">
+            <!-- 退出按钮 -->
+            <button class="absolute top-4 right-4 z-[110] text-white/50 hover:text-white text-4xl transition bg-black/20 hover:bg-black/40 rounded-full p-2"
+                    @click="resetLightbox">
                 <i class="bx bx-x"></i>
             </button>
 
-            <div class="max-w-7xl max-h-[90vh] flex flex-col md:flex-row gap-8 items-center pointer-events-auto">
-                <div class="relative group">
-                    <img :src="lightbox.current.url"
-                         class="max-h-[80vh] max-w-full rounded shadow-[0_0_50px_rgba(0,253,147,0.15)] border border-[#222]">
+            <!-- 中心全屏显示图片 -->
+            <img :src="lightbox.current.url"
+                 @load="onImgLoad"
+                 class="select-none origin-center shadow-[0_0_50px_rgba(0,253,147,0.15)] rounded-sm"
+                 :style="{
+                    transform: `translate(${lightbox.translateX}px, ${lightbox.translateY}px) scale(${lightbox.scale})`,
+                    maxWidth: '95vw',
+                    maxHeight: '95vh',
+                    transition: lightbox.isDragging ? 'none' : 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)',
+                    cursor: lightbox.scale > 1 ? (lightbox.isDragging ? 'grabbing' : 'grab') : 'zoom-in'
+                 }"
+                 draggable="false"
+                 @click.stop="handleImgClick"
+            >
+
+            <!-- 动态缩略图 (只有在放大状态才显示) -->
+            <transition enter-active-class="transition opacity-300" leave-active-class="transition opacity-300" enter-from-class="opacity-0" leave-to-class="opacity-0">
+                <div v-if="lightbox.scale > 1"
+                     class="absolute bottom-6 right-6 w-32 md:w-48 bg-[#0a0a0a]/80 border border-[#333] rounded overflow-hidden shadow-2xl pointer-events-none z-[110]">
+                    <!-- 缩略背景图 -->
+                    <img :src="lightbox.current.url" class="w-full h-auto opacity-50 relative z-10" draggable="false">
+                    <!-- 取景指示框 -->
+                    <div class="absolute border border-[#00fd93] shadow-[0_0_10px_rgba(0,253,147,0.5)] z-20 transition-all duration-75 bg-[#00fd93]/10"
+                         :style="thumbBoxStyle"></div>
                 </div>
-
-                <div v-if="lightbox.current.title"
-                     class="bg-[#111] p-8 rounded border border-[#333] min-w-[320px] shadow-2xl">
-                    <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">Project Name</div>
-                    <h2 class="text-2xl font-bold text-white mb-4">{{ lightbox.current.title }}</h2>
-
-                    <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">Details</div>
-                    <p class="text-gray-300 text-sm mb-6 leading-relaxed">{{ lightbox.current.desc }}</p>
-
-                    <div class="flex items-center justify-between pt-6 border-t border-[#222]">
-                        <div>
-                            <div class="text-xs text-gray-500">Category</div>
-                            <div class="text-[#00fd93] font-bold">{{ lightbox.current.category }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </transition>
         </div>
     </transition>
 
@@ -417,19 +1318,15 @@
                 </h3>
                 <p class="text-xs text-gray-600 font-mono uppercase tracking-widest leading-relaxed">
                     © 2026 Hucise Systems.<br>
-                    All Rights Reserved. <span class="text-[#333]">v2.0.54</span>
+                    All Rights Reserved. <span class="text-[#333]">v2.1.0</span>
                 </p>
             </div>
 
             <div class="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs font-mono text-gray-500 uppercase tracking-wider">
-                <a href="#" @click="scrollTo('heroHeader')"
-                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
-                <a href="#" @click="toggleCommissions"
-                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
-                <a href="#"
-                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Terms</a>
-                <a href="#"
-                   class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
+                <a href="#" @click="scrollTo('heroHeader')" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Home</a>
+                <a href="#" @click="toggleCommissions" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Commissions</a>
+                <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Terms</a>
+                <a href="#" class="hover:text-[#00fd93] hover:underline decoration-[#00fd93] underline-offset-4 transition-all">Contact</a>
             </div>
 
             <div class="flex items-center gap-4 border bg-[#0a0a0a] px-5 py-3 rounded-md transition-all duration-300"
@@ -477,6 +1374,423 @@
         </div>
     </footer>
 </div>
-<script src="script.js"></script>
+
+<!-- 外部依赖放在 Body 末尾确保不阻塞渲染 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
+<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+<script>
+    const {createApp, ref, computed, onMounted, reactive, onUnmounted, nextTick} = Vue;
+
+    class TextScramble {
+        constructor(el) {
+            this.el = el;
+            this.chars = '[]░▒▓█▀▄⣿';
+            this.update = this.update.bind(this);
+        }
+
+        setText(newText) {
+            const oldText = this.el.innerText;
+            const length = Math.max(oldText.length, newText.length);
+            const promise = new Promise((resolve) => (this.resolve = resolve));
+
+            this.queue = [];
+            for (let i = 0; i < length; i++) {
+                const from = oldText[i] || '';
+                const to = newText[i] || '';
+
+                const start = Math.floor(i * 1.5);
+                const end = start + Math.floor(Math.random() * 15) + 15;
+
+                this.queue.push({from, to, start, end});
+            }
+
+            cancelAnimationFrame(this.frameRequest);
+            this.frame = 0;
+            this.update();
+            return promise;
+        }
+
+        update() {
+            let output = '';
+            let complete = 0;
+            for (let i = 0, n = this.queue.length; i < n; i++) {
+                let {from, to, start, end, char} = this.queue[i];
+                if (this.frame >= end) {
+                    complete++;
+                    output += to;
+                } else if (this.frame >= start) {
+                    if (!char || Math.random() < 0.28) {
+                        char = this.randomChar();
+                        this.queue[i].char = char;
+                    }
+                    output += `<span class="scramble-dud">${char}</span>`;
+                } else {
+                    output += from;
+                }
+            }
+            this.el.innerHTML = output;
+            if (complete === this.queue.length) {
+                this.resolve();
+            } else {
+                this.frameRequest = requestAnimationFrame(this.update);
+                this.frame++;
+            }
+        }
+
+        randomChar() {
+            return this.chars[Math.floor(Math.random() * this.chars.length)];
+        }
+    }
+
+    createApp({
+        setup() {
+            const isNavOpen = ref(false);
+            const isScrolled = ref(false);
+            const activeSection = ref('home');
+            const showCommissions = ref(false);
+            const showHistory = ref(false);
+            const typedElement = ref(null);
+            const bioText = ref(null);
+            const article = ref('an');
+
+            const currentCommissionState = ref('full');
+
+            const commissionStatusConfig = {
+                open: { text: 'Commission: OPEN', color: '#00fd93', dotClass: 'bg-[#00fd93]', shadowClass: 'shadow-[0_0_8px_#00fd93]' },
+                full: { text: 'Commission: FULL', color: '#f04747', dotClass: 'bg-[#f04747]', shadowClass: 'shadow-[0_0_8px_#f04747]' },
+                hold: { text: 'ON HOLD', color: '#faa61a', dotClass: 'bg-[#faa61a]', shadowClass: 'shadow-[0_0_8px_#faa61a]' }
+            };
+
+            const activeCommissionStatus = computed(() => commissionStatusConfig[currentCommissionState.value] || commissionStatusConfig.open);
+            const showCapsule = computed(() => showCommissions.value && activeSection.value !== 'heroHeader');
+
+            const hoverDiscord = ref(false);
+            const discordId = '792591311190228994';
+            const lanyardData = ref(null);
+
+            const statusConfig = {
+                online: { color: '#00fd93', text: 'ONLINE', twText: 'text-[#00fd93]', twBg: 'bg-[#00fd93]', twShadow: 'shadow-[0_0_10px_#00fd93]' },
+                dnd: { color: '#f04747', text: 'DND', twText: 'text-[#f04747]', twBg: 'bg-[#f04747]', twShadow: 'shadow-[0_0_10px_#f04747]' },
+                idle: { color: '#faa61a', text: 'IDLE', twText: 'text-[#faa61a]', twBg: 'bg-[#faa61a]', twShadow: 'shadow-[0_0_10px_#faa61a]' },
+                offline: { color: '#747f8d', text: 'OFFLINE', twText: 'text-[#747f8d]', twBg: 'bg-[#747f8d]', twShadow: 'shadow-[0_0_10px_#747f8d]' }
+            };
+
+            const currentStatus = computed(() => {
+                if (!lanyardData.value) return statusConfig.offline;
+                return statusConfig[lanyardData.value.discord_status] || statusConfig.offline;
+            });
+
+            const currentActivity = computed(() => {
+                if (!lanyardData.value) return null;
+                if (lanyardData.value.spotify) {
+                    return { type: 'Listening', name: `${lanyardData.value.spotify.song} - ${lanyardData.value.spotify.artist}` };
+                }
+                const activities = lanyardData.value.activities.filter(a => a.type === 0);
+                if (activities.length > 0) {
+                    return { type: 'Playing', name: activities[0].name };
+                }
+                return null;
+            });
+
+            let lanyardInterval = null;
+            const fetchLanyard = async () => {
+                try {
+                    const res = await fetch(`https://api.lanyard.rest/v1/users/${discordId}`);
+                    const json = await res.json();
+                    if (json.success) lanyardData.value = json.data;
+                } catch (err) {}
+            };
+
+            const handleScroll = () => { isScrolled.value = window.scrollY > 50; };
+
+            const initScrollReveal = () => {
+                const revealElements = document.querySelectorAll('.reveal');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) entry.target.classList.add('active');
+                    });
+                }, {threshold: 0.02, rootMargin: "0px 0px -50px 0px"});
+                revealElements.forEach((el) => observer.observe(el));
+            };
+
+            const initSectionObserver = () => {
+                const sections = [
+                    document.getElementById('heroHeader'),
+                    document.getElementById('mission-log'),
+                    document.getElementById('visual-database'),
+                    document.getElementById('service-rates')
+                ].filter(Boolean);
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) activeSection.value = entry.target.id;
+                    });
+                }, {threshold: 0.1, rootMargin: "-30% 0px -40% 0px"});
+                sections.forEach(sec => observer.observe(sec));
+            };
+
+            const socials = [
+                {icon: 'bx bxl-twitter', link: 'https://x.com/ChicagoHucise'},
+                {icon: 'bx bxl-github', link: 'https://github.com/Chicagohucise'},
+                {icon: 'bx bxl-discord', link: 'https://discordapp.com/users/792591311190228994'},
+                {icon: 'bx bxl-steam', link: 'https://steamcommunity.com/id/Hucies'},
+                {icon: 'bx bxl-spotify', link: 'https://open.spotify.com/user/31chfbbi4id7bdjyurr27iamqrcm?si=fbb5dc6e53384b65'}
+            ];
+
+            const projects = ref([
+                { client: '碳酸野六', type: '--', payment: 'Prepay ？', progress: 100, due: '2026/5/9', avatar: '/api/avatar/Yl.jpg' },
+                { client: '玄鸟', type: 'Painterly Style Half Body', payment: 'Prepay ¥350', progress: 70, due: '2026/5/13', avatar: '/api/avatar/Xn.jpg' },
+                { client: 'Brred', type: 'Painterly Style Half Body', payment: 'Prepay ¥350 + Tip ¥50', progress: 15, due: '2026/5/23', avatar: '/api/avatar/Brred.jpg' },
+                { client: 'Semk', type: 'Painterly Style Half Body', payment: 'Prepay ¥350 + Tip ¥50', progress: 0, due: '2026/6/2', avatar: '/api/avatar/Semk.jpg' },
+                { client: 'Kuno', type: 'Painterly Style Half Body', payment: 'Prepay ¥350', progress: 0, due: '2026/-/-', avatar: '/api/avatar/Kuno.jpg' },
+                { client: 'shenryo', type: 'Flat Color Half Body', payment: 'Prepay ¥250', progress: 0, due: '2026/-/-', avatar: '/api/avatar/shenryo.jpg' },
+                { client: 'kirin_white 麒麟白牙', type: 'Flat Color 2-View Reference (With Outfit)', payment: 'Prepay ¥350', progress: 0, due: '2026/-/-', avatar: '/api/avatar/kirin_white.jpg' },
+                { client: 'Sola空', type: 'Painterly Style Half Body', payment: 'Prepay: ¥350', progress: 0, due: '2026/-/-', avatar: '/api/avatar/Sola.jpg' },
+                { client: '睿彦', type: 'Flat Color Half Body/Outfit variations', payment: 'quote: ¥300', progress: 0, due: '2026/-/-', avatar: '/api/avatar/Semk.jpg' },
+                { client: '筱狼', type: 'Painterly Style Half Body', payment: 'Pending', progress: 0, due: '2026/-/-', avatar: '/api/avatar/Xl.jpg' },
+                { client: 'AzoRyan', type: 'Painterly Style Half Body (2 Characters)', payment: '--', progress: 30, due: '2026/-/-', avatar: '/api/avatar/AzoRyan.jpg' }
+            ]);
+
+            const history = ref([
+                { client: '哈草咪', type: 'Painterly Style Half Body', amount: '¥350+Support Tip ¥150 Thank you for the additional tip 💖', date: '2026/4/30' },
+                { client: 'kirin_white 麒麟白牙', type: 'Half Body Background included/Flat Color/', amount: '¥300', date: '2026/4/10' },
+                { client: 'TowDas', type: 'Half Body/Flat Color', amount: '¥450', date: '2026/4/10' },
+                { client: 'Seigfried', type: 'Painterly Style Half Body (2 Characters)', amount: '¥450', date: '2026/3/6' },
+                { client: '沧屿', type: 'Expression*3/Chibi Style||Avatar*1/Painterly Style', amount: '¥400', date: '2026/2/28' },
+                { client: 'ALExEWolf', type: 'Painterly Style Half Body (2 Characters)', amount: '<3', date: '2026/2/12' },
+                { client: 'Finn', type: 'Half Body/Painterly Style', amount: '¥350', date: '2026/1/15' },
+                { client: '沧屿', type: 'Half Body/Painterly Style', amount: '¥350', date: '2025/11/7' },
+                { client: 'kirin_white 麒麟白牙', type: 'Chibi Avatar', amount: '¥150', date: '2025/11/15' },
+                { client: '沧屿', type: 'Expression', amount: '¥50', date: '2025/11/7' },
+                { client: 'Seigfried', type: 'Half Body (2 Characters)/Painterly Style', amount: '¥450', date: '2025/11/3' },
+                { client: '零贰', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250+Support Tip ¥33 Thank you for the additional tip 💖', date: '2025/10/9' },
+                { client: 'Seigfried', type: 'Half Body (2 Characters)/Flat Color', amount: '¥250', date: '2025/9/25' },
+            ]);
+
+            const commissionTypes = [
+                { title: 'ICON / HEAD', price: 'Start from ¥150 / $25', desc: 'Perfect for social media avatars. High resolution with simple background.', icon: 'bx bxs-face' },
+                { title: 'HALF BODY', price: 'Start from ¥300 / $45', desc: 'Waist-up character drawing showing clothing details and accessories.', icon: 'bx bxs-user' },
+                { title: 'FULL BODY', price: 'Start from ¥500 / $75', desc: 'Full character design with dynamic posing and complex shading.', icon: 'bx bxs-user-detail' }
+            ];
+
+            const baseUrl = '/api/images/';
+            const list = [
+                'Chibi Style Avatar', 'Painterly Style Half Body', 'Chibi Style Avatar', 'Flat Color Full Body (2 Characters)',
+                'Flat Color Custom Character Expression', 'Painterly Style Half Body', 'Flat Color Full Body', 'Painterly Style Half Body',
+                'Painterly Style Half Body', 'Painterly Style Half Body (2 Characters)', 'Painterly Style Half Body',
+                'Flat Color Half Body (2 Characters)', 'Painterly Style Half Body', 'Painterly Style Custom Character Expression',
+                'Chibi Style Avatar', 'Painterly Style Avatar', 'Painterly Style Avatar', '-- -- --', 'Flat Color Half Body',
+                'Flat Color Half Body Background included', 'Painterly Style Half Body'
+            ];
+
+            const artworks = ref(
+                list.map((desc, index) => {
+                    const id = index + 1;
+                    const category = desc.split(' ').slice(0, 2).join(' ');
+                    return { id: id, title: '--', category: category, url: `${baseUrl}${id}.jpg`, desc: desc };
+                }).reverse()
+            );
+
+            /* =========================================
+               🚀 全新全屏重力拖拽缩放 Lightbox 逻辑 🚀
+               ========================================= */
+            const imgRect = ref({ width: 0, height: 0 });
+            const lightbox = reactive({ open: false, current: {}, scale: 1, translateX: 0, translateY: 0, isDragging: false, startX: 0, startY: 0 });
+            let dragMoved = false;
+
+            const onImgLoad = (e) => {
+                // 记录图片的渲染大小作为推算的基准坐标值
+                imgRect.value = { width: e.target.offsetWidth, height: e.target.offsetHeight };
+            };
+
+            const checkBounds = () => {
+                if (!imgRect.value.width) return;
+                const windowW = window.innerWidth;
+                const windowH = window.innerHeight;
+
+                const scaledImgW = imgRect.value.width * lightbox.scale;
+                const scaledImgH = imgRect.value.height * lightbox.scale;
+
+                if (scaledImgW > windowW) {
+                    const maxTx = (scaledImgW - windowW) / 2;
+                    lightbox.translateX = Math.max(-maxTx, Math.min(lightbox.translateX, maxTx));
+                } else {
+                    lightbox.translateX = 0;
+                }
+
+                if (scaledImgH > windowH) {
+                    const maxTy = (scaledImgH - windowH) / 2;
+                    lightbox.translateY = Math.max(-maxTy, Math.min(lightbox.translateY, maxTy));
+                } else {
+                    lightbox.translateY = 0;
+                }
+            };
+
+            const handleWheel = (e) => {
+                if (!lightbox.open) return;
+                e.preventDefault();
+                const zoomFactor = 0.25;
+                const delta = e.deltaY > 0 ? -zoomFactor : zoomFactor;
+                // 最大支持 6 倍缩放
+                lightbox.scale = Math.max(1, Math.min(lightbox.scale + delta, 6));
+                checkBounds();
+            };
+
+            const startDrag = (e) => {
+                if (lightbox.scale <= 1) return;
+                lightbox.isDragging = true;
+                dragMoved = false;
+                lightbox.startX = e.clientX - lightbox.translateX;
+                lightbox.startY = e.clientY - lightbox.translateY;
+            };
+
+            const onDrag = (e) => {
+                if (!lightbox.isDragging) return;
+                dragMoved = true;
+                lightbox.translateX = e.clientX - lightbox.startX;
+                lightbox.translateY = e.clientY - lightbox.startY;
+                checkBounds();
+            };
+
+            const stopDrag = () => { lightbox.isDragging = false; };
+
+            const handleImgClick = () => {
+                if (dragMoved) return; // 不把拖拽当做点击
+                if (lightbox.scale === 1) {
+                    lightbox.scale = 2.5; // 点一下默认放大2.5倍
+                    checkBounds();
+                } else {
+                    resetLightbox();
+                }
+            };
+
+            const thumbBoxStyle = computed(() => {
+                if (lightbox.scale <= 1 || !imgRect.value.width) return { display: 'none' };
+                const windowW = window.innerWidth;
+                const windowH = window.innerHeight;
+
+                const scaledImgW = imgRect.value.width * lightbox.scale;
+                const scaledImgH = imgRect.value.height * lightbox.scale;
+
+                // 计算取景框相对图片的宽高度比例
+                const boxWPct = Math.min(100, (windowW / scaledImgW) * 100);
+                const boxHPct = Math.min(100, (windowH / scaledImgH) * 100);
+
+                // 计算中心位移比例
+                const leftOffset = -(lightbox.translateX / scaledImgW) * 100;
+                const topOffset = -(lightbox.translateY / scaledImgH) * 100;
+
+                return {
+                    width: `${boxWPct}%`,
+                    height: `${boxHPct}%`,
+                    left: `${50 - boxWPct / 2 + leftOffset}%`,
+                    top: `${50 - boxHPct / 2 + topOffset}%`
+                };
+            });
+
+            const resetLightbox = () => {
+                lightbox.open = false;
+                lightbox.scale = 1;
+                lightbox.translateX = 0;
+                lightbox.translateY = 0;
+                lightbox.isDragging = false;
+            };
+
+            const openLightbox = (art) => {
+                lightbox.current = art;
+                lightbox.scale = 1;
+                lightbox.translateX = 0;
+                lightbox.translateY = 0;
+                imgRect.value = { width: 0, height: 0 };
+                lightbox.open = true;
+            };
+
+            const toggleCommissions = () => {
+                if (!showCommissions.value) {
+                    showCommissions.value = true;
+                    setTimeout(() => {
+                        const el = document.getElementById('commission-content');
+                        if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+                    }, 150);
+                    nextTick(() => setTimeout(initScrollReveal, 300));
+                } else {
+                    showCommissions.value = false;
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                }
+            };
+
+            const scrollTo = (id) => {
+                isNavOpen.value = false;
+                document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+            };
+
+            onMounted(() => {
+                window.addEventListener('scroll', handleScroll);
+                if (history.scrollRestoration) history.scrollRestoration = 'manual';
+                window.scrollTo(0, 0);
+
+                setTimeout(initSectionObserver, 500);
+
+                fetchLanyard();
+                lanyardInterval = setInterval(fetchLanyard, 15000);
+
+                const baseStrings = ["Artist.", "Engineer.", "Gamer.", "Furry.", "Architect.", "Illustrator.", "Analyst.", "Developer."];
+                if (Math.random() < 0.2) baseStrings.push("Idiot sandwich 🍞.^1000");
+
+                new Typed(typedElement.value, {
+                    strings: baseStrings,
+                    typeSpeed: 80,
+                    backSpeed: 40,
+                    backDelay: 1500,
+                    startDelay: 500,
+                    loop: true,
+                    smartBackspace: true,
+                    cursorChar: '_',
+                    preStringTyped: (arrayPos, self) => {
+                        const word = self.strings[arrayPos];
+                        const firstChar = word.charAt(0).toLowerCase();
+                        const isVowel = ['a', 'e', 'i', 'o', 'u'].includes(firstChar);
+                        article.value = isVowel ? 'an' : 'a';
+                    }
+                });
+
+                new SweetScroll({trigger: 'a[href^="#"]', offset: -80});
+
+                if (bioText.value) {
+                    const el = bioText.value;
+                    const targetText = "A digital artist & developer based in China. My fursonas are a wolf and a bird. I love bringing characters to life through code and art.";
+                    const fx = new TextScramble(el);
+                    setTimeout(() => fx.setText(targetText), 800);
+                }
+            });
+
+            onUnmounted(() => {
+                window.removeEventListener('scroll', handleScroll);
+                if (lanyardInterval) clearInterval(lanyardInterval);
+            });
+
+            return {
+                article, isNavOpen, isScrolled, activeSection, showCommissions, showHistory,
+                typedElement, socials, projects, history, commissionTypes, artworks, lightbox,
+                toggleCommissions, scrollTo, openLightbox, resetLightbox, bioText,
+                hoverDiscord, currentStatus, currentActivity, lanyardData,
+                currentCommissionState, activeCommissionStatus, showCapsule,
+
+                // 缩放相关返回
+                imgRect, onImgLoad, handleWheel, startDrag, onDrag, stopDrag, handleImgClick, thumbBoxStyle
+            };
+        }
+    }).mount('#app');
+
+    // 保持您的禁止审查代码
+    document.oncontextmenu = function () { return false; };
+    document.onkeydown = function (e) {
+        if (e.keyCode === 123) return false;
+        if (e.ctrlKey && e.shiftKey && e.keyCode === 73) return false;
+        if (e.ctrlKey && e.keyCode === 85) return false;
+    };
+</script>
 </body>
 </html>
