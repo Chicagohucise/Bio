@@ -505,17 +505,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            gap: 1.2rem;
         }
 
         .terminal-frame {
             position: relative;
             width: 260px;
             height: 260px;
-            padding: 8px;
-            background: rgba(0, 20, 10, 0.6);
-            border: 1px solid rgba(0, 253, 147, 0.3);
+            padding: 0; /* 移除内边距，让图片边缘贴合 */
+            background: transparent;
+            border: 1px solid rgba(0, 253, 147, 0.2); /* 极其细微的辅边框，匹配参考图 */
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 0 20px rgba(0, 253, 147, 0.05); /* 整体微弱底光 */
         }
 
         .avatar-core {
@@ -532,7 +533,7 @@
 
         .scanlines {
             position: absolute;
-            inset: 4px;
+            inset: 0; /* 修改为 0 贴合边缘 */
             background: linear-gradient(
                     to bottom,
                     rgba(255, 255, 255, 0),
@@ -549,12 +550,13 @@
 
         .t-corner {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 14px;
+            height: 14px;
             border: 2px solid var(--main-color);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             z-index: 20;
-            box-shadow: 0 0 5px var(--main-color);
+            /* 关键点：使用 drop-shadow 而不是 box-shadow，让光晕精准贴合 L 形线条 */
+            filter: drop-shadow(0 0 5px var(--main-color));
         }
 
         .tl { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
@@ -564,35 +566,45 @@
 
         .terminal-label {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 0.75rem;
+            font-size: 0.8rem; /* 字号稍微放大以匹配图片比例 */
+            font-weight: bold;
             color: var(--main-color);
-            background: rgba(0, 253, 147, 0.1);
-            padding: 4px 12px;
-            border: 1px solid var(--main-color);
+            background: transparent; /* 去除原本的浅绿色背景 */
+            padding: 6px 16px;
+            border: 1px solid var(--main-color); /* 纯粹的细边框 */
             text-transform: uppercase;
             letter-spacing: 0.1em;
             position: relative;
+            /* 增加文字和边框的发光效果 */
+            box-shadow: 0 0 10px rgba(0, 253, 147, 0.2), inset 0 0 10px rgba(0, 253, 147, 0.1);
+            text-shadow: 0 0 5px rgba(0, 253, 147, 0.5);
+            transition: all 0.3s ease;
         }
 
         .terminal-label::before {
             content: '>';
-            margin-right: 5px;
+            margin-right: 8px;
             animation: blink 1s step-end infinite;
         }
 
+        /* 悬浮增强 */
         .avatar-wrap:hover .terminal-frame {
-            border-color: var(--main-color);
-            box-shadow: 0 0 20px rgba(0, 253, 147, 0.15);
+            border-color: rgba(0, 253, 147, 0.5);
+            box-shadow: 0 0 30px rgba(0, 253, 147, 0.2);
             transform: scale(1.02);
         }
 
-        .avatar-wrap:hover .tl { transform: translate(4px, 4px); }
-        .avatar-wrap:hover .tr { transform: translate(-4px, 4px); }
-        .avatar-wrap:hover .bl { transform: translate(4px, -4px); }
-        .avatar-wrap:hover .br { transform: translate(-4px, -4px); }
+        /* 改为向外扩张，更有扫描仪锁定目标的质感 */
+        .avatar-wrap:hover .tl { transform: translate(-4px, -4px); filter: drop-shadow(0 0 8px var(--main-color)); }
+        .avatar-wrap:hover .tr { transform: translate(4px, -4px); filter: drop-shadow(0 0 8px var(--main-color)); }
+        .avatar-wrap:hover .bl { transform: translate(-4px, 4px); filter: drop-shadow(0 0 8px var(--main-color)); }
+        .avatar-wrap:hover .br { transform: translate(4px, 4px); filter: drop-shadow(0 0 8px var(--main-color)); }
 
-        .avatar-wrap:hover .scanlines { opacity: 0.2; }
-        .avatar-wrap:hover .terminal-label { background: var(--main-color); color: #000; font-weight: bold; }
+        .avatar-wrap:hover .scanlines { opacity: 0.15; }
+        .avatar-wrap:hover .terminal-label {
+            background: rgba(0, 253, 147, 0.1); /* 悬浮时微微发亮 */
+            box-shadow: 0 0 15px rgba(0, 253, 147, 0.4), inset 0 0 15px rgba(0, 253, 147, 0.2);
+        }
 
         /* =========================================
            4. 可展开区域
@@ -1168,13 +1180,13 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div v-for="(project, index) in projects" :key="project.client" class="tracker-card reveal"
+                <!-- 💡 客户头像重设计：添加了圆角矩形(rounded-xl), 霓虹发光边框(border-2, shadow-[0_0_10px...]) 和悬浮放大发光特效 -->
+                <div v-for="(project, index) in projects" :key="project.client" class="tracker-card reveal group"
                      :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
-                            <!-- 已替换为正确的错误捕获占位 -->
                             <img :src="project.avatar" onerror="this.style.display='none'"
-                                 class="w-12 h-12 rounded-full border border-gray-600 object-cover bg-gray-800">
+                                 class="w-12 h-12 rounded-xl border-2 border-[var(--main-color)] shadow-[0_0_10px_rgba(0,253,147,0.4)] object-cover bg-gray-800 transition-all duration-300 group-hover:shadow-[0_0_20px_rgba(0,253,147,0.8)] group-hover:scale-105">
                             <div>
                                 <h3 class="font-bold text-white leading-tight">{{ project.client }}</h3>
                                 <span class="text-[10px] uppercase tracking-wider text-gray-500 bg-[#111] px-1 rounded border border-[#333]">{{ project.payment }}</span>
@@ -1310,10 +1322,10 @@
              @mouseleave="stopDrag"
              @click.self="resetLightbox">
 
-            <!-- 退出按钮 -->
-            <button class="absolute top-4 right-4 z-[110] text-white/50 hover:text-white text-4xl transition bg-black/20 hover:bg-black/40 rounded-full p-2"
+            <!-- 退出按钮：根据参考图修改为半透明圆形底色和无边框设计 -->
+            <button class="absolute top-6 right-6 z-[110] text-gray-300/80 hover:text-white text-3xl transition bg-[#8a867c]/30 hover:bg-[#8a867c]/50 rounded-full w-12 h-12 flex items-center justify-center cursor-pointer"
                     @click="resetLightbox">
-                <i class="bx bx-x"></i>
+                <i class="bx bx-x font-bold"></i>
             </button>
 
             <!-- 中心全屏显示图片包装器 (包含氛围光影和实体图片，确保它们同步拖拽和缩放) -->
