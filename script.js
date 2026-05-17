@@ -231,7 +231,7 @@ createApp({
                 payment: 'Prepay ？',
                 progress: 100,
                 due: '2026/5/9',
-                avatar: '/api/avatar/碳酸野六.jpg'
+                avatar: '/api/avatar/Yl.jpg'
 
             },
 
@@ -241,7 +241,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 70,
                 due: '2026/5/13',
-                avatar: '/api/avatar/玄鸟.jpg'
+                avatar: '/api/avatar/Xn.jpg'
 
             },
             {
@@ -285,7 +285,7 @@ createApp({
                 payment: 'Prepay ¥350',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: '/api/avatar/kirin_white 麒麟白牙.jpg'
+                avatar: '/api/avatar/kirin_white.jpg'
 
             },
             {
@@ -313,7 +313,7 @@ createApp({
                 payment: 'Pending',
                 progress: 0,
                 due: '2026/-/-',
-                avatar: '/api/avatar/筱狼.jpg'
+                avatar: '/api/avatar/Xl.jpg'
 
             },
             {
