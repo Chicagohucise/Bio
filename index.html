@@ -17,7 +17,6 @@
     <meta property="og:type" content="website">
     <meta name="robots" content="index, follow">
 
-    <!-- 优化：预连接和预获取关键资源以提升加载速度 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://unpkg.com/vue@3/dist/vue.global.js" as="script">
@@ -29,7 +28,6 @@
     <link rel="icon" href=/api/avatar/Hucise.PNG type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
-    <!-- 样式全部内联，减少一次 HTTP 请求以加快首屏加载 -->
     <style>
         /* =========================================
            1. 全局配置 & 自定义变量
@@ -701,7 +699,7 @@
         }
 
         /* =========================================
-           6. 历史记录
+           6. 历史记录 (Archives 排版优化版)
            ========================================= */
         .terminal-box {
             background: #080808;
@@ -712,9 +710,11 @@
             font-size: 0.9rem;
         }
 
+        /* 💡 【关键修复】：引入了 CSS Grid 的 gap，确保栏位永不粘连 */
         .terminal-header {
             display: grid;
-            grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+            grid-template-columns: 1.5fr 3fr 1.5fr 1fr; /* 给 Task 更多空间 */
+            gap: 1.5rem; /* 强制间距 */
             padding: 0.8rem;
             border-bottom: 1px dashed #333;
             color: #666;
@@ -724,7 +724,8 @@
 
         .terminal-row {
             display: grid;
-            grid-template-columns: 1.5fr 1.5fr 1fr 1fr;
+            grid-template-columns: 1.5fr 3fr 1.5fr 1fr; /* 与表头对齐 */
+            gap: 1.5rem; /* 强制间距 */
             padding: 0.8rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             transition: background 0.2s;
@@ -895,8 +896,9 @@
         @media (max-width: 768px) {
             .hero-title { font-size: 3rem; }
             .terminal-header { display: none; }
-            .terminal-row { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-            .terminal-row span:nth-child(1) { grid-column: span 2; font-weight: bold; color: #fff; }
+            /* 手机端列表堆叠显示 */
+            .terminal-row { grid-template-columns: 1fr; gap: 0.5rem; }
+            .terminal-row span:nth-child(1) { font-weight: bold; color: #fff; }
         }
 
         .hero-actions {
@@ -1006,7 +1008,7 @@
             </div>
 
             <div class="hidden md:flex gap-12 items-center">
-                <a class="nav-item" :class="{ active: activeSection === 'home' && !showCommissions }"
+                <a class="nav-item" :class="{ active: activeSection === 'heroHeader' && !showCommissions }"
                    @click="scrollTo('heroHeader')">
                     / HOME
                 </a>
@@ -1064,7 +1066,6 @@
         </div>
     </nav>
 
-    <!-- 侧边栏悬浮胶囊 -->
     <transition
             enter-active-class="transition-all duration-700 delay-300"
             enter-from-class="-translate-x-full opacity-0"
@@ -1180,7 +1181,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- 💡 客户头像重设计：添加了圆角矩形(rounded-xl), 霓虹发光边框(border-2, shadow-[0_0_10px...]) 和悬浮放大发光特效 -->
                 <div v-for="(project, index) in projects" :key="project.client" class="tracker-card reveal group"
                      :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
                     <div class="flex justify-between items-start mb-4">
@@ -1231,7 +1231,7 @@
                         </div>
                         <div v-for="record in history" :key="record.date" class="terminal-row">
                             <span>{{ record.client }}</span>
-                            <span class="truncate">{{ record.type }}</span>
+                            <span class="truncate" :title="record.type">{{ record.type }}</span>
                             <span class="money">{{ record.amount }}</span>
                             <span>{{ record.date }}</span>
                         </div>
@@ -1265,7 +1265,6 @@
                 <div class="deco-line"></div>
             </div>
 
-            <!-- PRICE CARDS (New Design maintained) -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto relative z-10">
                 <div v-for="(item, index) in commissionTypes" :key="item.title" class="price-card group reveal"
                      :class="'reveal-delay-' + ((index % 3 + 1) * 100)">
@@ -1303,7 +1302,6 @@
         </section>
     </div>
 
-    <!-- 优化：全新无边框全屏 Lightbox 缩放查看器，带氛围环境光 -->
     <transition
             v-cloak
             enter-active-class="transition duration-400 var(--ease-out-expo)"
@@ -1322,27 +1320,23 @@
              @mouseleave="stopDrag"
              @click.self="resetLightbox">
 
-            <!-- 退出按钮：根据参考图修改为半透明圆形底色和无边框设计 -->
             <button class="absolute top-6 right-6 z-[110] text-gray-300/80 hover:text-white text-3xl transition bg-[#8a867c]/30 hover:bg-[#8a867c]/50 rounded-full w-12 h-12 flex items-center justify-center cursor-pointer"
                     @click="resetLightbox">
                 <i class="bx bx-x font-bold"></i>
             </button>
 
-            <!-- 中心全屏显示图片包装器 (包含氛围光影和实体图片，确保它们同步拖拽和缩放) -->
             <div class="relative origin-center flex items-center justify-center touch-none"
                  :style="{
                     transform: `translate(${lightbox.translateX}px, ${lightbox.translateY}px) scale(${lightbox.scale})`,
                     transition: lightbox.isDragging ? 'none' : 'transform 0.2s cubic-bezier(0.25, 1, 0.5, 1)'
                  }">
 
-                <!-- 💡 氛围光 (Ambient Glow) - 通过原图高斯模糊实现边缘发光效果 -->
                 <img :src="lightbox.current.url"
                      class="absolute z-0 select-none pointer-events-none blur-[60px] opacity-75 scale-105 saturate-150"
                      style="max-width: 95vw; max-height: 95vh;"
                      draggable="false"
                 >
 
-                <!-- 实体主图片 -->
                 <img :src="lightbox.current.url"
                      @load="onImgLoad"
                      class="relative z-10 select-none rounded-sm shadow-[0_0_40px_rgba(0,0,0,0.8)]"
@@ -1355,13 +1349,10 @@
                 >
             </div>
 
-            <!-- 动态缩略图 (只有在放大状态才显示) -->
             <transition enter-active-class="transition opacity-300" leave-active-class="transition opacity-300" enter-from-class="opacity-0" leave-to-class="opacity-0">
                 <div v-if="lightbox.scale > 1"
                      class="absolute bottom-6 right-6 w-32 md:w-48 bg-[#0a0a0a]/80 border border-[#333] rounded overflow-hidden shadow-2xl pointer-events-none z-[110]">
-                    <!-- 缩略背景图 -->
                     <img :src="lightbox.current.url" class="w-full h-auto opacity-50 relative z-10" draggable="false">
-                    <!-- 取景指示框 -->
                     <div class="absolute border border-[#00fd93] shadow-[0_0_10px_rgba(0,253,147,0.5)] z-20 transition-all duration-75 bg-[#00fd93]/10"
                          :style="thumbBoxStyle"></div>
                 </div>
@@ -1436,7 +1427,6 @@
     </footer>
 </div>
 
-<!-- 外部依赖放在 Body 末尾确保不阻塞渲染 -->
 <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 <script src="https://unpkg.com/sweet-scroll/sweet-scroll.min.js"></script>
 <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
@@ -1509,12 +1499,15 @@
         setup() {
             const isNavOpen = ref(false);
             const isScrolled = ref(false);
-            const activeSection = ref('home');
+            const activeSection = ref('heroHeader'); // 初始高亮首页
             const showCommissions = ref(false);
             const showHistory = ref(false);
             const typedElement = ref(null);
             const bioText = ref(null);
             const article = ref('an');
+
+            // 【新增】滚动锁
+            const isManualScrolling = ref(false);
 
             const currentCommissionState = ref('full');
 
@@ -1564,7 +1557,8 @@
                 } catch (err) {}
             };
 
-            const handleScroll = () => { isScrolled.value = window.scrollY > 50; };
+            // 处理顶部导航变色的逻辑保留，但不再处理高亮
+            const handleNavStyle = () => { isScrolled.value = window.scrollY > 50; };
 
             const initScrollReveal = () => {
                 const revealElements = document.querySelectorAll('.reveal');
@@ -1576,7 +1570,23 @@
                 revealElements.forEach((el) => observer.observe(el));
             };
 
+            // 💡 【全新重构】导航状态观察器 (彻底解决长区块和闪烁问题)
             const initSectionObserver = () => {
+                const options = {
+                    rootMargin: '-20% 0px -79% 0px', // 完美解决大区块高度无法触发的问题
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    if (isManualScrolling.value) return; // 如果正在点击滚动，直接中断判定，防止闪烁！
+
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            activeSection.value = entry.target.id;
+                        }
+                    });
+                }, options);
+
                 const sections = [
                     document.getElementById('heroHeader'),
                     document.getElementById('mission-log'),
@@ -1584,11 +1594,6 @@
                     document.getElementById('service-rates')
                 ].filter(Boolean);
 
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) activeSection.value = entry.target.id;
-                    });
-                }, {threshold: 0.1, rootMargin: "-30% 0px -40% 0px"});
                 sections.forEach(sec => observer.observe(sec));
             };
 
@@ -1662,7 +1667,6 @@
             let dragMoved = false;
 
             const onImgLoad = (e) => {
-                // 记录图片的渲染大小作为推算的基准坐标值
                 imgRect.value = { width: e.target.offsetWidth, height: e.target.offsetHeight };
             };
 
@@ -1694,7 +1698,6 @@
                 e.preventDefault();
                 const zoomFactor = 0.25;
                 const delta = e.deltaY > 0 ? -zoomFactor : zoomFactor;
-                // 最大支持 6 倍缩放
                 lightbox.scale = Math.max(1, Math.min(lightbox.scale + delta, 6));
                 checkBounds();
             };
@@ -1718,9 +1721,9 @@
             const stopDrag = () => { lightbox.isDragging = false; };
 
             const handleImgClick = () => {
-                if (dragMoved) return; // 不把拖拽当做点击
+                if (dragMoved) return;
                 if (lightbox.scale === 1) {
-                    lightbox.scale = 2.5; // 点一下默认放大2.5倍
+                    lightbox.scale = 2.5;
                     checkBounds();
                 } else {
                     resetLightbox();
@@ -1735,11 +1738,9 @@
                 const scaledImgW = imgRect.value.width * lightbox.scale;
                 const scaledImgH = imgRect.value.height * lightbox.scale;
 
-                // 计算取景框相对图片的宽高度比例
                 const boxWPct = Math.min(100, (windowW / scaledImgW) * 100);
                 const boxHPct = Math.min(100, (windowH / scaledImgH) * 100);
 
-                // 计算中心位移比例
                 const leftOffset = -(lightbox.translateX / scaledImgW) * 100;
                 const topOffset = -(lightbox.translateY / scaledImgH) * 100;
 
@@ -1782,13 +1783,42 @@
                 }
             };
 
+            // 💡 【修复与升级版】完美的滚动导航逻辑 (带保险机制)
             const scrollTo = (id) => {
                 isNavOpen.value = false;
-                document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+
+                // 立即更新高亮，并上锁防止过程中的闪烁
+                activeSection.value = id;
+                isManualScrolling.value = true;
+
+                const targetElement = document.getElementById(id);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+
+                    let fallbackTimeout = null;
+
+                    const onScrollEnd = () => {
+                        isManualScrolling.value = false; // 滚动到底解开锁
+                        window.removeEventListener('scrollend', onScrollEnd);
+                        if (fallbackTimeout) clearTimeout(fallbackTimeout);
+                    };
+
+                    window.addEventListener('scrollend', onScrollEnd);
+
+                    // 1000ms 强制解锁保险，防止极少数浏览器不触发 scrollend
+                    fallbackTimeout = setTimeout(() => {
+                        isManualScrolling.value = false;
+                        window.removeEventListener('scrollend', onScrollEnd);
+                    }, 1000);
+                } else {
+                    isManualScrolling.value = false; // 防呆解鎖
+                }
             };
 
             onMounted(() => {
-                window.addEventListener('scroll', handleScroll);
+                // 监听窗口滚动仅用于顶部导航变色
+                window.addEventListener('scroll', handleNavStyle);
+
                 if (history.scrollRestoration) history.scrollRestoration = 'manual';
                 window.scrollTo(0, 0);
 
@@ -1828,7 +1858,7 @@
             });
 
             onUnmounted(() => {
-                window.removeEventListener('scroll', handleScroll);
+                window.removeEventListener('scroll', handleNavStyle);
                 if (lanyardInterval) clearInterval(lanyardInterval);
             });
 
@@ -1838,8 +1868,6 @@
                 toggleCommissions, scrollTo, openLightbox, resetLightbox, bioText,
                 hoverDiscord, currentStatus, currentActivity, lanyardData,
                 currentCommissionState, activeCommissionStatus, showCapsule,
-
-                // 缩放相关返回
                 imgRect, onImgLoad, handleWheel, startDrag, onDrag, stopDrag, handleImgClick, thumbBoxStyle
             };
         }
